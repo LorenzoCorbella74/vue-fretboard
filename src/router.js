@@ -10,10 +10,12 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [{
       path: "/",
+      name: "list",
       component: List
     },
     {
       path: "/item/:id",
+      name: "item",
       component: Item
     },
     {

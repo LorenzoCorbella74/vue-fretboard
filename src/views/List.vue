@@ -102,7 +102,7 @@ export default {
       this.form.title = theOne.title;
       this.form.description = theOne.description;
       this.editmode = true;
-      this.editedItem = theOne.id;
+      this.editedItem = theOne;
     },
     checkItem(itemId) {
       // TODO:
@@ -116,12 +116,12 @@ export default {
       if (this.form.title && this.form.description) {
         if (this.editmode) {
           var newItem = {
-            id: this.editedItem,
+            id: this.editedItem.id,
             title: this.form.title,
             description: this.form.description,
-            data: []
+            data: this.editItem.data
           };
-          this.$set(this.items, this.editedItem, newItem);
+          this.$set(this.items, this.editedItem.id, newItem);
           this.$ls.set('lista', this.items);
           this.editmode = false;
         } else {
