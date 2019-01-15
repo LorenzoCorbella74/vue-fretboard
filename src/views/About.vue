@@ -13,9 +13,6 @@
   </div>
 </template>
 
-<style scoped>
-.margine-da-navbar {
-  margin-top: 24px;
-}
+<style>
 </style>
 

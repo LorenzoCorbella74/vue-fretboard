@@ -2,7 +2,7 @@
   <div id="app">
     <b-navbar toggleable type="light" variant="light">
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
-      <b-navbar-brand>Sovrapposizioni</b-navbar-brand>
+      <b-navbar-brand>Sovrapposizione scale/arpeggi</b-navbar-brand>
       <b-collapse is-nav id="nav_text_collapse">
         <b-navbar-nav>
           <b-nav-item to="/">List</b-nav-item>
@@ -10,15 +10,14 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <router-view/>
+    <div class="margine-da-navbar">
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+.margine-da-navbar {
+  margin-top: 24px;
 }
 </style>

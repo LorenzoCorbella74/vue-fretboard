@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <b-modal ref="myModalRef" :title="editmode? 'Edita elemento':'Salva elemento'" @ok="onSubmit">
+    <b-modal ref="myModalRef" :title="editmode? 'Edita studio':'Salva studio'" @ok="onSubmit">
       <b-form>
         <b-form-group id="exampleInputGroup1" label="Titolo" label-for="formTitle">
           <b-form-input
@@ -46,6 +46,7 @@
             v-model="form.description"
             required
             placeholder="Inserire una descrizione dello studio"
+            :rows="3"
             :max-rows="6"
           ></b-form-textarea>
         </b-form-group>
@@ -55,6 +56,10 @@
 </template>
 
 <script>
+import Vue from 'vue';
+export const lista = [];
+export let guitar = null;
+
 export default {
   name: 'home',
   data: function() {
@@ -65,17 +70,27 @@ export default {
         title: '',
         description: ''
       },
-      items: [
-        // esempio di struttura
-        // {
-        //   id: 0,
-        //   title: 'Esempio 1',
-        //   description:
-        //     'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eum ratione consequuntur hic est recusandae! Dolorum, voluptates.',
-        //   data: ['c lydian']
-        // }
-      ]
+      items: lista
+      // esempio di struttura
+      // {
+      //   id: 0,
+      //   title: 'Esempio 1',
+      //   description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.',
+      //   data: ['c lydian']
+      // }
     };
+  },
+  mounted() {
+    this.$ls.get('lista', 0).forEach((e, i) => {
+      this.$set(this.items, i, e);
+    });
+    // loader true
+    let ac = new AudioContext();
+    this.$Soundfont.instrument(ac, 'acoustic_guitar_steel').then(function(guitarDownloaded) {
+      guitar = guitarDownloaded;
+      console.log('Guitar: ', guitar);
+      // loader false
+    });
   },
   methods: {
     addItem(formData) {
@@ -91,6 +106,7 @@ export default {
     },
     checkItem(itemId) {
       // TODO:
+      this.$router.push(`/item/${itemId}`);
     },
     deleteItem(itemId) {
       this.items = this.items.filter(e => e.id != itemId);
@@ -106,6 +122,7 @@ export default {
             data: []
           };
           this.$set(this.items, this.editedItem, newItem);
+          this.$ls.set('lista', this.items);
           this.editmode = false;
         } else {
           var nextIndex = this.items.length;
@@ -116,8 +133,9 @@ export default {
             data: []
           };
           this.$set(this.items, nextIndex, newItem);
+          this.$ls.set('lista', this.items);
         }
-        console.log(this.$data.items);
+        // console.log(this.$data.items);
         this.$refs.myModalRef.hide();
         this.resetForm();
       } else {
