@@ -1,38 +1,47 @@
 <template>
   <div>
     <div class="container">
-      <div class="row">
-        <div class="d-flex text-white">
-          <div class="p-2 flex-md-grow-1">
-            <b-button :size="'sm'" :variant="'success'" @click="indietro"><<</b-button>
-          </div>
-          <div class="p-2 flex-md-grow-1">
-            <b-button :size="'sm'" :variant="'success'" @click="toList">lista</b-button>
-          </div>
-          <div class="p-2 flex-md-grow-1">
-            <b-button :size="'sm'" :variant="'success'" @click="avanti">>></b-button>
-          </div>
+      <div class="d-flex flex-row justify-content-between">
+        <div class="p-2">
+          <a href="#" class="card-link" @click="indietro">
+            <font-awesome-icon icon="angle-double-left"/>
+          </a>
+        </div>
+        <div class="p-2">
+          <a href="#" class="card-link" @click="toList">
+            <font-awesome-icon icon="list"/>
+          </a>
+        </div>
+        <div class="p-2">
+          <a href="#" class="card-link" @click="avanti">
+            <font-awesome-icon icon="angle-double-right"/>
+          </a>
         </div>
       </div>
-      <div class="row">
-        <div class="page-header">
+
+      <div class="d-flex flex-row justify-content-between">
+        <div class="p-2 page-header">
           <h1>{{selectedItem.title}}</h1>
         </div>
-        <hr>
-        <div class="d-flex flex-row-reverse">
-          <div class="p-2">
-            <b-button :size="'sm'" :variant="'success'" @click="addItem">Aggiungi</b-button>
-          </div>
+        <div class="p-2">
+          <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
+            <font-awesome-icon icon="plus"/>
+          </b-button>
         </div>
       </div>
+
       <div class="row">
         <b-list-group>
           <b-list-group-item v-for="i in selectedItem.data" :key="componentKey">
             <div>
               <!-- FRETBOARD -->
               <fretboard-chart :input="i" :key="i.key"></fretboard-chart>
-              <a href="#" class="card-link" @click="editItem(i.id)">Edit</a>
-              <a href="#" class="card-link" @click="deleteItem(i.id)">Delete</a>
+              <a href="#" class="card-link" @click="editItem(i.id)">
+                <font-awesome-icon icon="edit"/>
+              </a>
+              <a href="#" class="card-link" @click="deleteItem(i.id)">
+                <font-awesome-icon icon="trash"/>
+              </a>
             </div>
           </b-list-group-item>
         </b-list-group>
@@ -170,9 +179,9 @@ export default {
   },
   mounted() {
     // console.log(this.$router, this.$route);
-    console.log(this.items, this.itemId);
+    console.log('Items: ', this.items, this.itemId);
     this.selectedItem = this.items[this.itemId];
-    console.log(this.selectedItem);
+    console.log('Selected item: ', this.selectedItem);
   },
   // per reagire ai cambiamenti dei parametri dell'url...
   beforeRouteUpdate(to, from, next) {

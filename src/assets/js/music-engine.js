@@ -478,7 +478,8 @@ export const Fretboard = function (config) {
         fretHeight: 30, // altezza tasti
         id: 'fretboard-' + Math.floor(Math.random() * 1000000), // id della tastiera
         name: '', // NOME della scala/arpeggio
-        notes: '' // NOTE della scala/arpeggio
+        notes: '', // NOTE della scala/arpeggio
+        callback: config.callback || null
     };
 
     instance.fretsWithDots = function () {
@@ -523,53 +524,6 @@ export const Fretboard = function (config) {
 
         return instance.svgContainer;
     };
-
-    /* instance.makeTable = function () {
-        let tbody = d3.select('#' + instance.id, '.scale-data')
-            .append('table')
-            .append('tbody');
-        let riga1 = tbody.append('tr');
-        riga1.selectAll('td')
-            .data(instance.notes.toUpperCase().split(' '))
-            .enter()
-            .append('td')
-            .text((d) => d);
-        let riga2 = tbody.append('tr');
-        riga2.selectAll('td')
-            .data(instance.gradi.split(' '))
-            .enter()
-            .append('td')
-            .text((d) => d);
-
-        return tbody;
-    } */
-
-    /*  instance.drawScaleName = function () {
-         d3.select('#' + instance.id)
-             .append('div')
-             .attr('class', 'scale-data')
-             .append('span')
-             .attr('class', 'scale-name')
-             .text(`${instance.name.toUpperCase() }`)
-             .append('span')
-             .style('position', 'relative')
-             .style('left', 6 + 'px')
-             .append('i')
-             .attr('class', 'fas fa-play')
-             .on('click', function (d) {
-                 instance.playScale(instance.notes);
-             });
-
-         instance.makeTable();
-
-         d3.select('#' + instance.id)
-             .append('i')
-             .attr('class', 'delete-btn fa fa-trash')
-             .on('click', function (d) {
-                 instance.delete(instance.id);
-             });
-
-     } */
 
     // TASTI
     instance.drawFrets = function () {
@@ -799,31 +753,8 @@ export const Fretboard = function (config) {
         }
     }
 
-    /*
-    acoustic_grand_piano
-    electric_guitar_jazz 
-    acoustic_guitar_nylon
-    acoustic_guitar_steel
-    */
-    instance.playScale = function (scale) {
-        let scaleDISC = scale.split(' ').map(e => e.toUpperCase() + 3);
-        let scaleASC = scale.split(' ').map(e => e.toUpperCase() + 3).reverse();
-        scaleToBePlayed = scaleDISC.concat(scale[0].toUpperCase() + 4, scaleASC);
-        // console.log(scaleToBePlayed);
-
-        /* Soundfont.instrument(ac,'acoustic_guitar_steel').then(function (guitar) {  //  */
-        let time = ac.currentTime + 0.2;
-        scaleToBePlayed.forEach(function (note) {
-            // console.log("Scheduling...", note, time);
-            guitar.play(note, time, 0.2);
-            time += 0.2;
-        });
-        /*  }); */
-    }
-
     instance.playNote = function (note) {
-        let noteToBePlayed = note.toUpperCase();
-        guitar.play(note, ac.currentTime + 0.2, 0.2);
+        instance.callback(note);
     }
 
     /* 

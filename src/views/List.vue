@@ -2,26 +2,51 @@
   <div>
     <div class="home">
       <div class="container">
-        <div class="row">
-          <div class="page-header">
+        <div class="d-flex flex-row justify-content-between">
+          <div class="p-2 page-header">
             <h1>{{title}}</h1>
           </div>
-          <hr>
-          <div class="d-flex flex-row-reverse">
-            <div class="p-2">
-              <b-button :size="'sm'" :variant="'success'" @click="addItem">Aggiungi</b-button>
-            </div>
+          <div class="p-2">
+            <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
+              <font-awesome-icon icon="plus"/>
+            </b-button>
           </div>
         </div>
+
         <div class="row">
-          <div class="card mr-2" style="width: 17rem;" v-for="card in items" :key="card.id">
-            <img class="card-img-top" src="https://via.placeholder.com/120x80" alt="Card image">
-            <div class="card-body">
-              <h5 class="card-title">{{card.title}} - {{card.id}}</h5>
-              <p class="card-text">{{card.description}}</p>
-              <a href="#" class="card-link" @click="editItem(card.id)">Edit</a>
-              <a href="#" class="card-link" @click="deleteItem(card.id)">Delete</a>
-              <a href="#" class="card-link" @click="checkItem(card.id)">Check</a>
+          <div class="col-md-3 col-sm-6 mb-2" v-for="card in items" :key="card.id">
+            <!-- mr-1 d-inline-block -->
+            <div class="card">
+              <img class="card-img-top" :src="getIconPath(card.id)" alt="Card image">
+              <div class="card-img-overlay">
+                <h3 class="card-title">{{card.title}}</h3>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <p class="card-text">{{card.description| text_truncate(60)}}</p>
+                <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
+                <!-- 
+                <b-btn v-b-toggle.collapse1 link variant="outline-primary">
+                <font-awesome-icon icon="angle-down"/>
+              </b-btn>
+              <b-collapse id="collapse1" class="mt-2">
+                <b-card>
+                  <ul>
+                    <li v-for="a in card.data">{{'- ' + a.root +' '+ a.name}}</li>
+                  </ul>
+                </b-card>
+                </b-collapse>-->
+                <a href="#" class="card-link" @click="editItem(card.id)">
+                  <font-awesome-icon icon="edit"/>
+                </a>
+                <a href="#" class="card-link" @click="deleteItem(card.id)">
+                  <font-awesome-icon icon="trash"/>
+                </a>
+                <a href="#" class="card-link" @click="checkItem(card.id)">
+                  <font-awesome-icon icon="list"/>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -50,6 +75,14 @@
             :max-rows="6"
           ></b-form-textarea>
         </b-form-group>
+        <b-form-group id="exampleInputGroup3" label="Progress" label-for="exampleInput3">
+          <b-form-input
+            id="exampleInput3"
+            type="number"
+            v-model="form.progress"
+            placeholder="Indicare"
+          ></b-form-input>
+        </b-form-group>
       </b-form>
     </b-modal>
   </div>
@@ -58,17 +91,18 @@
 <script>
 import Vue from 'vue';
 export const lista = [];
-export let guitar = null;
 
 export default {
   name: 'home',
   data: function() {
     return {
-      title: 'Benvenuti',
+      title: 'Studi',
+      max: 100,
       editmode: false,
       form: {
         title: '',
-        description: ''
+        description: '',
+        progress: 0
       },
       items: lista
       // esempio di struttura
@@ -76,6 +110,7 @@ export default {
       //   id: 0,
       //   title: 'Esempio 1',
       //   description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.',
+      //   progress:0
       //   data: ['c lydian']
       // }
     };
@@ -84,15 +119,13 @@ export default {
     this.$ls.get('lista', 0).forEach((e, i) => {
       this.$set(this.items, i, e);
     });
-    // loader true
-    let ac = new AudioContext();
-    this.$Soundfont.instrument(ac, 'acoustic_guitar_steel').then(function(guitarDownloaded) {
-      guitar = guitarDownloaded;
-      console.log('Guitar: ', guitar);
-      // loader false
-    });
   },
   methods: {
+    getIconPath(id) {
+      //let randomNumber = Math.floor(Math.random() * 15) + 1;
+      let imgNum = Number(id) + 1;
+      return require(`../assets/img/guitar${imgNum}.jpeg`);
+    },
     addItem(formData) {
       this.$refs.myModalRef.show();
     },
@@ -101,11 +134,12 @@ export default {
       let theOne = this.items.find(e => e.id == itemId);
       this.form.title = theOne.title;
       this.form.description = theOne.description;
+      this.form.progress = theOne.progress;
       this.editmode = true;
       this.editedItem = theOne;
+      console.log('Edited one: ', this.editedItem);
     },
     checkItem(itemId) {
-      // TODO:
       this.$router.push(`/item/${itemId}`);
     },
     deleteItem(itemId) {
@@ -119,7 +153,8 @@ export default {
             id: this.editedItem.id,
             title: this.form.title,
             description: this.form.description,
-            data: this.editItem.data
+            progress: Number(this.form.progress),
+            data: this.editItem.data || []
           };
           this.$set(this.items, this.editedItem.id, newItem);
           this.$ls.set('lista', this.items);
@@ -130,6 +165,8 @@ export default {
             id: nextIndex,
             title: this.form.title,
             description: this.form.description,
+            progress: Number(this.form.progress),
+            progress: this.form.progress,
             data: []
           };
           this.$set(this.items, nextIndex, newItem);
@@ -146,6 +183,7 @@ export default {
       this.form.title = '';
       this.form.description = '';
     }
-  }
+  },
+  computed: {}
 };
 </script>

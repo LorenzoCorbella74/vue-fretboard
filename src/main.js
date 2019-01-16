@@ -1,14 +1,49 @@
-import Vue from "vue";
-import BootstrapVue from "bootstrap-vue"
+import Vue from 'vue';
+import BootstrapVue from 'bootstrap-vue'
 import App from './App.vue'
-// import "bootstrap/dist/css/bootstrap.min.css"
-import "./assets/bootstrap.min.css";
-import "bootstrap-vue/dist/bootstrap-vue.css"
-import router from "./router";
-import store from "./store";
+import router from './router';
+import store from './store';
 import Storage from 'vue-ls';
 
-import Soundfont from 'soundfont-player';
+// STILI
+// import 'bootstrap/dist/css/bootstrap.min.css'
+import './assets/styles/bootstrap.min.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import './assets/styles/index.scss'
+
+// FONT AWESOME
+import {
+  library
+} from '@fortawesome/fontawesome-svg-core'
+import {
+  faMusic,
+  faPlus,
+  faPlay,
+  faEdit,
+  faTrash,
+  faList,
+  faAngleDown,
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+  faSpinner,
+  faGuitar
+} from '@fortawesome/free-solid-svg-icons'
+import {
+  FontAwesomeIcon
+} from '@fortawesome/vue-fontawesome'
+library.add(faMusic, faPlus, faPlay, faEdit, faTrash, faList, faAngleDown, faAngleDoubleLeft, faAngleDoubleRight, faSpinner, faGuitar)
+
+// GLOBAL FILTERS
+import {
+  capitalize,
+  text_truncate
+} from './filters/textFilters';
+Vue.filter('capitalize', capitalize);
+Vue.filter('text_truncate', text_truncate);
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+
 
 Vue.config.productionTip = false;
 
@@ -19,6 +54,7 @@ Vue.use(Storage, {
   storage: 'local', // storage name session, local, memory
 });
 
+
 new Vue({
   router,
   store,
@@ -26,6 +62,6 @@ new Vue({
 }).$mount('#app');
 
 // Si può accedere tramite this.$Soundfont
-Object.defineProperty(Vue.prototype, '$Soundfont', {
+/* Object.defineProperty(Vue.prototype, '$Soundfont', {
   value: Soundfont
-});
+}); */

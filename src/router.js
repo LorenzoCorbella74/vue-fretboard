@@ -1,7 +1,12 @@
 import Vue from "vue";
 import Router from "vue-router";
+
+// 
 import List from "./views/List.vue";
 import Item from "./views/Item.vue";
+import Circolo from './views/Circolo.vue'
+import Interscambio from './views/Interscambio.vue'
+
 
 Vue.use(Router);
 
@@ -12,6 +17,16 @@ export default new Router({
       path: "/",
       name: "list",
       component: List
+    },
+    {
+      path: "/circolo",
+      name: "circolo",
+      component: Circolo
+    },
+    {
+      path: "/interscambio",
+      name: "interscambio",
+      component: Interscambio
     },
     {
       path: "/item/:id",
