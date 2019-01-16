@@ -1,11 +1,14 @@
 <template>
   <div class="row">
     <div class="col-md-4">
-      <h5>{{tastiera.name}}</h5>
-      <a href="#" class="card-link" @click="playScale()">
-        <font-awesome-icon icon="play"/>
-      </a>
-      <span></span>
+      <h5>
+        {{tastiera.name}}
+        <span class="d-inline">
+          <a href="#" class="card-link" @click="playScale()">
+            <font-awesome-icon icon="play"/>
+          </a>
+        </span>
+      </h5>
     </div>
     <div class="col-md-3">
       <table class="table">

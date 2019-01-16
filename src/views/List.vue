@@ -37,15 +37,23 @@
                   </ul>
                 </b-card>
                 </b-collapse>-->
-                <a href="#" class="card-link" @click="editItem(card.id)">
-                  <font-awesome-icon icon="edit"/>
-                </a>
-                <a href="#" class="card-link" @click="deleteItem(card.id)">
-                  <font-awesome-icon icon="trash"/>
-                </a>
-                <a href="#" class="card-link" @click="checkItem(card.id)">
-                  <font-awesome-icon icon="list"/>
-                </a>
+                <div class="d-flex justify-content-around">
+                  <div class="p-2">
+                    <a href="#" class="card-link" @click="editItem(card.id)">
+                      <font-awesome-icon icon="edit"/>
+                    </a>
+                  </div>
+                  <div class="p-2">
+                    <a href="#" class="card-link" @click="deleteItem(card.id)">
+                      <font-awesome-icon icon="trash"/>
+                    </a>
+                  </div>
+                  <div class="p-2">
+                    <a href="#" class="card-link" @click="checkItem(card.id)">
+                      <font-awesome-icon icon="list"/>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

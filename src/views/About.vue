@@ -6,8 +6,13 @@
           <h1 class="mt-5">Buon studio!</h1>
           <p>Con quest'app si vuole aiutare tutti i chitarristi a visualizzare le sovrapposizioni di scale ed arpeggi</p>
           <br>
+        </div>
+        <div class="col lg-6">
           <div class="text-center">
-            <font-awesome-icon icon="guitar" spin size="6x"/>
+            <br>
+            <br>
+            <br>
+            <font-awesome-icon icon="guitar" size="10x"/>
           </div>
         </div>
       </div>

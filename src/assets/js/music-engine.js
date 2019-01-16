@@ -517,6 +517,7 @@ export const Fretboard = function (config) {
             .select(elem)
             .append('div')
             .attr('class', 'fretboard')
+            .attr('class', 'col-md-8 offset-lg-2')
             .attr('id', instance.id) // id è nell'istanza
             .append('svg')
             .attr('width', instance.fretboardWidth() + instance.XMARGIN() * 2)

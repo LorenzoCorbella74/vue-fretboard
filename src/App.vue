@@ -61,7 +61,7 @@ export default {
 
 <style lang="scss">
 .margine-da-navbar {
-  margin-top: 24px;
+  margin-top: 16px;
 }
 .overlay {
   position: fixed; /* Sit on top of the page content */

@@ -30,21 +30,17 @@
         </div>
       </div>
 
-      <div class="row">
-        <b-list-group>
-          <b-list-group-item v-for="i in selectedItem.data" :key="componentKey">
-            <div>
-              <!-- FRETBOARD -->
-              <fretboard-chart :input="i" :key="i.key"></fretboard-chart>
-              <a href="#" class="card-link" @click="editItem(i.id)">
-                <font-awesome-icon icon="edit"/>
-              </a>
-              <a href="#" class="card-link" @click="deleteItem(i.id)">
-                <font-awesome-icon icon="trash"/>
-              </a>
-            </div>
-          </b-list-group-item>
-        </b-list-group>
+      <div class="d-flex flex-column">
+        <div class="p-2" v-for="i in selectedItem.data" :key="componentKey">
+          <!-- FRETBOARD -->
+          <fretboard-chart :input="i" :key="i.key"></fretboard-chart>
+          <a href="#" class="card-link" @click="editItem(i.id)">
+            <font-awesome-icon icon="edit"/>
+          </a>
+          <a href="#" class="card-link" @click="deleteItem(i.id)">
+            <font-awesome-icon icon="trash"/>
+          </a>
+        </div>
       </div>
     </div>
 
