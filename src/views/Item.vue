@@ -30,8 +30,8 @@
         </div>
       </div>
 
-      <div class="d-flex flex-row">
-        <div class="p-2" v-for="i in selectedItem.data" :key="componentKey">
+      <div class="d-flex flex-column">
+        <div class="border-dotted" v-for="i in selectedItem.data" :key="componentKey">
           <!-- FRETBOARD -->
           <fretboard-chart :input="i" :key="i.key"></fretboard-chart>
           <div class="posizione-icone">
@@ -276,12 +276,16 @@ export default {
 
 <style>
 /* @import './styles/app.scss'; */
-.posizione-icone {
+/* .posizione-icone {
   margin: -15% 0 0 0;
 }
 @media (max-width: 992px) {
   .posizione-icone {
-    margin: -35% 0 0 0;
+    margin: -45% 0 0 0;
   }
+} */
+.border-dotted {
+  border: 1px grey dotted;
+  padding: 12px;
 }
 </style>

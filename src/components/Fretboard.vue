@@ -1,5 +1,6 @@
 <template>
   <div class="row">
+    <!-- my-5 -->
     <div class="col-md-4">
       <h5>
         {{tastiera.name}}
