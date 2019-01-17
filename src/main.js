@@ -26,20 +26,28 @@ import {
   faAngleDoubleLeft,
   faAngleDoubleRight,
   faSpinner,
-  faGuitar
+  faGuitar,
+  faQuestionCircle,
+  faFileImport,
+  faFileExport
 } from '@fortawesome/free-solid-svg-icons'
 import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
-library.add(faMusic, faPlus, faPlay, faEdit, faTrash, faList, faAngleDown, faAngleDoubleLeft, faAngleDoubleRight, faSpinner, faGuitar)
+library.add(faMusic, faPlus, faPlay, faEdit, faTrash, faList, faAngleDown, faAngleDoubleLeft, faAngleDoubleRight, faSpinner, faGuitar, faQuestionCircle, faFileImport,
+  faFileExport)
 
 // GLOBAL FILTERS
 import {
   capitalize,
   text_truncate
 } from './filters/textFilters';
+import {
+  date_format
+} from './filters/dateFilters';
 Vue.filter('capitalize', capitalize);
 Vue.filter('text_truncate', text_truncate);
+Vue.filter('date_format', date_format);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

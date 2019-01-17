@@ -7,6 +7,16 @@
             <h1>{{title}}</h1>
           </div>
           <div class="p-2">
+            <b-form-group label="Filtra per">
+              <b-form-radio-group id="radios2" v-model="listFilter" name="radioSubComponent">
+                <b-form-radio value="data">Data</b-form-radio>
+                <b-form-radio value="progress">Progress</b-form-radio>
+                <b-form-radio value="tipo">Famiglia</b-form-radio>
+                <b-form-radio value="testo" disabled>Testo</b-form-radio>
+              </b-form-radio-group>
+            </b-form-group>
+          </div>
+          <div class="p-2">
             <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
               <font-awesome-icon icon="plus"/>
             </b-button>
@@ -14,12 +24,13 @@
         </div>
 
         <div class="row">
-          <div class="col-md-3 col-sm-6 mb-2" v-for="card in items" :key="card.id">
+          <div class="col-md-3 col-sm-6 mb-2" v-for="card in filteredList" :key="card.id">
             <!-- mr-1 d-inline-block -->
-            <div class="card">
-              <img class="card-img-top" :src="getIconPath(card.id)" alt="Card image">
+            <div class="card" :class="[card.tipo]">
+              <img class="card-img-top" :src="getIconPath(card.id)" alt="Card image" v-once>
               <div class="card-img-overlay">
-                <h3 class="card-title">{{card.title}}</h3>
+                <h3 class="card-title" v-once>{{card.title}}</h3>
+                <h6 class="card-subtitle mb-2 text-muted sub-title">{{card.date | date_format}}</h6>
               </div>
             </div>
             <div class="card">
@@ -83,6 +94,7 @@
             :max-rows="6"
           ></b-form-textarea>
         </b-form-group>
+
         <b-form-group id="exampleInputGroup3" label="Progress" label-for="exampleInput3">
           <b-form-input
             id="exampleInput3"
@@ -90,6 +102,14 @@
             v-model="form.progress"
             placeholder="Indicare"
           ></b-form-input>
+        </b-form-group>
+        <b-form-group id="exampleInputGroup4" label="Famiglia" label-for="exampleInput4">
+          <b-form-select
+            id="exampleInput4"
+            v-model="form.tipo"
+            :options="optionsTipo"
+            :select-size="4"
+          />
         </b-form-group>
       </b-form>
     </b-modal>
@@ -105,13 +125,25 @@ export default {
   data: function() {
     return {
       title: 'Studi',
+      listFilter: 'data',
       max: 100,
       editmode: false,
       form: {
         title: '',
         description: '',
-        progress: 0
+        progress: 0,
+        tipo: null
       },
+      optionsTipo: [
+        { value: null, text: 'Selezionare una scala' },
+        { value: 'maggiore', text: 'Maggiore' },
+        { value: 'minore', text: 'Minore' },
+        { value: 'melodica', text: 'Minore Melodica' },
+        { value: 'armonica', text: 'Minore Armonica' },
+        { value: 'pentatonica', text: 'Pentatonica' },
+        { value: 'diminuita', text: 'Diminuita' },
+        { value: 'interi', text: 'A toni interi', disabled: true }
+      ],
       items: lista
       // esempio di struttura
       // {
@@ -130,8 +162,11 @@ export default {
   },
   methods: {
     getIconPath(id) {
-      //let randomNumber = Math.floor(Math.random() * 15) + 1;
+      //let randomNumber = Math.floor(Math.random() * 14) + 1;
       let imgNum = Number(id) + 1;
+      if (imgNum > 14) {
+        imgNum = imgNum - 14;
+      }
       return require(`../assets/img/guitar${imgNum}.jpeg`);
     },
     addItem(formData) {
@@ -143,6 +178,7 @@ export default {
       this.form.title = theOne.title;
       this.form.description = theOne.description;
       this.form.progress = theOne.progress;
+      this.form.tipo = theOne.tipo;
       this.editmode = true;
       this.editedItem = theOne;
       console.log('Edited one: ', this.editedItem);
@@ -152,6 +188,7 @@ export default {
     },
     deleteItem(itemId) {
       this.items = this.items.filter(e => e.id != itemId);
+      this.$ls.set('lista', this.$data.items);
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -161,11 +198,13 @@ export default {
             id: this.editedItem.id,
             title: this.form.title,
             description: this.form.description,
+            tipo: this.form.tipo,
             progress: Number(this.form.progress),
-            data: this.editItem.data || []
+            data: this.editItem.data || [],
+            date: this.editedItem.date
           };
           this.$set(this.items, this.editedItem.id, newItem);
-          this.$ls.set('lista', this.items);
+          this.$ls.set('lista', this.$data.items);
           this.editmode = false;
         } else {
           var nextIndex = this.items.length;
@@ -173,12 +212,14 @@ export default {
             id: nextIndex,
             title: this.form.title,
             description: this.form.description,
+            tipo: this.form.tipo,
             progress: Number(this.form.progress),
             progress: this.form.progress,
+            date: new Date().toISOString(),
             data: []
           };
           this.$set(this.items, nextIndex, newItem);
-          this.$ls.set('lista', this.items);
+          this.$ls.set('lista', this.$data.items);
         }
         // console.log(this.$data.items);
         this.$refs.myModalRef.hide();
@@ -192,6 +233,58 @@ export default {
       this.form.description = '';
     }
   },
-  computed: {}
+  computed: {
+    filteredList() {
+      if (this.listFilter == 'data') {
+        // Ascending: dal numero minore al maggiore
+        return this.items.sort((obj1, obj2) => obj1.id - obj2.id);
+      } else if (this.listFilter == 'progress') {
+        // discendente: dal numero maggiore al minore
+        return this.items.sort((obj1, obj2) => obj2.progress - obj1.progress);
+      } else if (this.listFilter == 'tipo') {
+        return this.items.sort((a, b) => {
+          // Use toUpperCase() to ignore character casing
+          const tipoA = a.tipo.toUpperCase();
+          const tipoB = b.tipo.toUpperCase();
+          let comparison = 0;
+          if (tipoA > tipoB) {
+            comparison = 1;
+          } else if (tipoA < tipoB) {
+            comparison = -1;
+          }
+          return comparison;
+        });
+      }
+    }
+  }
 };
 </script>
+
+<style lang="scss" scoped>
+.maggiore {
+  border-bottom: 5px solid red;
+}
+.minore {
+  border-bottom: 5px solid aqua;
+}
+.melodica {
+  border-bottom: 5px solid aquamarine;
+}
+.armonica {
+  border-bottom: 5px solid steelblue;
+}
+.pentatonica {
+  border-bottom: 5px solid yellow;
+}
+.diminuita {
+  border-bottom: 5px solid coral;
+}
+.interi {
+  border-bottom: 5px solid goldenrod;
+}
+.sub-title {
+  font-size: 12px;
+}
+</style>
+
+
