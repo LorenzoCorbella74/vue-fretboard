@@ -11,7 +11,7 @@
       </h5>
     </div>
     <div class="col-md-3">
-      <table class="table">
+      <table class="table table-sm">
         <thead class="thead-light">
           <tr>
             <th v-for="g in tastiera.gradi">{{g}}</th>

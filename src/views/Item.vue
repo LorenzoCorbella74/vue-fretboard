@@ -1,20 +1,20 @@
 <template>
   <div>
     <div class="container">
-      <div class="d-flex flex-row justify-content-between">
+      <div class="d-flex flex-row justify-content-around">
         <div class="p-2">
           <a href="#" class="card-link" @click="indietro">
-            <font-awesome-icon icon="angle-double-left"/>
+            <font-awesome-icon icon="angle-double-left" size="2x"/>
           </a>
         </div>
         <div class="p-2">
           <a href="#" class="card-link" @click="toList">
-            <font-awesome-icon icon="list"/>
+            <font-awesome-icon icon="list" size="2x"/>
           </a>
         </div>
         <div class="p-2">
           <a href="#" class="card-link" @click="avanti">
-            <font-awesome-icon icon="angle-double-right"/>
+            <font-awesome-icon icon="angle-double-right" size="2x"/>
           </a>
         </div>
       </div>
@@ -30,16 +30,18 @@
         </div>
       </div>
 
-      <div class="d-flex flex-column">
+      <div class="d-flex flex-row">
         <div class="p-2" v-for="i in selectedItem.data" :key="componentKey">
           <!-- FRETBOARD -->
           <fretboard-chart :input="i" :key="i.key"></fretboard-chart>
-          <a href="#" class="card-link" @click="editItem(i.id)">
-            <font-awesome-icon icon="edit"/>
-          </a>
-          <a href="#" class="card-link" @click="deleteItem(i.id)">
-            <font-awesome-icon icon="trash"/>
-          </a>
+          <div class="posizione-icone">
+            <a href="#" class="card-link" @click="editItem(i.id)">
+              <font-awesome-icon icon="edit"/>
+            </a>
+            <a href="#" class="card-link" @click="deleteItem(i.id)">
+              <font-awesome-icon icon="trash"/>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -105,7 +107,7 @@ export default {
       name: 'Item selezionato',
       componentKey: 0,
       items: lista, // oggetto condiviso tra le pagine List e Item
-      itemId: Number(this.$route.params.id),
+      itemId: Number(this.$route.params.id), // FIXME: non si aggiorna !!!!
       selectedItem: {
         title: '',
         desciption: ''
@@ -175,9 +177,10 @@ export default {
   },
   mounted() {
     // console.log(this.$router, this.$route);
-    console.log('Items: ', this.items, this.itemId);
+    // console.log('Items: ', this.items, this.itemId);
     this.selectedItem = this.items[this.itemId];
     console.log('Selected item: ', this.selectedItem);
+    console.log('ItemId: ', this.itemId);
   },
   // per reagire ai cambiamenti dei parametri dell'url...
   beforeRouteUpdate(to, from, next) {
@@ -211,11 +214,13 @@ export default {
     },
     avanti() {
       let itemNumber =
-        Number(this.itemId) + 1 > this.items.length - 1 ? this.items.length - 1 : Number(this.itemId) + 1;
+        Number(this.$route.params.id) + 1 == this.items.length - 1
+          ? this.items.length - 1
+          : Number(this.$route.params.id) + 1;
       this.$router.push(`/item/${itemNumber}`);
     },
     indietro() {
-      let itemNumber = Number(this.itemId) - 1 < 0 ? 0 : Number(this.itemId) - 1;
+      let itemNumber = Number(this.$route.params.id) - 1 == 0 ? 0 : Number(this.$route.params.id) - 1;
       this.$router.push(`/item/${itemNumber}`);
     },
     toList() {
@@ -271,4 +276,12 @@ export default {
 
 <style>
 /* @import './styles/app.scss'; */
+.posizione-icone {
+  margin: -15% 0 0 0;
+}
+@media (max-width: 992px) {
+  .posizione-icone {
+    margin: -35% 0 0 0;
+  }
+}
 </style>

@@ -23,13 +23,13 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" v-if="items.length>0">
           <div class="col-md-3 col-sm-6 mb-2" v-for="card in filteredList" :key="card.id">
             <!-- mr-1 d-inline-block -->
-            <div class="card" :class="[card.tipo]">
-              <img class="card-img-top" :src="getIconPath(card.id)" alt="Card image" v-once>
+            <div class="card" :class="[card.tipo]" v-once @click="checkItem(card.id)">
+              <img class="card-img-top" :src="getIconPath(card.id)" alt="Card image">
               <div class="card-img-overlay">
-                <h3 class="card-title" v-once>{{card.title}}</h3>
+                <h3 class="card-title">{{card.title}}</h3>
                 <h6 class="card-subtitle mb-2 text-muted sub-title">{{card.date | date_format}}</h6>
               </div>
             </div>
@@ -37,17 +37,6 @@
               <div class="card-body">
                 <p class="card-text">{{card.description| text_truncate(60)}}</p>
                 <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
-                <!-- 
-                <b-btn v-b-toggle.collapse1 link variant="outline-primary">
-                <font-awesome-icon icon="angle-down"/>
-              </b-btn>
-              <b-collapse id="collapse1" class="mt-2">
-                <b-card>
-                  <ul>
-                    <li v-for="a in card.data">{{'- ' + a.root +' '+ a.name}}</li>
-                  </ul>
-                </b-card>
-                </b-collapse>-->
                 <div class="d-flex justify-content-around">
                   <div class="p-2">
                     <a href="#" class="card-link" @click="editItem(card.id)">
@@ -156,16 +145,22 @@ export default {
     };
   },
   mounted() {
-    this.$ls.get('lista', 0).forEach((e, i) => {
-      this.$set(this.items, i, e);
-    });
+    const l = this.$ls.get('lista', 0);
+    if (l) {
+      this.$ls.get('lista', 0).forEach((e, i) => {
+        if (e) {
+          this.$set(this.items, i, e);
+        }
+      });
+      console.log('Items: ', this.$data.items);
+    }
   },
   methods: {
     getIconPath(id) {
-      //let randomNumber = Math.floor(Math.random() * 14) + 1;
+      // let randomNumber = Math.floor(Math.random() * 14) + 1;
       let imgNum = Number(id) + 1;
       if (imgNum > 14) {
-        imgNum = imgNum - 14;
+        imgNum = imgNum % 14;
       }
       return require(`../assets/img/guitar${imgNum}.jpeg`);
     },
@@ -200,14 +195,14 @@ export default {
             description: this.form.description,
             tipo: this.form.tipo,
             progress: Number(this.form.progress),
-            data: this.editItem.data || [],
+            data: this.editedItem.data || [],
             date: this.editedItem.date
           };
           this.$set(this.items, this.editedItem.id, newItem);
           this.$ls.set('lista', this.$data.items);
           this.editmode = false;
         } else {
-          var nextIndex = this.items.length;
+          var nextIndex = this.items.length; // si simula un id di partenza
           var newItem = {
             id: nextIndex,
             title: this.form.title,
@@ -221,7 +216,7 @@ export default {
           this.$set(this.items, nextIndex, newItem);
           this.$ls.set('lista', this.$data.items);
         }
-        // console.log(this.$data.items);
+
         this.$refs.myModalRef.hide();
         this.resetForm();
       } else {
@@ -235,25 +230,29 @@ export default {
   },
   computed: {
     filteredList() {
-      if (this.listFilter == 'data') {
-        // Ascending: dal numero minore al maggiore
-        return this.items.sort((obj1, obj2) => obj1.id - obj2.id);
-      } else if (this.listFilter == 'progress') {
-        // discendente: dal numero maggiore al minore
-        return this.items.sort((obj1, obj2) => obj2.progress - obj1.progress);
-      } else if (this.listFilter == 'tipo') {
-        return this.items.sort((a, b) => {
-          // Use toUpperCase() to ignore character casing
-          const tipoA = a.tipo.toUpperCase();
-          const tipoB = b.tipo.toUpperCase();
-          let comparison = 0;
-          if (tipoA > tipoB) {
-            comparison = 1;
-          } else if (tipoA < tipoB) {
-            comparison = -1;
-          }
-          return comparison;
-        });
+      if (this.items.length > 0) {
+        if (this.listFilter == 'data') {
+          // Ascending: dal numero minore al maggiore
+          return this.items.sort((obj1, obj2) => obj1.id - obj2.id);
+        } else if (this.listFilter == 'progress') {
+          // discendente: dal numero maggiore al minore
+          return this.items.sort((obj1, obj2) => obj2.progress - obj1.progress);
+        } else if (this.listFilter == 'tipo') {
+          return this.items.sort((a, b) => {
+            // Use toUpperCase() to ignore character casing
+            const tipoA = a.tipo.toUpperCase();
+            const tipoB = b.tipo.toUpperCase();
+            let comparison = 0;
+            if (tipoA > tipoB) {
+              comparison = 1;
+            } else if (tipoA < tipoB) {
+              comparison = -1;
+            }
+            return comparison;
+          });
+        }
+      } else {
+        return [];
       }
     }
   }
