@@ -31,7 +31,7 @@
       </div>
 
       <div class="d-flex flex-column">
-        <div class="border-dotted" v-for="i in selectedItem.data" :key="componentKey">
+        <div class="border-dotted" v-for="i in selectedItem.data" :key="i.id">
           <!-- FRETBOARD -->
           <fretboard-chart :input="i" :key="i.key"></fretboard-chart>
           <div class="posizione-icone">
@@ -191,7 +191,7 @@ export default {
   },
   methods: {
     forceRerender() {
-      this.componentKey += 1;
+      this.componentKey++;
     },
     addItem(formData) {
       this.$refs.myModalRef.show();
@@ -217,11 +217,15 @@ export default {
         Number(this.$route.params.id) + 1 == this.items.length - 1
           ? this.items.length - 1
           : Number(this.$route.params.id) + 1;
-      this.$router.push(`/item/${itemNumber}`);
+      if (itemNumber <= this.items.length - 1) {
+        this.$router.push(`/item/${itemNumber}`);
+      }
     },
     indietro() {
       let itemNumber = Number(this.$route.params.id) - 1 == 0 ? 0 : Number(this.$route.params.id) - 1;
-      this.$router.push(`/item/${itemNumber}`);
+      if (itemNumber >= 0) {
+        this.$router.push(`/item/${itemNumber}`);
+      }
     },
     toList() {
       this.$router.push('/'); //this.$router.go(-1);
