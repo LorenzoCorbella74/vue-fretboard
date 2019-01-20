@@ -29,13 +29,14 @@ import {
   faGuitar,
   faQuestionCircle,
   faFileImport,
-  faFileExport
+  faFileExport,
+  faCodeBranch
 } from '@fortawesome/free-solid-svg-icons'
 import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
 library.add(faMusic, faPlus, faPlay, faEdit, faTrash, faList, faAngleDown, faAngleDoubleLeft, faAngleDoubleRight, faSpinner, faGuitar, faQuestionCircle, faFileImport,
-  faFileExport)
+  faFileExport, faCodeBranch)
 
 // GLOBAL FILTERS
 import {

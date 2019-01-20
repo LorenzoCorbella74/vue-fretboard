@@ -31,14 +31,17 @@
       </div>
 
       <div class="d-flex flex-column">
-        <div class="border-dotted" v-for="i in selectedItem.data" :key="i.id">
+        <div class="border-dotted" v-for="(i, index) in selectedItem.data" :key="i.id">
           <!-- FRETBOARD -->
-          <fretboard-chart :input="i" :key="i.key"></fretboard-chart>
+          <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
           <div class="posizione-icone">
             <a href="#" class="card-link" @click="editItem(i.id)">
               <font-awesome-icon icon="edit"/>
             </a>
-            <a href="#" class="card-link" @click="deleteItem(i.id)">
+            <a href="#" class="card-link" @click="mergeWithFirst(i)" v-if="index>0">
+              <font-awesome-icon icon="code-branch"/>
+            </a>
+            <a href="#" class="card-link float-right" @click="deleteItem(i.id)">
               <font-awesome-icon icon="trash"/>
             </a>
           </div>
@@ -273,6 +276,15 @@ export default {
       this.form.selectedNote = null;
       this.form.selectedScale = null;
       this.form.selectedArp = null;
+    },
+    mergeWithFirst(toBeMerged) {
+      const first = this.selectedItem.data[0] ? this.selectedItem.data[0] : null;
+      console.log(first, toBeMerged);
+    },
+    registerFretboard(data, who) {
+      console.log('Registering data: ', this.selectedItem.data[who.id]);
+      this.$set(this.selectedItem.data[who.id], 'notes', data.notes);
+      this.$set(this.selectedItem.data[who.id], 'gradi', data.gradi);
     }
   }
 };

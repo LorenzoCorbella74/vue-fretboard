@@ -51,7 +51,9 @@ export default {
     // si genera la diteggiatura
     nuovaTastiera.scale(this.input.root + ' ' + this.input.name, this.input.type, this.input.typeOutput);
     this.tastiera = nuovaTastiera;
-    console.log(this.tastiera);
+    let objCopy = JSON.parse(JSON.stringify(nuovaTastiera));
+    this.$emit('tastiera', Object.assign({}, objCopy));
+    // console.log(this.tastiera);
   },
   methods: {
     /*
