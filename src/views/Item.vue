@@ -63,7 +63,8 @@
       </div>
     </div>
 
-    <b-modal ref="myModalRef" :title="calcolaTitolo" @ok="onSubmit">
+    <!-- MODALE -->
+    <b-modal ref="myModalRef" :title="calcolaTitolo" size="lg" @ok="onSubmit">
       <b-form>
         <div class="row">
           <div class="col-md-6">
@@ -160,8 +161,28 @@ export default {
         { text: 'Phrygian', value: 'phrygian' },
         { text: 'Phrygian Penta', value: 'phrygian-pentatonic' },
         { text: 'Locrian', value: 'locrian' },
-        { text: 'Locrian Penta', value: 'locrian-pentatonic' }
-        // TODO:
+        { text: 'Locrian Penta', value: 'locrian-pentatonic' },
+        // Minore melodica
+        { text: 'Melodic Minor', value: 'melodic-minor' },
+        { text: 'Dorian b2', value: 'dorian-b2' },
+        { text: 'Lydian 5#', value: 'lydian-aug' },
+        { text: 'Lydian Dominante (4#)', value: 'lydian-dominant' },
+        { text: 'Mixolydian b6', value: 'mixolydian-b6' },
+        { text: 'Aeolian b5', value: 'aeolian-b5' },
+        { text: 'Super Locrian (ALTERED)', value: 'super-locrian' },
+        // Minore Armonica
+        { text: 'Harmonic Minor', value: 'harmonic-minor' },
+        { text: 'Locrian #6', value: 'locrian-#6' },
+        { text: 'Ionian #5', value: 'ionian-#5' },
+        { text: 'Dorian #4', value: 'dorian-#4' },
+        { text: 'Phrygian Dominant', value: 'phrygian-dominant' },
+        { text: 'Lydian #2', value: 'lydian-#2' },
+        { text: 'Super Locrian (Dim)', value: 'super-locrian-dim' },
+        // Toni interi
+        { text: 'Whole Tone', value: 'whole-tone' },
+        // Diminuita
+        { text: 'Diminished st', value: 'diminished-st' },
+        { text: 'Diminished ts', value: 'diminished-ts' }
       ],
       optionsArp: [
         { text: 'Maj', value: 'maj' },
@@ -213,7 +234,7 @@ export default {
     forceRerender() {
       this.componentKey++;
     },
-    addItem(formData) {
+    addItem() {
       this.resetForm();
       this.$refs.myModalRef.show();
     },
@@ -236,6 +257,7 @@ export default {
     },
     deleteItem(itemId) {
       this.selectedItem.data = this.selectedItem.data.filter(e => e.id != itemId);
+      this.$ls.set('lista', this.items);
     },
     avanti() {
       let itemNumber =

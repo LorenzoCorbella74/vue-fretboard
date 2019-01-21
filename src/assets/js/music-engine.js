@@ -788,7 +788,7 @@ export const Fretboard = function (config) {
                 .attr('y', (string - 1) * instance.fretHeight + 1 + instance.YMARGIN() + 3.5 + 'px')
                 .attr('font-family', 'sans-serif')
                 .attr('font-size', '10px')
-                .attr('fill', '#333') // '#2F4F4F' DarkSlateGrey
+                .attr('fill', '#4c5151') // '#2F4F4F' DarkSlateGrey
                 .text(content) // si rimuove l'ultimo carattere
                 .on('click', () => instance.playNote(note));
 
