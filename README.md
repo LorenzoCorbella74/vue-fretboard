@@ -2,7 +2,7 @@
 
 ![tastiera](./src/assets/img/Screen.PNG)
 
-Tool basato sul repository [notes-on-fretboard](https://github.com/LorenzoCorbella74/notes-on-fretboard) che permette di tenere traccia degli studi delle sovrapposizioni di note di scale e arpeggi visualizzando verticalmente più tastiere di chitarra. La visualizzazione della tastiera è basata sulla preziosa libreria [fretboard](https://github.com/txels/fretboard) basata su D3.js. Per una demo seguire il [link](https://lorenzocorbella74.github.io/notes-on-fretboard/). Guitar images courtesy of [Pexels](https://www.pexels.com).
+Tool basato sul repository [notes-on-fretboard](https://github.com/LorenzoCorbella74/notes-on-fretboard) che permette di tenere traccia degli studi delle sovrapposizioni di note di scale e arpeggi visualizzando verticalmente più tastiere di chitarra. La visualizzazione della tastiera è basata sulla preziosa libreria [fretboard](https://github.com/txels/fretboard) basata su D3.js. Per una demo seguire il [link](https://lorenzocorbella74.github.io/vue-fretboard/). Guitar images courtesy of [Pexels](https://www.pexels.com).
 
 ## Features
 - [x] scelta di scale o arpeggi 
