@@ -159,8 +159,8 @@ export default {
     getIconPath(id) {
       // let randomNumber = Math.floor(Math.random() * 14) + 1;
       let imgNum = Number(id) + 1;
-      if (imgNum > 14) {
-        imgNum = imgNum % 14;
+      if (imgNum > 20) {
+        imgNum = imgNum % 20;
       }
       return require(`../assets/img/guitar${imgNum}.jpeg`);
     },
