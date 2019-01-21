@@ -35,7 +35,7 @@
             </div>
             <div class="card">
               <div class="card-body">
-                <p class="card-text">{{card.description| text_truncate(60)}}</p>
+                <p class="card-text custom-height">{{card.description| text_truncate(60)}}</p>
                 <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
                 <div class="d-flex justify-content-around">
                   <div class="p-2">
@@ -164,7 +164,7 @@ export default {
       }
       return require(`../assets/img/guitar${imgNum}.jpeg`);
     },
-    addItem(formData) {
+    addItem() {
       this.resetForm();
       this.$refs.myModalRef.show();
     },
@@ -190,16 +190,16 @@ export default {
       evt.preventDefault();
       if (this.form.title && this.form.description) {
         if (this.editmode) {
-          var newItem = {
+          var newEditedItem = {
             id: this.editedItem.id,
             title: this.form.title,
             description: this.form.description,
             tipo: this.form.tipo,
-            progress: Number(this.form.progress),
+            progress: this.form.progress,
             data: this.editedItem.data || [],
             date: this.editedItem.date
           };
-          this.$set(this.items, this.editedItem.id, newItem);
+          this.$set(this.items, this.editedItem.id, newEditedItem);
           this.$ls.set('lista', this.$data.items);
           this.editmode = false;
         } else {
@@ -209,7 +209,6 @@ export default {
             title: this.form.title,
             description: this.form.description,
             tipo: this.form.tipo,
-            progress: Number(this.form.progress),
             progress: this.form.progress,
             date: new Date().toISOString(),
             data: []
@@ -253,7 +252,7 @@ export default {
           });
         }
       } else {
-        return [];
+        return null;
       }
     }
   }
@@ -284,6 +283,9 @@ export default {
 }
 .sub-title {
   font-size: 12px;
+}
+.custom-height {
+  height: 64px;
 }
 </style>
 
