@@ -7,6 +7,7 @@ const colors_penta = ['yellow', '#87CEFA', '#F4D03F', 'Tomato', 'lightgray']; //
 const colors_penta_six = ['yellow', '#87CEFA', '#F4D03F', 'SlateBlue', 'Tomato', 'lightgray']; // 6 note
 const colors_triads_seven = ['yellow', '#F4D03F', 'Tomato', 'lightgray']; // 4 note
 const colors_triads = ['yellow', '#F4D03F', 'Tomato']; // 3 note
+const colors_merge = ['#F4D03F', 'lightgray', 'gray']; // 3 note
 
 // ACCORDATURE
 export const Tunings = {
@@ -168,7 +169,7 @@ const intervalMap4 = {
 };
 const NOTES = 'a a# b c c# d d# e f f# g g#'.split(' '); // è l'array di note
 const NOTESENH = 'a bb b c db d eb e f gb g ab'.split(' '); // è l'array di note
-const SCALES = {
+export const SCALES = {
     'maj': ["2t", "ts", "2ts"],
     'maj7': ["2t", "ts", "2t", 's'],
     '7': ["2t", "ts", "ts", 't'],
@@ -417,7 +418,7 @@ function calcolaAccordo(gradiScala) {
 }
 
 // ritorna un array di note che rappresenta la scala in base agli intervalli passati
-function createScale(startNote, intervalli) {
+export function createScale(startNote, intervalli) {
     let output = {
         key: startNote,
         notes: [],
@@ -449,7 +450,7 @@ function createScaleOnDegree(startNote, scale, degree) {
 }
 
 // si creano tutti i gradi a partire da una scala maggiore
-function createAllDegree(tonica, scala) {
+export function createAllDegree(tonica, scala) {
     var allDegree = [];
     var mag = createScale(tonica, scala).notes;
     mag.forEach((firstNote, i) => {
@@ -465,6 +466,97 @@ function formatText(scalename) {
     out = out.charAt(0).toUpperCase() + out.slice(1).toLowerCase();
     return out;
 }
+
+/* ------------------- MERGE SCALES ------------------- */
+
+function transposeScaleObjByStartingNote(startNote, scale) {
+    var indexToSplit;
+    scale.some(function (item, i) {
+        if (item["value"] === startNote) {
+            indexToSplit = i;
+            return true;
+        }
+    });
+    var first = scale.slice(0, indexToSplit);
+    var second = scale.slice(indexToSplit);
+    return second.concat(first);
+}
+
+export function mergeScale(a, b) {
+    let mag, min;
+    if (a.length >= b.length) {
+        mag = a;
+        min = b;
+    } else {
+        mag = b;
+        min = a;
+    }
+    let data = [];
+    let trovato = [];
+    for (let i = 0; i < min.length; i++) {
+        for (let j = 0; j < mag.length; j++) {
+            if (min[i] === mag[j]) {
+                data.push({
+                    value: min[i],
+                    style: 0,
+                    index: j
+                }); // se in entrambi
+                trovato[i] = true;
+                break;
+            }
+        }
+        if (!trovato[i]) {
+            data.push({
+                value: min[i],
+                style: 2,
+                index: i
+            }); // se solo nel 2°
+        }
+    }
+    let trovatodue = [];
+    for (let i = 0; i < mag.length; i++) {
+        for (let j = 0; j < data.length; j++) {
+            if (mag[i] === data[j].value) {
+                trovatodue[i] = true;
+                break;
+            }
+        }
+        if (!trovatodue[i]) {
+            data.push({
+                value: mag[i],
+                style: 1,
+                index: i
+            }); // se solo nel 1°
+        }
+    }
+    // console.log("min: ", min,"mag: ", mag);
+    // console.log(data.map(e=>e.value))
+    let output = data.sort((a, b) => {
+        if (a.value < b.value) {
+            return -1;
+        }
+        if (a.value > b.value) {
+            return 1;
+        }
+        return 0;
+    });
+    return transposeScaleObjByStartingNote(a[0], output);
+}
+
+export function mergeDegree(data, a, b) {
+    let output = [];
+    for (let i = 0; i < data.length; i++) {
+        const e = data[i];
+        if (e.style === 1 || e.style === 0) {
+            output.push(a[e.index]);
+        }
+        if (e.style == 2) {
+            output.push(b[e.index]);
+        }
+    }
+    return output;
+}
+/* ------------------- MERGE SCALES ------------------- */
 
 // si istanzia l'oggetto 'TASTIERA' passandogli un eventuale oggetto di configurazione
 export const Fretboard = function (config) {
@@ -737,15 +829,20 @@ export const Fretboard = function (config) {
         }
     }
 
-    instance.addNotes = function (notes, tipo, tipovisualizzazione) {
+    instance.addNotes = function (notes, tipo, tipovisualizzazione, colorForMerge) {
         // console.log(notes, tipo, tipovisualizzazione);
         const NOTES = notes.split(' ');
+        let showColor;
         let allDegrees;
         if (tipovisualizzazione == 'grado') {
             allDegrees = instance.gradi.split(' ');
         }
         for (let i = 0; i < NOTES.length; i++) {
-            const showColor = instance.getRightColor(i, tipo, NOTES.length);
+            if (!colorForMerge) {
+                showColor = instance.getRightColor(i, tipo, NOTES.length);
+            } else {
+                showColor = colors_merge[instance.colors[i]];
+            }
             const note = NOTES[i];
             const degree = allDegrees ? allDegrees[i] : null;
             for (let octave = 2; octave < 7; octave++) {
@@ -762,6 +859,15 @@ export const Fretboard = function (config) {
     Per disegnare SCALE è chiamata all'interno dell'HTML !!!! 
     scaleNAme = "c lydian"
     */
+    instance.mergedScale = function (note, gradi, tipo, tipovisualizzazione, name) {
+        instance.merged = true;
+        instance.name = name;
+        instance.notes = note.map(e => e.value).join(' ');
+        instance.colors = note.map(e => e.style);
+        instance.gradi = gradi.join(' ');
+        instance.clear(); // cancella tutto e ridisegna la tastiera
+        instance.addNotes(instance.notes, tipo, tipovisualizzazione, instance.colors); // ridisegna le note "c d e f# g a b", "scala", "grado"
+    };
     instance.scale = function (scaleName, tipo, tipovisualizzazione) {
         let [root, type] = scaleName.split(' ');
         let intervalli = SCALES[type];

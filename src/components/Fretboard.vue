@@ -33,15 +33,13 @@ import { Fretboard, Tunings } from '../assets/js/music-engine.js';
 import { ac, guitar } from '../App.vue';
 export default {
   name: 'fretboard-chart',
-  props: ['input'], // <fretboard-chart :input="data"><fretboard-chart>  data  sono dati dinamici
+  props: ['input'],
   data: function(params) {
     return {
       tastiera: {}
     };
   },
   mounted() {
-    // console.log(this.input, Fretboard);
-
     const nuovaTastiera = Fretboard({
       tuning: Tunings[this.input.tuning] || Tunings.E_std,
       callback: this.playNote
@@ -49,11 +47,21 @@ export default {
     // istanzia il contenitore SVG per la tastiera
     nuovaTastiera.makeContainer(this.$el);
     // si genera la diteggiatura
-    nuovaTastiera.scale(this.input.root + ' ' + this.input.name, this.input.type, this.input.typeOutput);
+    if (!this.input.merge) {
+      nuovaTastiera.scale(this.input.root + ' ' + this.input.name, this.input.type, this.input.typeOutput);
+    } else {
+      nuovaTastiera.mergedScale(
+        this.input.note,
+        this.input.gradi,
+        this.input.type,
+        this.input.typeOutput,
+        this.input.name
+      );
+    }
     this.tastiera = nuovaTastiera;
+    // si trasmette al padre i dati della scala
     let objCopy = JSON.parse(JSON.stringify(nuovaTastiera));
     this.$emit('tastiera', Object.assign({}, objCopy));
-    // console.log(this.tastiera);
   },
   methods: {
     /*

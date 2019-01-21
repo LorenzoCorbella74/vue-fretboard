@@ -88,7 +88,7 @@
           <b-form-input
             id="exampleInput3"
             type="number"
-            v-model="form.progress"
+            v-model.number="form.progress"
             placeholder="Indicare"
           ></b-form-input>
         </b-form-group>
@@ -165,6 +165,7 @@ export default {
       return require(`../assets/img/guitar${imgNum}.jpeg`);
     },
     addItem(formData) {
+      this.resetForm();
       this.$refs.myModalRef.show();
     },
     editItem(itemId) {

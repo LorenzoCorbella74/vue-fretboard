@@ -35,10 +35,11 @@
           <!-- FRETBOARD -->
           <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
           <div class="posizione-icone">
-            <a href="#" class="card-link" @click="editItem(i.id)">
+            <a href="#" class="card-link" @click="editItem(i.id)" v-if="!i.merge">
               <font-awesome-icon icon="edit"/>
             </a>
-            <a href="#" class="card-link" @click="mergeWithFirst(i)" v-if="index>0">
+            <a href="#" class="card-link" @click="mergeWithOther(i)" v-if="!i.merge">
+              <!-- index>0 &&  -->
               <font-awesome-icon icon="code-branch"/>
             </a>
             <a href="#" class="card-link float-right" @click="deleteItem(i.id)">
@@ -49,7 +50,7 @@
       </div>
     </div>
 
-    <b-modal ref="myModalRef" :title="editmode? 'Edita':'Salva'" @ok="onSubmit">
+    <b-modal ref="myModalRef" :title="calcolaTitolo" @ok="onSubmit">
       <b-form>
         <div class="row">
           <div class="col-md-6">
@@ -101,6 +102,7 @@
 <script>
 import { lista } from './List.vue';
 import Fretboard from '../components/Fretboard.vue';
+import { mergeScale, mergeDegree, createScale, createAllDegree, SCALES } from '../assets/js/music-engine.js';
 
 export default {
   name: 'Item',
@@ -115,7 +117,8 @@ export default {
         title: '',
         desciption: ''
       },
-      editmode: false,
+      editMode: false,
+      mergeMode: false,
       form: {
         scaleUsArp: 'scala',
         noteUsDegree: 'grado',
@@ -197,20 +200,25 @@ export default {
       this.componentKey++;
     },
     addItem(formData) {
+      this.resetForm();
       this.$refs.myModalRef.show();
     },
     editItem(itemId) {
       this.$refs.myModalRef.show();
       let theOne = this.selectedItem.data.find(e => e.id == itemId);
-      console.log(theOne);
       this.form.scaleUsArp = theOne.type;
       this.form.noteUsDegree = theOne.typeOutput;
       this.form.selectedTuning = theOne.tuning;
       this.form.selectedNote = theOne.root;
       this.form.selectedScale = theOne.name;
       this.form.selectedArp = theOne.name;
-      this.editmode = true;
+      this.editMode = true;
       this.editedItem = theOne.id;
+    },
+    mergeWithOther(toBeMerged) {
+      this.$refs.myModalRef.show();
+      this.mergeMode = true;
+      this.mergeFirstItem = toBeMerged;
     },
     deleteItem(itemId) {
       this.selectedItem.data = this.selectedItem.data.filter(e => e.id != itemId);
@@ -236,7 +244,9 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       if ((this.form.selectedNote && this.form.selectedScale) || (this.form.selectedNote && this.form.selectedArp)) {
-        if (this.editmode) {
+        // si edita
+        let name = this.form.scaleUsArp == 'scala' ? this.form.selectedScale : this.form.selectedArp;
+        if (this.editMode) {
           var newItem = {
             id: this.editedItem,
             key: Math.random() * 1000000,
@@ -244,11 +254,36 @@ export default {
             typeOutput: this.form.noteUsDegree,
             tuning: this.form.selectedTuning,
             root: this.form.selectedNote,
-            name: this.form.scaleUsArp == 'scala' ? this.form.selectedScale : this.form.selectedArp
+            name: name
           };
           this.selectedItem.data[this.editedItem] = Object.assign({}, newItem);
           this.$ls.set('lista', this.items);
-          this.editmode = false;
+          this.editMode = false;
+          // si mergia
+        } else if (this.mergeMode) {
+          let secondroot = this.form.selectedNote;
+          let secondtype = name;
+          let secondintervalli = SCALES[secondtype];
+          let mergeSecondItem = createScale(secondroot, secondintervalli);
+          const noteMergiate = mergeScale(this.mergeFirstItem.notes.split(' '), mergeSecondItem.notes);
+          const gradiMergiati = mergeDegree(noteMergiate, this.mergeFirstItem.gradi.split(' '), mergeSecondItem.gradi);
+          console.log('Mergiato: ', noteMergiate, gradiMergiati);
+          this.selectedItem.data.push({
+            id: this.selectedItem.data.length,
+            key: Math.random() * 1000000,
+            type: this.form.scaleUsArp,
+            typeOutput: this.form.noteUsDegree,
+            tuning: this.form.selectedTuning,
+            root: this.form.selectedNote,
+            name: `${secondroot} ${secondtype} mergiato con ${this.mergeFirstItem.root} ${this.mergeFirstItem.name}`,
+            merge: true,
+            note: noteMergiate,
+            gradi: gradiMergiati
+          });
+          this.items[this.itemId] = Object.assign({}, this.selectedItem); // per la reattività si  deve mettere uno nuovo
+          this.$ls.set('lista', this.items);
+          this.mergeMode = false;
+          // si salva una nuova scala
         } else {
           this.selectedItem.data.push({
             id: this.selectedItem.data.length,
@@ -277,14 +312,21 @@ export default {
       this.form.selectedScale = null;
       this.form.selectedArp = null;
     },
-    mergeWithFirst(toBeMerged) {
-      const first = this.selectedItem.data[0] ? this.selectedItem.data[0] : null;
-      console.log(first, toBeMerged);
-    },
     registerFretboard(data, who) {
-      console.log('Registering data: ', this.selectedItem.data[who.id]);
       this.$set(this.selectedItem.data[who.id], 'notes', data.notes);
       this.$set(this.selectedItem.data[who.id], 'gradi', data.gradi);
+      console.log('Registering data: ', this.selectedItem.data[who.id]);
+    }
+  },
+  computed: {
+    calcolaTitolo() {
+      if (this.editMode) {
+        return 'Edita';
+      } else if (this.mergeMode) {
+        return 'Mergia';
+      } else {
+        return 'Salva';
+      }
     }
   }
 };
