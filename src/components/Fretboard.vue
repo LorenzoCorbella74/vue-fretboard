@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <!-- my-5 -->
-    <div class="col-md-4">
+    <div class="col-md-5">
       <h5>
         {{tastiera.name}}
         <span class="d-inline">
@@ -11,16 +11,16 @@
         </span>
       </h5>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-6">
       <table class="table table-sm">
         <thead class="thead-light">
           <tr>
-            <th v-for="g in tastiera.gradi">{{g}}</th>
+            <th v-for="g in tastiera.gradiSplitted">{{g}}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td v-for="n in tastiera.notes">{{n|capitalize}}</td>
+            <td v-for="n in tastiera.notesSplitted">{{n|capitalize}}</td>
           </tr>
         </tbody>
       </table>
@@ -36,7 +36,9 @@ export default {
   props: ['input'],
   data: function(params) {
     return {
-      tastiera: {}
+      tastiera: {},
+      notesSplitted: [],
+      gradiSplitted: []
     };
   },
   mounted() {
@@ -44,6 +46,7 @@ export default {
       tuning: Tunings[this.input.tuning] || Tunings.E_std,
       callback: this.playNote
     });
+
     // istanzia il contenitore SVG per la tastiera
     nuovaTastiera.makeContainer(this.$el);
     // si genera la diteggiatura
@@ -58,10 +61,13 @@ export default {
         this.input.name
       );
     }
+    nuovaTastiera.notesSplitted = nuovaTastiera.notes.split(' ');
+    nuovaTastiera.gradiSplitted = nuovaTastiera.gradi.split(' ');
     this.tastiera = nuovaTastiera;
     // si trasmette al padre i dati della scala
     let objCopy = JSON.parse(JSON.stringify(nuovaTastiera));
     this.$emit('tastiera', Object.assign({}, objCopy));
+    console.log('Tastiera: ', this.tastiera);
   },
   methods: {
     /*

@@ -125,13 +125,15 @@ export default {
 
 <style lang="scss">
 .wrapper {
-  background: url('https://unsplash.it/1500/1500/?image=994') center no-repeat;
+  background: url('https://unsplash.it/1500/1500/?image=721') center no-repeat;
   /* 
   
   Lista delle img: https://picsum.photos/images 
   1053
   1041
-  994
+  994 <-
+  769
+  765,721
 
   */
   background-size: cover;
