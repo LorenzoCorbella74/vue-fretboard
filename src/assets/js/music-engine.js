@@ -566,7 +566,7 @@ export const Fretboard = function (config) {
         frets: config.frets || 12, // numero di tasti da visualizzare
         strings: config.strings || 6, // numero di corde
         tuning: config.tuning || Tunings.E_4ths, // accordatura
-        fretWidth: 46, // larghezza tasti
+        fretWidth: config.fretWidth || 46, // larghezza tasti
         fretHeight: 30, // altezza tasti
         id: 'fretboard-' + Math.floor(Math.random() * 1000000), // id della tastiera
         name: '', // NOME della scala/arpeggio
@@ -864,7 +864,7 @@ export const Fretboard = function (config) {
         instance.name = name;
         instance.notes = note.map(e => e.value).join(' ');
         instance.colors = note.map(e => e.style);
-        instance.gradi = gradi.join(' ');
+        instance.gradi = typeof gradi === 'string' ? gradi : gradi.join(' ');
         instance.clear(); // cancella tutto e ridisegna la tastiera
         instance.addNotes(instance.notes, tipo, tipovisualizzazione, instance.colors); // ridisegna le note "c d e f# g a b", "scala", "grado"
     };

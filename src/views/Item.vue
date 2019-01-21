@@ -2,21 +2,21 @@
   <div>
     <div class="container bg-white">
       <div class="d-flex flex-row justify-content-around">
-        <div class="p-2">
+        <!--  <div class="p-2">
           <a href="#" class="card-link" @click="indietro">
             <font-awesome-icon icon="angle-double-left" size="2x"/>
           </a>
-        </div>
+        </div>-->
         <div class="p-2">
           <a href="#" class="card-link" @click="toList">
             <font-awesome-icon icon="list" size="2x"/>
           </a>
         </div>
-        <div class="p-2">
+        <!--  <div class="p-2">
           <a href="#" class="card-link" @click="avanti">
             <font-awesome-icon icon="angle-double-right" size="2x"/>
           </a>
-        </div>
+        </div>-->
       </div>
 
       <div class="d-flex flex-row justify-content-between">
@@ -31,22 +31,35 @@
       </div>
 
       <div class="d-flex flex-column">
-        <div class="border-dotted" v-for="(i, index) in selectedItem.data" :key="i.id">
-          <!-- FRETBOARD -->
-          <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
-          <div class="posizione-icone">
-            <a href="#" class="card-link" @click="editItem(i.id)" v-if="!i.merge">
-              <font-awesome-icon icon="edit"/>
-            </a>
-            <a href="#" class="card-link" @click="mergeWithOther(i)" v-if="!i.merge">
-              <!-- index>0 &&  -->
-              <font-awesome-icon icon="code-branch"/>
-            </a>
-            <a href="#" class="card-link float-right" @click="deleteItem(i.id)">
-              <font-awesome-icon icon="trash"/>
-            </a>
+        <draggable
+          v-model="selectedItem.data"
+          :options="{group:'people'}"
+          @start="drag=true"
+          @end="drag=false"
+        >
+          <!-- <transition-group name="list-fretboard" tag="div"> -->
+          <div
+            class="list-fretboard border-dotted"
+            v-for="(i, index) in selectedItem.data"
+            :key="i.id"
+          >
+            <!-- FRETBOARD -->
+            <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
+            <div class="posizione-icone">
+              <a href="#" class="card-link" @click="editItem(i.id)" v-if="!i.merge">
+                <font-awesome-icon icon="edit"/>
+              </a>
+              <a href="#" class="card-link" @click="mergeWithOther(i)" v-if="!i.merge">
+                <!-- index>0 &&  -->
+                <font-awesome-icon icon="code-branch"/>
+              </a>
+              <a href="#" class="card-link float-right" @click="deleteItem(i.id)">
+                <font-awesome-icon icon="trash"/>
+              </a>
+            </div>
           </div>
-        </div>
+          <!-- </transition-group> -->
+        </draggable>
       </div>
     </div>
 
@@ -103,10 +116,11 @@
 import { lista } from './List.vue';
 import Fretboard from '../components/Fretboard.vue';
 import { mergeScale, mergeDegree, createScale, createAllDegree, SCALES } from '../assets/js/music-engine.js';
+import draggable from 'vuedraggable';
 
 export default {
   name: 'Item',
-  components: { 'fretboard-chart': Fretboard },
+  components: { 'fretboard-chart': Fretboard, draggable },
   data() {
     return {
       name: 'Item selezionato',
@@ -332,7 +346,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* @import './styles/app.scss'; */
 /* .posizione-icone {
   margin: -15% 0 0 0;
@@ -345,5 +359,26 @@ export default {
 .border-dotted {
   border: 1px grey dotted;
   padding: 12px;
+}
+.list-fretboard {
+  transition: all 0.5s;
+}
+.list-fretboard-enter, .list-fretboard-leave-to
+/* .list-fretboard-leave-active for <2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px); /* scale(0.9); */
+}
+.list-fretboard-enter-to {
+  opacity: 1;
+  transform: translateY(10px); /* scale(1); */
+}
+
+.list-fretboard-leave-active {
+  /*position: absolute;*/
+}
+
+.list-fretboard-move {
+  opacity: 1;
+  transition: all 0.5s;
 }
 </style>

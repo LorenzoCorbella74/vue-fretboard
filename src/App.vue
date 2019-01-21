@@ -10,13 +10,12 @@
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
             <b-nav-item to="/" right>Studi</b-nav-item>
-            <b-nav-item to="/circolo" right>Circolo V</b-nav-item>
-            <b-nav-item to="/interscambio" right>Interscambio modale</b-nav-item>
+            <!-- <b-nav-item to="/circolo" right>Circolo V</b-nav-item>
+            <b-nav-item to="/interscambio" right>Interscambio modale</b-nav-item>-->
             <!-- <b-nav-item to="/about" right>About</b-nav-item> -->
             <b-nav-item-dropdown text right>
-              <b-dropdown-item>
-                <font-awesome-icon icon="file-import" class="mr-2"/>
-                <file-importer @load="text = $event"></file-importer>
+              <b-dropdown-item @click="showImportModal">
+                <font-awesome-icon icon="file-import" class="mr-2"/>Importa
               </b-dropdown-item>
               <b-dropdown-item href="#" @click="exportFile">
                 <font-awesome-icon icon="file-export" class="mr-2"/>Export
@@ -32,9 +31,8 @@
 
     <!-- OVERLAY -->
     <div class="d-flex justify-content-center align-items-center overlay" v-if="isLoading">
-      <div class="p-2 text-center">
+      <div class="p-2 text-center text-light">
         <font-awesome-icon icon="spinner" spin size="5x"/>
-
         <div>Loading guitar sounds...</div>
       </div>
     </div>
@@ -44,6 +42,19 @@
         <router-view/>
       </transition>
     </div>
+    <!-- MODALE IMPORT -->
+    <b-modal ref="importModal" :title="'Importa'" @ok="importFile">
+      <b-form>
+        <file-importer @load="text = $event" :accept="'text/json'"></file-importer>
+
+        <b-form-group label="Tipo">
+          <b-form-radio-group id="radios2" v-model="fileImport" name="radioSubComponent">
+            <b-form-radio value="substitute">Cancella e sostituisci tutto</b-form-radio>
+            <b-form-radio value="merge" disabled>Mergia</b-form-radio>
+          </b-form-radio-group>
+        </b-form-group>
+      </b-form>
+    </b-modal>
   </div>
 </template>
 
@@ -56,40 +67,6 @@ import { lista } from './views/List.vue';
 import { saveAs } from 'file-saver';
 import FileImporter from './components/FileImporter.vue';
 
-/* function handleFiles(files) {
-  // Check for the various File API support.
-  if (window.FileReader) {
-    // FileReader are supported.
-    getAsText(files[0]);
-  } else {
-    alert('FileReader are not supported in this browser.');
-  }
-}
-
-function getAsText(fileToRead) {
-  var reader = new FileReader();
-  // Read file into memory as UTF-8
-  reader.readAsText(fileToRead);
-  // Handle errors load
-  reader.onload = loadHandler;
-  reader.onerror = errorHandler;
-}
-
-function loadHandler(event) {
-  var json = event.target.result;
-  processData(json);
-}
-
-function processData(json) {
-  console.log(JSON.parse(json));
-}
-
-function errorHandler(evt) {
-  if (evt.target.error.name == 'NotReadableError') {
-    alert("Canno't read file !");
-  }
-} */
-
 export default {
   name: 'App',
   components: {
@@ -97,7 +74,10 @@ export default {
   },
   data() {
     return {
-      isLoading: false
+      isLoading: false,
+      fileImport: 'substitute',
+      importedText: '',
+      lista: lista
     };
   },
   methods: {
@@ -108,6 +88,17 @@ export default {
         type: formato
       });
       saveAs(blob, `export_${new Date().toISOString()}.json`);
+    },
+    showImportModal() {
+      this.$refs.importModal.show();
+    },
+    importFile() {
+      this.isLoading = true;
+      const importedContent = JSON.parse(this.fileContent);
+      importedContent.forEach((e, i) => {
+        this.$set(this.lista, i, e);
+      });
+      this.isLoading = false;
     }
   },
   mounted() {

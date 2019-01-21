@@ -1,17 +1,17 @@
 <template>
   <div class="row">
     <!-- my-5 -->
-    <div class="col-md-5">
-      <h5>
+    <div class="col-md-4">
+      <h6>
         {{tastiera.name}}
         <span class="d-inline">
           <a href="#" class="card-link" @click="playScale()">
             <font-awesome-icon icon="play"/>
           </a>
         </span>
-      </h5>
+      </h6>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
       <table class="table table-sm">
         <thead class="thead-light">
           <tr>
@@ -37,39 +37,50 @@ export default {
   data: function(params) {
     return {
       tastiera: {},
-      notesSplitted: [],
-      gradiSplitted: []
+      width: 0
     };
   },
   mounted() {
-    const nuovaTastiera = Fretboard({
-      tuning: Tunings[this.input.tuning] || Tunings.E_std,
-      callback: this.playNote
-    });
-
-    // istanzia il contenitore SVG per la tastiera
-    nuovaTastiera.makeContainer(this.$el);
-    // si genera la diteggiatura
-    if (!this.input.merge) {
-      nuovaTastiera.scale(this.input.root + ' ' + this.input.name, this.input.type, this.input.typeOutput);
-    } else {
-      nuovaTastiera.mergedScale(
-        this.input.note,
-        this.input.gradi,
-        this.input.type,
-        this.input.typeOutput,
-        this.input.name
-      );
-    }
-    nuovaTastiera.notesSplitted = nuovaTastiera.notes.split(' ');
-    nuovaTastiera.gradiSplitted = nuovaTastiera.gradi.split(' ');
-    this.tastiera = nuovaTastiera;
-    // si trasmette al padre i dati della scala
-    let objCopy = JSON.parse(JSON.stringify(nuovaTastiera));
-    this.$emit('tastiera', Object.assign({}, objCopy));
-    console.log('Tastiera: ', this.tastiera);
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    this.inizialize(this.width);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize);
   },
   methods: {
+    inizialize(width) {
+      const nuovaTastiera = Fretboard({
+        tuning: Tunings[this.input.tuning] || Tunings.E_std,
+        callback: this.playNote,
+        fretWidth: width < 500 ? 34 : 46
+      });
+
+      // istanzia il contenitore SVG per la tastiera
+      nuovaTastiera.makeContainer(this.$el);
+      // si genera la diteggiatura
+      if (!this.input.merge) {
+        nuovaTastiera.scale(this.input.root + ' ' + this.input.name, this.input.type, this.input.typeOutput);
+      } else {
+        nuovaTastiera.mergedScale(
+          this.input.note,
+          this.input.gradi,
+          this.input.type,
+          this.input.typeOutput,
+          this.input.name
+        );
+      }
+      nuovaTastiera.notesSplitted = nuovaTastiera.notes.split(' ');
+      nuovaTastiera.gradiSplitted = nuovaTastiera.gradi.split(' ');
+      this.tastiera = nuovaTastiera;
+      // si trasmette al padre i dati della scala
+      let objCopy = JSON.parse(JSON.stringify(nuovaTastiera));
+      this.$emit('tastiera', Object.assign({}, objCopy));
+      // console.log('Tastiera: ', this.tastiera);
+    },
+    onResize() {
+      this.width = this.$el.offsetWidth;
+    },
     /*
     acoustic_grand_piano
     electric_guitar_jazz 
@@ -93,6 +104,16 @@ export default {
     playNote(note) {
       let noteToBePlayed = note.toUpperCase();
       guitar.play(note, ac.currentTime + 0.2, 0.2);
+    }
+  },
+  watch: {
+    width: function(a, b) {
+      // console.log('Width: ', a, b);
+      const elem = document.querySelector(`#${this.tastiera.id}`);
+      if (elem) {
+        elem.parentNode.removeChild(elem);
+        this.inizialize(a);
+      }
     }
   }
 };
