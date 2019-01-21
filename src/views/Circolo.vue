@@ -1,6 +1,6 @@
 <template>
   <div class="circolo">
-    <div class="container">
+    <div class="container bg-white">
       <div class="row">
         <div class="col-lg-6">
           <h1 class="mt-5">Circolo delle quinte</h1>

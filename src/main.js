@@ -7,7 +7,9 @@ import Storage from 'vue-ls';
 
 // STILI
 // import 'bootstrap/dist/css/bootstrap.min.css'
-import './assets/styles/bootstrap.min.css';
+import './assets/styles/lux.min.css';
+// import './assets/styles/lux.min.css';
+//import './assets/styles/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/styles/index.scss'
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="home">
-      <div class="container">
+      <div class="container bg-white">
         <div class="d-flex flex-row justify-content-between">
           <div class="p-2 page-header">
             <h1>{{title}}</h1>
@@ -24,13 +24,13 @@
         </div>
 
         <div class="row" v-if="items.length>0">
-          <div class="col-md-3 col-sm-6 mb-2" v-for="card in filteredList" :key="card.id">
+          <div class="col-lg-3 col-sm-6 mb-2" v-for="card in filteredList" :key="card.id">
             <!-- mr-1 d-inline-block -->
             <div class="card" :class="[card.tipo]" v-once @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(card.id)" alt="Card image">
               <div class="card-img-overlay">
-                <h3 class="card-title">{{card.title}}</h3>
-                <h6 class="card-subtitle mb-2 text-muted sub-title">{{card.date | date_format}}</h6>
+                <h3 class="card-title text-light">{{card.title}}</h3>
+                <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
               </div>
             </div>
             <div class="card">

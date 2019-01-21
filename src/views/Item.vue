@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container bg-white">
       <div class="d-flex flex-row justify-content-around">
         <div class="p-2">
           <a href="#" class="card-link" @click="indietro">

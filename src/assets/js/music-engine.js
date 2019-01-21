@@ -566,7 +566,7 @@ export const Fretboard = function (config) {
         frets: config.frets || 12, // numero di tasti da visualizzare
         strings: config.strings || 6, // numero di corde
         tuning: config.tuning || Tunings.E_4ths, // accordatura
-        fretWidth: 50, // larghezza tasti
+        fretWidth: 46, // larghezza tasti
         fretHeight: 30, // altezza tasti
         id: 'fretboard-' + Math.floor(Math.random() * 1000000), // id della tastiera
         name: '', // NOME della scala/arpeggio

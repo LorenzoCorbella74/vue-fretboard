@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="wrapper">
     <!-- NAVIGATION -->
     <div class="container">
       <b-navbar toggleable type="dark" variant="dark">
@@ -124,6 +124,21 @@ export default {
 
 
 <style lang="scss">
+.wrapper {
+  background: url('https://unsplash.it/1500/1500/?image=994') center no-repeat;
+  /* 
+  
+  Lista delle img: https://picsum.photos/images 
+  1053
+  1041
+  994
+
+  */
+  background-size: cover;
+  min-height: 100vh;
+  color: rgb(55, 55, 55);
+}
+
 .margine-da-navbar {
   margin-top: 16px;
 }
