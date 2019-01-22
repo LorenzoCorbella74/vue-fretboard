@@ -22,7 +22,7 @@
             </b-form-group>
           </div>
           <div class="p-3">
-            <b-form-input type="text" v-model="textFilter" placeholder="Filtra"></b-form-input>
+            <b-form-input type="text" v-model="textFilter" placeholder="cerca testo..."></b-form-input>
           </div>
           <div class="p-3">
             <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
@@ -101,7 +101,7 @@
         <b-form-group id="exampleInputGroup3" label="Completamento" label-for="exampleInput3">
           <b-form-input
             id="exampleInput3"
-            type="number"
+            type="range"
             v-model.number="form.progress"
             placeholder="Indicare"
           ></b-form-input>
