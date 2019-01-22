@@ -1,6 +1,5 @@
 import * as d3 from 'd3';
 
-
 const colors_dim = ['yellow', '#87CEFA', '#F4D03F', '#8FBC8F', 'Tomato', '#a78999', 'lightgray', '#C70039']; // 8 note
 const colors = ['yellow', '#87CEFA', '#F4D03F', '#8FBC8F', 'Tomato', '#a78999', 'lightgray']; // 7 note
 const colors_penta = ['yellow', '#87CEFA', '#F4D03F', 'Tomato', 'lightgray']; // 5 note
@@ -664,15 +663,15 @@ export const Fretboard = function (config) {
         for (let i = 0; i < cordeAVuoto.length; i++) {
             instance.svgContainer
                 .append('text')
-                .attr("x", (instance.XMARGIN() - 50) + 'px')
+                .attr("x", (instance.XMARGIN() - 46) + 'px')
                 .attr('y', i * instance.fretHeight + 4 + instance.YMARGIN())
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "14px")
-                .attr("fill", "lightgray")
+                .attr("fill", "gray")
                 .text(cordeAVuoto[i])
         }
 
-        for (let i = 0; i < cordeAVuoto.length; i++) {
+        /* for (let i = 0; i < cordeAVuoto.length; i++) {
             instance.svgContainer
                 .append('text')
                 .attr("x", (instance.XMARGIN() - 50) + 'px')
@@ -681,7 +680,7 @@ export const Fretboard = function (config) {
                 .attr("font-size", "14px")
                 .attr("fill", "lightgray")
                 .text(cordeAVuoto[i])
-        }
+        } */
     };
 
     // PALLINI

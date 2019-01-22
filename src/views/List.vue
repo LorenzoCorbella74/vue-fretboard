@@ -24,12 +24,12 @@
         </div>
 
         <div class="row" v-if="items.length>0">
-          <div class="col-lg-3 col-sm-6 mb-2" v-for="card in filteredList" :key="card.id">
+          <div class="col-lg-3 col-sm-6 mb-3" v-for="card in filteredList" :key="card.id">
             <!-- mr-1 d-inline-block -->
             <div class="card" :class="[card.tipo]" v-once @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(card.id)" alt="Card image">
               <div class="card-img-overlay">
-                <h3 class="card-title text-light">{{card.title}}</h3>
+                <h4 class="card-title text-light">{{card.title}}</h4>
                 <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
               </div>
             </div>
@@ -84,7 +84,7 @@
           ></b-form-textarea>
         </b-form-group>
 
-        <b-form-group id="exampleInputGroup3" label="Progress" label-for="exampleInput3">
+        <b-form-group id="exampleInputGroup3" label="Completamento" label-for="exampleInput3">
           <b-form-input
             id="exampleInput3"
             type="number"
@@ -127,11 +127,11 @@ export default {
         { value: null, text: 'Selezionare una scala' },
         { value: 'maggiore', text: 'Maggiore' },
         { value: 'minore', text: 'Minore' },
-        { value: 'melodica', text: 'Minore Melodica' },
-        { value: 'armonica', text: 'Minore Armonica' },
+        { value: 'melodica', text: 'Min. Melodica' },
+        { value: 'armonica', text: 'Min. Armonica' },
         { value: 'pentatonica', text: 'Pentatonica' },
         { value: 'diminuita', text: 'Diminuita' },
-        { value: 'interi', text: 'A toni interi', disabled: true }
+        { value: 'interi', text: 'A toni interi' }
       ],
       items: lista
       // esempio di struttura

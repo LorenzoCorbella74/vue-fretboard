@@ -20,8 +20,9 @@
       </div>
 
       <div class="d-flex flex-row justify-content-between">
-        <div class="p-2 page-header">
-          <h1>{{selectedItem.title}}</h1>
+        <div class="p-2">
+          <h3>{{selectedItem.title}}</h3>
+          <p class="text-muted">{{selectedItem.description}}</p>
         </div>
         <div class="p-2">
           <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
@@ -116,7 +117,7 @@
 <script>
 import { lista } from './List.vue';
 import Fretboard from '../components/Fretboard.vue';
-import { mergeScale, mergeDegree, createScale, createAllDegree, SCALES } from '../assets/js/music-engine.js';
+import { mergeScale, mergeDegree, createScale, SCALES } from '../assets/js/music-engine.js';
 import draggable from 'vuedraggable';
 
 export default {
@@ -145,6 +146,7 @@ export default {
       optionsScaleUsArp: [{ text: 'Scala', value: 'scala' }, { text: 'Arpeggio', value: 'arpeggio' }],
       optionsNoteUsDegree: [{ text: 'Note', value: 'nota' }, { text: 'Gradi', value: 'grado' }],
       optionsScales: [
+        { text: '- Maggiore e Pentaoniche', value: '', disabled: true },
         { text: 'Lydian', value: 'lydian' },
         { text: 'Lydian Penta', value: 'lydian-pentatonic' },
         { text: 'Major (Ionian)', value: 'ionian' },
@@ -163,6 +165,7 @@ export default {
         { text: 'Locrian', value: 'locrian' },
         { text: 'Locrian Penta', value: 'locrian-pentatonic' },
         // Minore melodica
+        { text: '- Minore melodica', value: '', disabled: true },
         { text: 'Melodic Minor', value: 'melodic-minor' },
         { text: 'Dorian b2', value: 'dorian-b2' },
         { text: 'Lydian 5#', value: 'lydian-aug' },
@@ -171,6 +174,7 @@ export default {
         { text: 'Aeolian b5', value: 'aeolian-b5' },
         { text: 'Super Locrian (ALTERED)', value: 'super-locrian' },
         // Minore Armonica
+        { text: '- Minore Armonica', value: '', disabled: true },
         { text: 'Harmonic Minor', value: 'harmonic-minor' },
         { text: 'Locrian #6', value: 'locrian-#6' },
         { text: 'Ionian #5', value: 'ionian-#5' },
@@ -179,6 +183,7 @@ export default {
         { text: 'Lydian #2', value: 'lydian-#2' },
         { text: 'Super Locrian (Dim)', value: 'super-locrian-dim' },
         // Toni interi
+        { text: '- Simmetriche', value: '', disabled: true },
         { text: 'Whole Tone', value: 'whole-tone' },
         // Diminuita
         { text: 'Diminished st', value: 'diminished-st' },
