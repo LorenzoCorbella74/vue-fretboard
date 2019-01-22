@@ -134,6 +134,7 @@ export const lista = [];
 
 // Form Validation
 import VeeValidate, { Validator } from 'vee-validate';
+import firebase from '../assets/js/Firebase';
 
 export default {
   name: 'home',
@@ -161,7 +162,9 @@ export default {
         { value: 'diminuita', text: 'Diminuita' },
         { value: 'interi', text: 'A toni interi' }
       ],
-      items: lista
+      items: lista,
+      ref: firebase.firestore().collection('studies'),
+      xxx: []
       // esempio di struttura
       // {
       //   id: 0,
@@ -171,6 +174,18 @@ export default {
       //   data: []
       // }
     };
+  },
+  created() {
+    this.ref.onSnapshot(querySnapshot => {
+      this.xxx = [];
+      querySnapshot.forEach(doc => {
+        this.xxx.push({
+          id: doc.id,
+          title: doc.title
+        });
+      });
+      console.log('boards: ', this.xxx);
+    });
   },
   mounted() {
     const l = this.$ls.get('lista', 0);
