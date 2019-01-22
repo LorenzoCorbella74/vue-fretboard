@@ -232,6 +232,7 @@ export default {
             this.$set(this.items, this.editedItem.id, newItem);
             this.$ls.set('lista', this.$data.items);
             this.editmode = false;
+            this.submitted = false;
           } else {
             var nextIndex = this.items.length; // si simula un id di partenza
             var newItem = {
@@ -246,6 +247,7 @@ export default {
             };
             this.$set(this.items, nextIndex, newItem);
             this.$ls.set('lista', this.$data.items);
+            this.submitted = false;
           }
           // si chiude la modale
           this.$refs.myModalRef.hide();

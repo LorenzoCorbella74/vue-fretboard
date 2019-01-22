@@ -321,6 +321,7 @@ export default {
             this.selectedItem.data[this.editedItem] = Object.assign({}, newItem);
             this.$ls.set('lista', this.items);
             this.editMode = false;
+            this.submitted=false;
             // si mergia
           } else if (this.mergeMode) {
             let secondroot = this.form.selectedNote;
@@ -349,6 +350,7 @@ export default {
             this.items[this.itemId] = Object.assign({}, this.selectedItem); // per la reattività si  deve mettere uno nuovo
             this.$ls.set('lista', this.items);
             this.mergeMode = false;
+            this.submitted = false;
             // si salva una nuova scala
           } else {
             this.selectedItem.data.push({
@@ -362,6 +364,7 @@ export default {
             });
             this.items[this.itemId] = Object.assign({}, this.selectedItem); // per la reattività si  deve mettere uno nuovo
             this.$ls.set('lista', this.items);
+            this.submitted = false;
           }
           // console.log(this.$data.items);
           this.$refs.myModalRef.hide();
