@@ -32,10 +32,9 @@
         </div>
 
         <div class="row" v-if="items.length>0">
-          <div class="col-lg-3 col-sm-6 mb-3" v-for="card in filteredList" :key="card.id">
-            <!-- mr-1 d-inline-block -->
+          <div class="col-lg-3 col-sm-6 mb-3" v-for="(card,index) in filteredList" :key="card.id">
             <div class="card" :class="[card.tipo]" @click="checkItem(card.id)">
-              <img class="card-img-top" :src="getIconPath(card.id)" alt="Card image">
+              <img class="card-img-top" :src="getIconPath(index+1)" alt="Card image">
               <div class="card-img-overlay">
                 <h4 class="card-title text-light">{{card.title}}</h4>
                 <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
@@ -43,7 +42,7 @@
             </div>
             <div class="card">
               <div class="card-body">
-                <p class="card-text custom-height">{{card.description| text_truncate(60)}}</p>
+                <p class="card-text custom-height">{{card.description | text_truncate(60)}}</p>
                 <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
                 <div class="d-flex justify-content-around">
                   <div class="p-1">
@@ -120,9 +119,7 @@
         </b-form-group>
       </form>
       <div slot="modal-footer" class="w-100">
-        <!-- <p class="float-left">Modal Footer Content</p> -->
         <b-btn size="md" class="float-right" variant="primary" type="submit" @click="onSubmit">Salva</b-btn>
-        <!-- :disabled="criteriaFulfill" -->
       </div>
     </b-modal>
   </div>
@@ -130,7 +127,7 @@
 
 <script>
 import Vue from 'vue';
-export const lista = [];
+// export const lista = [];
 
 // Form Validation
 import VeeValidate, { Validator } from 'vee-validate';
@@ -162,9 +159,8 @@ export default {
         { value: 'diminuita', text: 'Diminuita' },
         { value: 'interi', text: 'A toni interi' }
       ],
-      items: lista,
-      ref: firebase.firestore().collection('studies'),
-      xxx: []
+      items: [],
+      ref: firebase.firestore().collection('studies')
       // esempio di struttura
       // {
       //   id: 0,
@@ -176,28 +172,22 @@ export default {
     };
   },
   created() {
-    this.ref.onSnapshot(querySnapshot => {
-      this.xxx = [];
-      querySnapshot.forEach(doc => {
-        this.xxx.push({
+    this.ref.get().then(snapshot => {
+      snapshot.forEach(doc => {
+        this.items.push({
           id: doc.id,
-          title: doc.title
+          title: doc.data().title,
+          description: doc.data().description,
+          progress: doc.data().progress,
+          tipo: doc.data().tipo,
+          data: doc.data().data,
+          date: doc.data().date
         });
       });
-      console.log('boards: ', this.xxx);
+      console.log('Items from Firebase: ', this.items);
     });
   },
-  mounted() {
-    const l = this.$ls.get('lista', 0);
-    if (l) {
-      this.$ls.get('lista', 0).forEach((e, i) => {
-        if (e) {
-          this.$set(this.items, i, e);
-        }
-      });
-      console.log('Items: ', this.$data.items);
-    }
-  },
+  mounted() {},
   methods: {
     getIconPath(id) {
       // let randomNumber = Math.floor(Math.random() * 14) + 1;
@@ -218,6 +208,8 @@ export default {
       this.form.description = theOne.description;
       this.form.progress = theOne.progress;
       this.form.tipo = theOne.tipo;
+      this.form.data = theOne.data;
+      this.form.date = theOne.date;
       this.editmode = true;
       this.editedItem = theOne;
       console.log('Edited one: ', this.editedItem);
@@ -226,8 +218,15 @@ export default {
       this.$router.push(`/item/${itemId}`);
     },
     deleteItem(itemId) {
-      this.items = this.items.filter(e => e.id != itemId);
-      this.$ls.set('lista', this.$data.items);
+      this.ref
+        .doc(itemId)
+        .delete()
+        .then(() => {
+          this.items = this.items.filter(e => e.id != itemId);
+        })
+        .catch(error => {
+          alert('Error removing document: ', error);
+        });
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -242,16 +241,24 @@ export default {
               tipo: this.form.tipo,
               progress: Number(this.form.progress),
               data: this.editedItem.data || [],
-              date: this.editedItem.date
+              date: this.editedItem.date || new Date().toISOString()
             };
-            this.$set(this.items, this.editedItem.id, newItem);
-            this.$ls.set('lista', this.$data.items);
+            this.ref
+              .doc(this.editedItem.id)
+              .update(newItem)
+              .then(docRef => {
+                // aggiorna il modello FE
+                // NOTE: trovare l'id!!!
+                this.$set(this.items, this.editedItem.id, newItem);
+              })
+              .catch(error => {
+                alert('Error editing study: ', error);
+              });
             this.editmode = false;
             this.submitted = false;
           } else {
             var nextIndex = this.items.length; // si simula un id di partenza
             var newItem = {
-              id: nextIndex,
               title: this.form.title,
               description: this.form.description,
               tipo: this.form.tipo,
@@ -260,9 +267,16 @@ export default {
               date: new Date().toISOString(),
               data: []
             };
-            this.$set(this.items, nextIndex, newItem);
-            this.$ls.set('lista', this.$data.items);
-            this.submitted = false;
+            this.ref
+              .add(newItem)
+              .then(docRef => {
+                this.submitted = false;
+                newItem.id = docRef.id;
+                this.$set(this.items, nextIndex, newItem);
+              })
+              .catch(error => {
+                alert('Error adding study: ', error);
+              });
           }
           // si chiude la modale
           this.$refs.myModalRef.hide();
