@@ -64,9 +64,8 @@
       </div>
     </div>
 
-    <!-- MODALE -->
-    <b-modal ref="myModalRef" :title="calcolaTitolo" size="lg" @ok="onSubmit">
-      <b-form>
+    <b-modal ref="myModalRef" :title="calcolaTitolo">
+      <form>
         <div class="row">
           <div class="col-md-6">
             <b-form-group>
@@ -92,24 +91,43 @@
             <b-form-select v-model="form.selectedTuning" :options="optionsTuning" class="mb-3"/>
           </div>
           <div class="col-md-3">
-            <b-form-select v-model="form.selectedNote" :options="optionsNotes" class="mb-3"/>
+            <b-form-select
+              name="selectedNote"
+              v-model="form.selectedNote"
+              :options="optionsNotes"
+              class="mb-3"
+              v-validate="'required'"
+              :class="{'is-invalid': submitted && errors.has('selectedNote') }"
+            />
+            <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
           </div>
           <div class="col-md-6">
             <b-form-select
+              name="selectedScale"
               v-if="form.scaleUsArp=='scala'"
               v-model="form.selectedScale"
               :options="optionsScales"
               class="mb-3"
+              v-validate="'required'"
+              :class="{'is-invalid': submitted && errors.has('selectedScale') }"
             />
+            <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
             <b-form-select
+              name="selectedArp"
               v-if="form.scaleUsArp=='arpeggio'"
               v-model="form.selectedArp"
               :options="optionsArp"
               class="mb-3"
+              v-validate="'required'"
+              :class="{'is-invalid': submitted && errors.has('selectedArp') }"
             />
+            <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
           </div>
         </div>
-      </b-form>
+      </form>
+      <div slot="modal-footer" class="w-100">
+        <b-btn size="md" class="float-right" variant="primary" type="submit" @click="onSubmit">Salva</b-btn>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -143,6 +161,7 @@ export default {
         selectedNote: null,
         selectedTuning: 'E_std'
       },
+      submitted: false,
       optionsScaleUsArp: [{ text: 'Scala', value: 'scala' }, { text: 'Arpeggio', value: 'arpeggio' }],
       optionsNoteUsDegree: [{ text: 'Note', value: 'nota' }, { text: 'Gradi', value: 'grado' }],
       optionsScales: [
@@ -284,66 +303,71 @@ export default {
     },
     onSubmit(evt) {
       evt.preventDefault();
-      if ((this.form.selectedNote && this.form.selectedScale) || (this.form.selectedNote && this.form.selectedArp)) {
-        // si edita
-        let name = this.form.scaleUsArp == 'scala' ? this.form.selectedScale : this.form.selectedArp;
-        if (this.editMode) {
-          var newItem = {
-            id: this.editedItem,
-            key: Math.random() * 1000000,
-            type: this.form.scaleUsArp,
-            typeOutput: this.form.noteUsDegree,
-            tuning: this.form.selectedTuning,
-            root: this.form.selectedNote,
-            name: name
-          };
-          this.selectedItem.data[this.editedItem] = Object.assign({}, newItem);
-          this.$ls.set('lista', this.items);
-          this.editMode = false;
-          // si mergia
-        } else if (this.mergeMode) {
-          let secondroot = this.form.selectedNote;
-          let secondtype = name;
-          let secondintervalli = SCALES[secondtype];
-          let mergeSecondItem = createScale(secondroot, secondintervalli);
-          const noteMergiate = mergeScale(this.mergeFirstItem.notes.split(' '), mergeSecondItem.notes);
-          const gradiMergiati = mergeDegree(noteMergiate, this.mergeFirstItem.gradi.split(' '), mergeSecondItem.gradi);
-          console.log('Mergiato: ', noteMergiate, gradiMergiati);
-          this.selectedItem.data.push({
-            id: this.selectedItem.data.length,
-            key: Math.random() * 1000000,
-            type: this.form.scaleUsArp,
-            typeOutput: this.form.noteUsDegree,
-            tuning: this.form.selectedTuning,
-            root: this.form.selectedNote,
-            name: `${secondroot} ${secondtype} mergiato con ${this.mergeFirstItem.root} ${this.mergeFirstItem.name}`,
-            merge: true,
-            note: noteMergiate,
-            gradi: gradiMergiati
-          });
-          this.items[this.itemId] = Object.assign({}, this.selectedItem); // per la reattività si  deve mettere uno nuovo
-          this.$ls.set('lista', this.items);
-          this.mergeMode = false;
-          // si salva una nuova scala
-        } else {
-          this.selectedItem.data.push({
-            id: this.selectedItem.data.length,
-            key: Math.random() * 1000000,
-            type: this.form.scaleUsArp,
-            typeOutput: this.form.noteUsDegree,
-            tuning: this.form.selectedTuning,
-            root: this.form.selectedNote,
-            name: this.form.scaleUsArp == 'scala' ? this.form.selectedScale : this.form.selectedArp
-          });
-          this.items[this.itemId] = Object.assign({}, this.selectedItem); // per la reattività si  deve mettere uno nuovo
-          this.$ls.set('lista', this.items);
+      this.submitted = true;
+      this.$validator.validate().then(valid => {
+        if (valid) {
+          // si edita
+          let name = this.form.scaleUsArp == 'scala' ? this.form.selectedScale : this.form.selectedArp;
+          if (this.editMode) {
+            var newItem = {
+              id: this.editedItem,
+              key: Math.random() * 1000000,
+              type: this.form.scaleUsArp,
+              typeOutput: this.form.noteUsDegree,
+              tuning: this.form.selectedTuning,
+              root: this.form.selectedNote,
+              name: name
+            };
+            this.selectedItem.data[this.editedItem] = Object.assign({}, newItem);
+            this.$ls.set('lista', this.items);
+            this.editMode = false;
+            // si mergia
+          } else if (this.mergeMode) {
+            let secondroot = this.form.selectedNote;
+            let secondtype = name;
+            let secondintervalli = SCALES[secondtype];
+            let mergeSecondItem = createScale(secondroot, secondintervalli);
+            const noteMergiate = mergeScale(this.mergeFirstItem.notes.split(' '), mergeSecondItem.notes);
+            const gradiMergiati = mergeDegree(
+              noteMergiate,
+              this.mergeFirstItem.gradi.split(' '),
+              mergeSecondItem.gradi
+            );
+            console.log('Mergiato: ', noteMergiate, gradiMergiati);
+            this.selectedItem.data.push({
+              id: this.selectedItem.data.length,
+              key: Math.random() * 1000000,
+              type: this.form.scaleUsArp,
+              typeOutput: this.form.noteUsDegree,
+              tuning: this.form.selectedTuning,
+              root: this.form.selectedNote,
+              name: `${secondroot} ${secondtype} mergiato con ${this.mergeFirstItem.root} ${this.mergeFirstItem.name}`,
+              merge: true,
+              note: noteMergiate,
+              gradi: gradiMergiati
+            });
+            this.items[this.itemId] = Object.assign({}, this.selectedItem); // per la reattività si  deve mettere uno nuovo
+            this.$ls.set('lista', this.items);
+            this.mergeMode = false;
+            // si salva una nuova scala
+          } else {
+            this.selectedItem.data.push({
+              id: this.selectedItem.data.length,
+              key: Math.random() * 1000000,
+              type: this.form.scaleUsArp,
+              typeOutput: this.form.noteUsDegree,
+              tuning: this.form.selectedTuning,
+              root: this.form.selectedNote,
+              name: this.form.scaleUsArp == 'scala' ? this.form.selectedScale : this.form.selectedArp
+            });
+            this.items[this.itemId] = Object.assign({}, this.selectedItem); // per la reattività si  deve mettere uno nuovo
+            this.$ls.set('lista', this.items);
+          }
+          // console.log(this.$data.items);
+          this.$refs.myModalRef.hide();
+          this.resetForm();
         }
-        // console.log(this.$data.items);
-        this.$refs.myModalRef.hide();
-        this.resetForm();
-      } else {
-        evt.preventDefault();
-      }
+      });
     },
     resetForm() {
       this.form.scaleUsArp = 'scala';

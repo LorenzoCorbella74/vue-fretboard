@@ -5,6 +5,10 @@ import router from './router';
 import store from './store';
 import Storage from 'vue-ls';
 
+import VeeValidate, {
+  Validator
+} from "vee-validate";
+
 // STILI
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import './assets/styles/lux.min.css';
@@ -58,6 +62,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false;
 
+Vue.use(VeeValidate);
 Vue.use(BootstrapVue);
 Vue.use(Storage, {
   namespace: 'vuejs__', // key prefix

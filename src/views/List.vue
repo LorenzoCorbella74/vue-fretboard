@@ -60,28 +60,34 @@
         </div>
       </div>
     </div>
-
-    <b-modal ref="myModalRef" :title="editmode? 'Edita studio':'Salva studio'" @ok="onSubmit">
-      <b-form>
+    <!-- MODALE SALVA EDITA Studio-->
+    <b-modal ref="myModalRef" :title="editmode? 'Edita studio':'Salva studio'">
+      <form>
         <b-form-group id="exampleInputGroup1" label="Titolo" label-for="formTitle">
           <b-form-input
             id="formTitle"
             type="text"
+            name="titolo"
             v-model="form.title"
-            required
             placeholder="Inserire un titolo"
+            v-validate="'required'"
+            :class="{'is-invalid': submitted && errors.has('titolo') }"
           ></b-form-input>
+          <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
         <b-form-group id="exampleInputGroup2" label="Descrizione" label-for="exampleInput2">
           <b-form-textarea
             id="exampleInput2"
             type="text"
+            name="description"
             v-model="form.description"
-            required
             placeholder="Inserire una descrizione dello studio"
             :rows="3"
             :max-rows="6"
+            v-validate="'required'"
+            :class="{'is-invalid': submitted && errors.has('description') }"
           ></b-form-textarea>
+          <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="exampleInputGroup3" label="Completamento" label-for="exampleInput3">
@@ -95,12 +101,21 @@
         <b-form-group id="exampleInputGroup4" label="Famiglia" label-for="exampleInput4">
           <b-form-select
             id="exampleInput4"
+            name="tipo"
             v-model="form.tipo"
             :options="optionsTipo"
             :select-size="4"
+            v-validate="'required'"
+            :class="{'is-invalid': submitted && errors.has('description') }"
           />
+          <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
-      </b-form>
+      </form>
+      <div slot="modal-footer" class="w-100">
+        <!-- <p class="float-left">Modal Footer Content</p> -->
+        <b-btn size="md" class="float-right" variant="primary" type="submit" @click="onSubmit">Salva</b-btn>
+        <!-- :disabled="criteriaFulfill" -->
+      </div>
     </b-modal>
   </div>
 </template>
@@ -108,6 +123,9 @@
 <script>
 import Vue from 'vue';
 export const lista = [];
+
+// Form Validation
+import VeeValidate, { Validator } from 'vee-validate';
 
 export default {
   name: 'home',
@@ -123,6 +141,7 @@ export default {
         progress: 0,
         tipo: null
       },
+      submitted: false,
       optionsTipo: [
         { value: null, text: 'Selezionare una scala' },
         { value: 'maggiore', text: 'Maggiore' },
@@ -140,7 +159,7 @@ export default {
       //   title: 'Esempio 1',
       //   description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.',
       //   progress:0
-      //   data: ['c lydian']
+      //   data: []
       // }
     };
   },
@@ -188,47 +207,54 @@ export default {
     },
     onSubmit(evt) {
       evt.preventDefault();
-      if (this.form.title && this.form.description) {
-        if (this.editmode) {
-          var newEditedItem = {
-            id: this.editedItem.id,
-            title: this.form.title,
-            description: this.form.description,
-            tipo: this.form.tipo,
-            progress: this.form.progress,
-            data: this.editedItem.data || [],
-            date: this.editedItem.date
-          };
-          this.$set(this.items, this.editedItem.id, newEditedItem);
-          this.$ls.set('lista', this.$data.items);
-          this.editmode = false;
-        } else {
-          var nextIndex = this.items.length; // si simula un id di partenza
-          var newItem = {
-            id: nextIndex,
-            title: this.form.title,
-            description: this.form.description,
-            tipo: this.form.tipo,
-            progress: this.form.progress,
-            date: new Date().toISOString(),
-            data: []
-          };
-          this.$set(this.items, nextIndex, newItem);
-          this.$ls.set('lista', this.$data.items);
+      this.submitted = true;
+      this.$validator.validate().then(valid => {
+        if (valid) {
+          if (this.editmode) {
+            var newItem = {
+              id: this.editedItem.id,
+              title: this.form.title,
+              description: this.form.description,
+              tipo: this.form.tipo,
+              progress: Number(this.form.progress),
+              data: this.editedItem.data || [],
+              date: this.editedItem.date
+            };
+            this.$set(this.items, this.editedItem.id, newItem);
+            this.$ls.set('lista', this.$data.items);
+            this.editmode = false;
+          } else {
+            var nextIndex = this.items.length; // si simula un id di partenza
+            var newItem = {
+              id: nextIndex,
+              title: this.form.title,
+              description: this.form.description,
+              tipo: this.form.tipo,
+              progress: Number(this.form.progress),
+              progress: this.form.progress,
+              date: new Date().toISOString(),
+              data: []
+            };
+            this.$set(this.items, nextIndex, newItem);
+            this.$ls.set('lista', this.$data.items);
+          }
+          // si chiude la modale
+          this.$refs.myModalRef.hide();
+          this.resetForm();
         }
-
-        this.$refs.myModalRef.hide();
-        this.resetForm();
-      } else {
-        evt.preventDefault();
-      }
+      });
     },
     resetForm() {
       this.form.title = '';
       this.form.description = '';
+      this.form.progress = 0;
+      this.form.tipo = null;
     }
   },
   computed: {
+    criteriaFulfill: function() {
+      return Boolean(this.errors.items != 0 || !this.form.title);
+    },
     filteredList() {
       if (this.items.length > 0) {
         if (this.listFilter == 'data') {
