@@ -2,21 +2,29 @@
   <div>
     <div class="home">
       <div class="container bg-white">
+        <div class="p-2 page-header">
+          <h1>{{title}}</h1>
+        </div>
         <div class="d-flex flex-row justify-content-between">
-          <div class="p-2 page-header">
-            <h1>{{title}}</h1>
-          </div>
-          <div class="p-2">
-            <b-form-group label="Filtra per">
+          <div class="p-3">
+            <b-form-group label="Filtra:">
               <b-form-radio-group id="radios2" v-model="listFilter" name="radioSubComponent">
-                <b-form-radio value="data">Data</b-form-radio>
-                <b-form-radio value="progress">Progress</b-form-radio>
-                <b-form-radio value="tipo">Famiglia</b-form-radio>
-                <b-form-radio value="testo" disabled>Testo</b-form-radio>
+                <b-form-radio value="data">
+                  <font-awesome-icon icon="clock"/>
+                </b-form-radio>
+                <b-form-radio value="progress">
+                  <font-awesome-icon icon="sort-numeric-up"/>
+                </b-form-radio>
+                <b-form-radio value="tipo">
+                  <font-awesome-icon icon="layer-group"/>
+                </b-form-radio>
               </b-form-radio-group>
             </b-form-group>
           </div>
-          <div class="p-2">
+          <div class="p-3">
+            <b-form-input type="text" v-model="textFilter" placeholder="Filtra"></b-form-input>
+          </div>
+          <div class="p-3">
             <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
               <font-awesome-icon icon="plus"/>
             </b-button>
@@ -26,7 +34,7 @@
         <div class="row" v-if="items.length>0">
           <div class="col-lg-3 col-sm-6 mb-3" v-for="card in filteredList" :key="card.id">
             <!-- mr-1 d-inline-block -->
-            <div class="card" :class="[card.tipo]" v-once @click="checkItem(card.id)">
+            <div class="card" :class="[card.tipo]" @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(card.id)" alt="Card image">
               <div class="card-img-overlay">
                 <h4 class="card-title text-light">{{card.title}}</h4>
@@ -133,6 +141,7 @@ export default {
     return {
       title: 'Studi',
       listFilter: 'data',
+      textFilter: '',
       max: 100,
       editmode: false,
       form: {
@@ -252,19 +261,19 @@ export default {
     }
   },
   computed: {
-    criteriaFulfill: function() {
-      return Boolean(this.errors.items != 0 || !this.form.title);
-    },
     filteredList() {
       if (this.items.length > 0) {
+        const filtered = this.items.filter(e => {
+          return e.description.toLowerCase().includes(this.textFilter.toLowerCase());
+        });
         if (this.listFilter == 'data') {
           // Ascending: dal numero minore al maggiore
-          return this.items.sort((obj1, obj2) => obj1.id - obj2.id);
+          return filtered.sort((obj1, obj2) => obj1.id - obj2.id);
         } else if (this.listFilter == 'progress') {
           // discendente: dal numero maggiore al minore
-          return this.items.sort((obj1, obj2) => obj2.progress - obj1.progress);
+          return filtered.sort((obj1, obj2) => obj2.progress - obj1.progress);
         } else if (this.listFilter == 'tipo') {
-          return this.items.sort((a, b) => {
+          return filtered.sort((a, b) => {
             // Use toUpperCase() to ignore character casing
             const tipoA = a.tipo.toUpperCase();
             const tipoB = b.tipo.toUpperCase();

@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <b-modal ref="myModalRef" :title="calcolaTitolo">
+    <b-modal size="lg" ref="myModalRef" :title="calcolaTitolo">
       <form>
         <div class="row">
           <div class="col-md-6">
@@ -111,7 +111,7 @@
               v-validate="'required'"
               :class="{'is-invalid': submitted && errors.has('selectedScale') }"
             />
-            <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
+            <b-form-invalid-feedback v-if="form.scaleUsArp=='scala'">Il campo è richiesto</b-form-invalid-feedback>
             <b-form-select
               name="selectedArp"
               v-if="form.scaleUsArp=='arpeggio'"
@@ -121,7 +121,7 @@
               v-validate="'required'"
               :class="{'is-invalid': submitted && errors.has('selectedArp') }"
             />
-            <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
+            <b-form-invalid-feedback v-if="form.scaleUsArp=='arpeggio'">Il campo è richiesto</b-form-invalid-feedback>
           </div>
         </div>
       </form>
