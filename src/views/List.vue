@@ -46,20 +46,20 @@
                 <p class="card-text custom-height">{{card.description| text_truncate(60)}}</p>
                 <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
                 <div class="d-flex justify-content-around">
-                  <div class="p-2">
-                    <a href="#" class="card-link" @click="editItem(card.id)">
+                  <div class="p-1">
+                    <button type="button" class="btn btn-link" @click="editItem(card.id)">
                       <font-awesome-icon icon="edit"/>
-                    </a>
+                    </button>
                   </div>
-                  <div class="p-2">
-                    <a href="#" class="card-link" @click="deleteItem(card.id)">
+                  <div class="p-1">
+                    <button type="button" class="btn btn-link" @click="deleteItem(card.id)">
                       <font-awesome-icon icon="trash"/>
-                    </a>
+                    </button>
                   </div>
-                  <div class="p-2">
-                    <a href="#" class="card-link" @click="checkItem(card.id)">
+                  <div class="p-1">
+                    <button type="button" class="btn btn-link" @click="checkItem(card.id)">
                       <font-awesome-icon icon="list"/>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -247,6 +247,7 @@ export default {
             this.$set(this.items, this.editedItem.id, newItem);
             this.$ls.set('lista', this.$data.items);
             this.editmode = false;
+            this.submitted = false;
           } else {
             var nextIndex = this.items.length; // si simula un id di partenza
             var newItem = {
@@ -261,6 +262,7 @@ export default {
             };
             this.$set(this.items, nextIndex, newItem);
             this.$ls.set('lista', this.$data.items);
+            this.submitted = false;
           }
           // si chiude la modale
           this.$refs.myModalRef.hide();
