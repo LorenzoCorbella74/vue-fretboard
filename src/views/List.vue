@@ -60,28 +60,34 @@
         </div>
       </div>
     </div>
-
-    <b-modal ref="myModalRef" :title="editmode? 'Edita studio':'Salva studio'" @ok="onSubmit">
+    <!-- MODALE SALVA EDITA Studio-->
+    <b-modal ref="myModalRef" :title="editmode? 'Edita studio':'Salva studio'">
       <b-form>
         <b-form-group id="exampleInputGroup1" label="Titolo" label-for="formTitle">
           <b-form-input
             id="formTitle"
             type="text"
+            name="titolo"
             v-model="form.title"
-            required
+            :state="!$v.form.title.$invalid"
+            aria-describedby="inputTitoloFeedback"
             placeholder="Inserire un titolo"
           ></b-form-input>
+          <b-form-invalid-feedback id="inputTitoloFeedback">Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
         <b-form-group id="exampleInputGroup2" label="Descrizione" label-for="exampleInput2">
           <b-form-textarea
             id="exampleInput2"
             type="text"
+            name="description"
             v-model="form.description"
-            required
+            :state="!$v.form.description.$invalid"
+            aria-describedby="inputDescrizioneFeedback"
             placeholder="Inserire una descrizione dello studio"
             :rows="3"
             :max-rows="6"
           ></b-form-textarea>
+          <b-form-invalid-feedback id="inputDescrizioneFeedback">Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="exampleInputGroup3" label="Progress" label-for="exampleInput3">
@@ -95,12 +101,27 @@
         <b-form-group id="exampleInputGroup4" label="Famiglia" label-for="exampleInput4">
           <b-form-select
             id="exampleInput4"
+            name="tipo"
             v-model="form.tipo"
             :options="optionsTipo"
             :select-size="4"
+            :state="!$v.form.tipo.$invalid"
+            aria-describedby="inputTipoFeedback"
           />
+          <b-form-invalid-feedback id="inputTipoFeedback">Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
       </b-form>
+      <div slot="modal-footer" class="w-100">
+        <!-- <p class="float-left">Modal Footer Content</p> -->
+        <b-btn
+          size="md"
+          class="float-right"
+          variant="primary"
+          type="submit"
+          :disabled="$v.form.$invalid"
+          @click="onSubmit"
+        >Avanti</b-btn>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -109,8 +130,27 @@
 import Vue from 'vue';
 export const lista = [];
 
+// Form Validation
+import { validationMixin } from 'vuelidate';
+import { required, minLength } from 'vuelidate/lib/validators';
+
 export default {
   name: 'home',
+  mixins: [validationMixin],
+  validations: {
+    form: {
+      title: {
+        required
+      },
+      description: {
+        required,
+        minLength: minLength(12)
+      },
+      tipo: {
+        required
+      }
+    }
+  },
   data: function() {
     return {
       title: 'Studi',
@@ -227,6 +267,8 @@ export default {
     resetForm() {
       this.form.title = '';
       this.form.description = '';
+      this.form.progress = 0;
+      this.form.tipo = null;
     }
   },
   computed: {
