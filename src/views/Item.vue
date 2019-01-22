@@ -47,16 +47,15 @@
             <!-- FRETBOARD -->
             <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
             <div class="posizione-icone">
-              <a href="#" class="card-link" @click="editItem(i.id)" v-if="!i.merge">
+              <button type="button" class="btn btn-link" @click="editItem(i.id)" v-if="!i.merge">
                 <font-awesome-icon icon="edit"/>
-              </a>
-              <a href="#" class="card-link" @click="mergeWithOther(i)" v-if="!i.merge">
-                <!-- index>0 &&  -->
+              </button>
+              <button type="button" class="btn btn-link" @click="mergeWithOther(i)" v-if="!i.merge">
                 <font-awesome-icon icon="code-branch"/>
-              </a>
-              <a href="#" class="card-link float-right" @click="deleteItem(i.id)">
+              </button>
+              <button type="button" class="btn btn-link float-right" @click="deleteItem(i.id)">
                 <font-awesome-icon icon="trash"/>
-              </a>
+              </button>
             </div>
           </div>
           <!-- </transition-group> -->
@@ -321,7 +320,7 @@ export default {
             this.selectedItem.data[this.editedItem] = Object.assign({}, newItem);
             this.$ls.set('lista', this.items);
             this.editMode = false;
-            this.submitted=false;
+            this.submitted = false;
             // si mergia
           } else if (this.mergeMode) {
             let secondroot = this.form.selectedNote;

@@ -46,20 +46,20 @@
                 <p class="card-text custom-height">{{card.description| text_truncate(60)}}</p>
                 <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
                 <div class="d-flex justify-content-around">
-                  <div class="p-2">
-                    <a href="#" class="card-link" @click="editItem(card.id)">
+                  <div class="p-1">
+                    <button type="button" class="btn btn-link" @click="editItem(card.id)">
                       <font-awesome-icon icon="edit"/>
-                    </a>
+                    </button>
                   </div>
-                  <div class="p-2">
-                    <a href="#" class="card-link" @click="deleteItem(card.id)">
+                  <div class="p-1">
+                    <button type="button" class="btn btn-link" @click="deleteItem(card.id)">
                       <font-awesome-icon icon="trash"/>
-                    </a>
+                    </button>
                   </div>
-                  <div class="p-2">
-                    <a href="#" class="card-link" @click="checkItem(card.id)">
+                  <div class="p-1">
+                    <button type="button" class="btn btn-link" @click="checkItem(card.id)">
                       <font-awesome-icon icon="list"/>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
