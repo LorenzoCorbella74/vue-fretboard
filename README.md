@@ -11,9 +11,10 @@ Tool basato sul repository [notes-on-fretboard](https://github.com/LorenzoCorbel
 - [x] E' possibile suonare le scale tramite [soundfont-player](https://github.com/danigb/soundfont-player)
 - [x] responsive svg
 - [x] draggable item
+
 ## Built With
 
-HTML5, [Bootstrap 4](https://getbootstrap.com/),[ Vue.js 2](https://it.vuejs.org/),[ Bootstrap Vue](https://bootstrap-vue.js.org), [Font Awesome](http://fontawesome.io), [D3.js](https://d3js.org/)
+HTML5, [Bootstrap 4](https://getbootstrap.com/),[ Vue.js 2](https://it.vuejs.org/),[ Bootstrap Vue](https://bootstrap-vue.js.org), [Font Awesome](http://fontawesome.io), [D3.js](https://d3js.org/), [Vuelidate](https://github.com/monterail/vuelidate).
 
 ## License
 
