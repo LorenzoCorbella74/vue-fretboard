@@ -127,7 +127,8 @@
 
 <script>
 import Vue from 'vue';
-// export const lista = [];
+
+export const lista = []; /* oggetto condiviso tra le pagine */
 
 // Form Validation
 import VeeValidate, { Validator } from 'vee-validate';
@@ -159,7 +160,7 @@ export default {
         { value: 'diminuita', text: 'Diminuita' },
         { value: 'interi', text: 'A toni interi' }
       ],
-      items: [],
+      items: lista,
       ref: firebase.firestore().collection('studies')
       // esempio di struttura
       // {
@@ -174,15 +175,17 @@ export default {
   created() {
     this.ref.get().then(snapshot => {
       snapshot.forEach(doc => {
-        this.items.push({
-          id: doc.id,
-          title: doc.data().title,
-          description: doc.data().description,
-          progress: doc.data().progress,
-          tipo: doc.data().tipo,
-          data: doc.data().data,
-          date: doc.data().date
-        });
+        if (!!this.items.findIndex(x => x.id == doc.id)) {
+          this.items.push({
+            id: doc.id,
+            title: doc.data().title,
+            description: doc.data().description,
+            progress: doc.data().progress,
+            tipo: doc.data().tipo,
+            data: doc.data().data,
+            date: doc.data().date
+          });
+        }
       });
       console.log('Items from Firebase: ', this.items);
     });
@@ -248,7 +251,7 @@ export default {
               .update(newItem)
               .then(docRef => {
                 // aggiorna il modello FE
-                let theIndex = this.items.findIndex(x => x.id==this.editedItem.id);
+                let theIndex = this.items.findIndex(x => x.id == this.editedItem.id);
                 this.$set(this.items, theIndex, newItem);
               })
               .catch(error => {

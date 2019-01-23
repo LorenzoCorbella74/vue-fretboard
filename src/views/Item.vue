@@ -135,6 +135,7 @@
 import { lista } from './List.vue';
 import Fretboard from '../components/Fretboard.vue';
 import { mergeScale, mergeDegree, createScale, SCALES } from '../assets/js/music-engine.js';
+import firebase from '../assets/js/Firebase';
 import draggable from 'vuedraggable';
 
 export default {
@@ -145,7 +146,7 @@ export default {
       name: 'Item selezionato',
       componentKey: 0,
       items: lista, // oggetto condiviso tra le pagine List e Item
-      itemId: Number(this.$route.params.id), // FIXME: non si aggiorna !!!!
+      itemId: this.$route.params.id, // FIXME: non si aggiorna !!!!
       selectedItem: {
         title: '',
         desciption: ''
@@ -236,20 +237,22 @@ export default {
         { text: 'E standard', value: 'E_std' },
         { text: 'Drop D', value: 'Drop_D' },
         { text: 'G open', value: 'G_open' }
-      ]
+      ],
+      ref: firebase.firestore().collection('studies')
     };
   },
   mounted() {
     // console.log(this.$router, this.$route);
-    // console.log('Items: ', this.items, this.itemId);
-    this.selectedItem = this.items[this.itemId];
+    let theIndex = this.items.findIndex(x => x.id == this.itemId);
+    this.selectedItem = this.items[theIndex];
     console.log('Selected item: ', this.selectedItem);
     console.log('ItemId: ', this.itemId);
   },
   // per reagire ai cambiamenti dei parametri dell'url...
   beforeRouteUpdate(to, from, next) {
     console.log(to, from);
-    this.selectedItem = this.items[Number(to.params.id)];
+    let theIndex = this.items.findIndex(x => x.id == to.params.id);
+    this.selectedItem = this.items[theIndex];
     this.forceRerender();
     next();
   },
@@ -280,7 +283,15 @@ export default {
     },
     deleteItem(itemId) {
       this.selectedItem.data = this.selectedItem.data.filter(e => e.id != itemId);
-      this.$ls.set('lista', this.items);
+      this.ref
+        .doc(this.selectedItem.id)
+        .update(this.selectedItem)
+        .then(docRef => {
+          console.log('Scale succesfully deleted...');
+        })
+        .catch(error => {
+          alert('Error deleting scale in study: ', error);
+        });
     },
     avanti() {
       let itemNumber =
@@ -317,8 +328,23 @@ export default {
               root: this.form.selectedNote,
               name: name
             };
+            let theIndex = this.selectedItem.data.findIndex(x => x.id == this.editedItem);
+            this.selectedItem.data[theIndex] = newItem;
+            this.ref
+              .doc(this.itemId)
+              .update(this.selectedItem)
+              .then(docRef => {
+                // aggiorna il modello FE
+                this.items[this.itemId] = Object.assign({}, this.selectedItem);
+                this.mergeMode = false;
+                this.submitted = false;
+              })
+              .catch(error => {
+                alert('Error editing scale in study: ', error);
+                this.submitted = false;
+              });
             this.selectedItem.data[this.editedItem] = Object.assign({}, newItem);
-            this.$ls.set('lista', this.items);
+            // this.$ls.set('lista', this.items);
             this.editMode = false;
             this.submitted = false;
             // si mergia
@@ -346,10 +372,20 @@ export default {
               note: noteMergiate,
               gradi: gradiMergiati
             });
-            this.items[this.itemId] = Object.assign({}, this.selectedItem); // per la reattività si  deve mettere uno nuovo
-            this.$ls.set('lista', this.items);
-            this.mergeMode = false;
-            this.submitted = false;
+            this.ref
+              .doc(this.itemId)
+              .update(this.selectedItem)
+              .then(docRef => {
+                // aggiorna il modello FE
+                this.items[this.itemId] = Object.assign({}, this.selectedItem);
+                this.mergeMode = false;
+                this.submitted = false;
+              })
+              .catch(error => {
+                alert('Error saving scale in study: ', error);
+                this.submitted = false;
+              });
+
             // si salva una nuova scala
           } else {
             this.selectedItem.data.push({
@@ -361,9 +397,18 @@ export default {
               root: this.form.selectedNote,
               name: this.form.scaleUsArp == 'scala' ? this.form.selectedScale : this.form.selectedArp
             });
-            this.items[this.itemId] = Object.assign({}, this.selectedItem); // per la reattività si  deve mettere uno nuovo
-            this.$ls.set('lista', this.items);
-            this.submitted = false;
+            this.ref
+              .doc(this.itemId)
+              .update(this.selectedItem)
+              .then(docRef => {
+                // aggiorna il modello FE
+                this.items[this.itemId] = Object.assign({}, this.selectedItem);
+                this.submitted = false;
+              })
+              .catch(error => {
+                alert('Error saving scale in study: ', error);
+                this.submitted = false;
+              });
           }
           // console.log(this.$data.items);
           this.$refs.myModalRef.hide();
@@ -382,7 +427,7 @@ export default {
     registerFretboard(data, who) {
       this.$set(this.selectedItem.data[who.id], 'notes', data.notes);
       this.$set(this.selectedItem.data[who.id], 'gradi', data.gradi);
-      console.log('Registering data: ', this.selectedItem.data[who.id]);
+      // console.log('Registering data: ', this.selectedItem.data[who.id]);
     }
   },
   computed: {

@@ -874,8 +874,8 @@ export const Fretboard = function (config) {
         instance.name = formatText(scaleName) + ' over ' + root.toUpperCase() + data.accordo;
         instance.notes = data.notes.join(' ');
         instance.gradi = data.gradi.join(' ');
-        console.log('Note: ', instance.notes, )
-        console.log('Gradi: ', instance.gradi, )
+        // console.log('Note: ', instance.notes, )
+        // console.log('Gradi: ', instance.gradi, )
         instance.clear(); // cancella tutto e ridisegna la tastiera
         instance.addNotes(instance.notes, tipo, tipovisualizzazione); // ridisegna le note "c d e f# g a b", "scala", "grado"
     };
