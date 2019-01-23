@@ -133,6 +133,7 @@ export const lista = []; /* oggetto condiviso tra le pagine */
 // Form Validation
 import VeeValidate, { Validator } from 'vee-validate';
 import firebase from '../assets/js/Firebase';
+var unsubscribe;
 
 export default {
   name: 'home',
@@ -173,28 +174,57 @@ export default {
     };
   },
   created() {
-    let output = [];
+    //let output = [];
     this.ref.get().then(snapshot => {
       snapshot.forEach(doc => {
-        output.push({
-          id: doc.id,
-          title: doc.data().title,
-          description: doc.data().description,
-          progress: doc.data().progress,
-          tipo: doc.data().tipo,
-          data: doc.data().data,
-          date: doc.data().date
-        });
+        let i = this.items.findIndex(x => x.id == doc.id);
+        console.log('ID trovato: ', i);
+        // la 1° volta popola l'array
+        if (i == -1) {
+          this.items.push({
+            id: doc.id,
+            title: doc.data().title,
+            description: doc.data().description,
+            progress: doc.data().progress,
+            tipo: doc.data().tipo,
+            data: doc.data().data,
+            date: doc.data().date
+          });
+          console.log('ID: ', doc.id);
+        }
       });
       // si rimuove i duplicati...
-      output = output.filter((obj, pos, arr) => {
-        return arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos;
-      });
-      output.forEach((e, i) => {
-        this.$set(this.items, i, e);
-      });
+      // output = output.filter((obj, pos, arr) => {
+      //   return arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos;
+      // });
+      // output.forEach((e, i) => {
+      //   this.$set(this.items, i, e);
+      // });
+
       // console.log('Items from Firebase: ', this.items);
+
+      unsubscribe = this.ref.onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            const Item = { ...change.doc.data(), id: change.doc.id };
+            console.log('Item was added: ', Item);
+          }
+          if (change.type === 'modified') {
+            const updatedNote = this.items.find(item => item.id === change.doc.id);
+            console.log('item was updated: ', updatedNote);
+          }
+          if (change.type === 'removed') {
+            const deletedNote = this.items.find(item => item.id === change.doc.id);
+            console.log('Item was removed: ', deletedNote);
+          }
+        });
+      });
     });
+
+    /* eslint-enable no-console */
+  },
+  destroyed() {
+    unsubscribe();
   },
   mounted() {},
   methods: {
@@ -227,11 +257,12 @@ export default {
       this.$router.push(`/item/${itemId}`);
     },
     deleteItem(itemId) {
+      let i = this.items.findIndex(x => x.id == itemId);
       this.ref
         .doc(itemId)
         .delete()
         .then(() => {
-          this.items = this.items.filter(e => e.id != itemId);
+          this.items.splice(i, 1);
         })
         .catch(error => {
           alert('Error removing document: ', error);
