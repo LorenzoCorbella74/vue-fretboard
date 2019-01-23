@@ -2,7 +2,7 @@
   <div>
     <div class="container bg-white">
       <div class="d-flex flex-row justify-content-around">
-        <!--  <div class="p-2">
+        <!-- <div class="p-2">
           <a href="#" class="card-link" @click="indietro">
             <font-awesome-icon icon="angle-double-left" size="2x"/>
           </a>
@@ -12,7 +12,7 @@
             <font-awesome-icon icon="list" size="2x"/>
           </a>
         </div>
-        <!--  <div class="p-2">
+        <!-- <div class="p-2">
           <a href="#" class="card-link" @click="avanti">
             <font-awesome-icon icon="angle-double-right" size="2x"/>
           </a>
@@ -294,18 +294,17 @@ export default {
         });
     },
     avanti() {
-      let itemNumber =
-        Number(this.$route.params.id) + 1 == this.items.length - 1
-          ? this.items.length - 1
-          : Number(this.$route.params.id) + 1;
-      if (itemNumber <= this.items.length - 1) {
-        this.$router.push(`/item/${itemNumber}`);
+      let theIndex = this.items.findIndex(x => x.id == this.$route.params.id);
+      let newIndex = theIndex + 1 == this.items.length - 1 ? this.items.length - 1 : theIndex + 1;
+      if (newIndex <= this.items.length - 1) {
+        this.$router.push(`/item/${this.items[newIndex].id}`);
       }
     },
     indietro() {
-      let itemNumber = Number(this.$route.params.id) - 1 == 0 ? 0 : Number(this.$route.params.id) - 1;
-      if (itemNumber >= 0) {
-        this.$router.push(`/item/${itemNumber}`);
+      let theIndex = this.items.findIndex(x => x.id == this.$route.params.id);
+      let newIndex = theIndex - 1 == 0 ? 0 : theIndex - 1;
+      if (newIndex >= 0) {
+        this.$router.push(`/item/${this.items[newIndex].id}`);
       }
     },
     toList() {
@@ -341,12 +340,9 @@ export default {
               })
               .catch(error => {
                 alert('Error editing scale in study: ', error);
+                this.mergeMode = false;
                 this.submitted = false;
               });
-            this.selectedItem.data[this.editedItem] = Object.assign({}, newItem);
-            // this.$ls.set('lista', this.items);
-            this.editMode = false;
-            this.submitted = false;
             // si mergia
           } else if (this.mergeMode) {
             let secondroot = this.form.selectedNote;
@@ -385,7 +381,6 @@ export default {
                 alert('Error saving scale in study: ', error);
                 this.submitted = false;
               });
-
             // si salva una nuova scala
           } else {
             this.selectedItem.data.push({
@@ -410,7 +405,7 @@ export default {
                 this.submitted = false;
               });
           }
-          // console.log(this.$data.items);
+          // Indipendentemente da tutto si chiude la modale...
           this.$refs.myModalRef.hide();
           this.resetForm();
         }

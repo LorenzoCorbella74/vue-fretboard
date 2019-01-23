@@ -173,21 +173,27 @@ export default {
     };
   },
   created() {
+    let output = [];
     this.ref.get().then(snapshot => {
       snapshot.forEach(doc => {
-        if (!!this.items.findIndex(x => x.id == doc.id)) {
-          this.items.push({
-            id: doc.id,
-            title: doc.data().title,
-            description: doc.data().description,
-            progress: doc.data().progress,
-            tipo: doc.data().tipo,
-            data: doc.data().data,
-            date: doc.data().date
-          });
-        }
+        output.push({
+          id: doc.id,
+          title: doc.data().title,
+          description: doc.data().description,
+          progress: doc.data().progress,
+          tipo: doc.data().tipo,
+          data: doc.data().data,
+          date: doc.data().date
+        });
       });
-      console.log('Items from Firebase: ', this.items);
+      // si rimuove i duplicati...
+      output = output.filter((obj, pos, arr) => {
+        return arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos;
+      });
+      output.forEach((e, i) => {
+        this.$set(this.items, i, e);
+      });
+      // console.log('Items from Firebase: ', this.items);
     });
   },
   mounted() {},
