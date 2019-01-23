@@ -2,21 +2,21 @@
   <div>
     <div class="container bg-white">
       <div class="d-flex flex-row justify-content-around">
-        <!-- <div class="p-2">
+        <div class="p-2">
           <a href="#" class="card-link" @click="indietro">
             <font-awesome-icon icon="angle-double-left" size="2x"/>
           </a>
-        </div>-->
+        </div>
         <div class="p-2">
           <a href="#" class="card-link" @click="toList">
             <font-awesome-icon icon="list" size="2x"/>
           </a>
         </div>
-        <!-- <div class="p-2">
+        <div class="p-2">
           <a href="#" class="card-link" @click="avanti">
             <font-awesome-icon icon="angle-double-right" size="2x"/>
           </a>
-        </div>-->
+        </div>
       </div>
 
       <div class="d-flex flex-row justify-content-between">
@@ -328,7 +328,7 @@ export default {
               name: name
             };
             let theIndex = this.selectedItem.data.findIndex(x => x.id == this.editedItem);
-            this.selectedItem.data[theIndex] = newItem;
+            this.selectedItem.data[theIndex] = Object.assign({}, newItem);
             this.ref
               .doc(this.itemId)
               .update(this.selectedItem)

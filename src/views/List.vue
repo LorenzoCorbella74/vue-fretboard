@@ -193,18 +193,9 @@ export default {
           console.log('ID: ', doc.id);
         }
       });
-      // si rimuove i duplicati...
-      // output = output.filter((obj, pos, arr) => {
-      //   return arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos;
-      // });
-      // output.forEach((e, i) => {
-      //   this.$set(this.items, i, e);
-      // });
-
       // console.log('Items from Firebase: ', this.items);
-
       unsubscribe = this.ref.onSnapshot(snapshot => {
-        snapshot.docChanges().forEach(change => {
+        /*         snapshot.docChanges().forEach(change => {
           if (change.type === 'added') {
             const Item = { ...change.doc.data(), id: change.doc.id };
             console.log('Item was added: ', Item);
@@ -217,7 +208,7 @@ export default {
             const deletedNote = this.items.find(item => item.id === change.doc.id);
             console.log('Item was removed: ', deletedNote);
           }
-        });
+        }); */
       });
     });
 
