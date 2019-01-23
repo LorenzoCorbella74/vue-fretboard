@@ -294,7 +294,6 @@ export default {
               description: this.form.description,
               tipo: this.form.tipo,
               progress: Number(this.form.progress),
-              progress: this.form.progress,
               date: new Date().toISOString(),
               data: []
             };
@@ -349,7 +348,7 @@ export default {
           });
         }
       } else {
-        return null;
+        return [];
       }
     }
   }
