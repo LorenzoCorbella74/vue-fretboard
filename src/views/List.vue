@@ -248,8 +248,8 @@ export default {
               .update(newItem)
               .then(docRef => {
                 // aggiorna il modello FE
-                // NOTE: trovare l'id!!!
-                this.$set(this.items, this.editedItem.id, newItem);
+                let theIndex = this.items.findIndex(x => x.id==this.editedItem.id);
+                this.$set(this.items, theIndex, newItem);
               })
               .catch(error => {
                 alert('Error editing study: ', error);
