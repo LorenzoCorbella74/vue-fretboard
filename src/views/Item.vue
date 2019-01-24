@@ -308,7 +308,7 @@ export default {
       }
     },
     toList() {
-      this.$router.push('/'); //this.$router.go(-1);
+      this.$router.push('/list'); //this.$router.go(-1);
     },
     onSubmit(evt) {
       evt.preventDefault();

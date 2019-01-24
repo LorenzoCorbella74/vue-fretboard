@@ -9,7 +9,7 @@
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
-            <b-nav-item to="/" right>Studi</b-nav-item>
+            <b-nav-item to="/list" right>Studi</b-nav-item>
             <!-- <b-nav-item to="/circolo" right>Circolo V</b-nav-item>
             <b-nav-item to="/interscambio" right>Interscambio modale</b-nav-item>-->
             <!-- <b-nav-item to="/about" right>About</b-nav-item> -->
@@ -22,6 +22,9 @@
               </b-dropdown-item>
               <b-dropdown-item to="/about">
                 <font-awesome-icon icon="question-circle" class="mr-2"/>About
+              </b-dropdown-item>
+              <b-dropdown-item @click="logout">
+                <font-awesome-icon icon="question-circle" class="mr-2"/>Logout
               </b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -60,11 +63,15 @@
 
 <script>
 import Soundfont from 'soundfont-player';
+import firebase from 'firebase';
 export let guitar = null;
 export let ac = new AudioContext();
 
+export let loggato = false;
+
 import { lista } from './views/List.vue';
 import { saveAs } from 'file-saver';
+import { currentUser, requiresAuth } from './router';
 import FileImporter from './components/FileImporter.vue';
 
 export default {
@@ -77,7 +84,9 @@ export default {
       isLoading: false,
       fileImport: 'substitute',
       importedText: '',
-      lista: lista
+      lista: lista,
+      currentUser: currentUser,
+      requiresAuth: requiresAuth
     };
   },
   methods: {
@@ -99,6 +108,15 @@ export default {
         this.$set(this.lista, i, e);
       });
       this.isLoading = false;
+    },
+    logout() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.requiresAuth = false;
+          this.$router.replace('/login');
+        });
     }
   },
   mounted() {
