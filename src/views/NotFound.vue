@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     notFound() {
-      this.$router.replace('/');
+      this.$router.replace('/list');
     }
   }
 };

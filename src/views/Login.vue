@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row justify-content-center align-items-center" style="height:100vh">
-      <div class="col-sm-6">
+      <div class="col-8">
         <div class="card">
           <div class="card-body">
             <div class="alert alert-warning">email: test@test.it
@@ -65,6 +65,12 @@ export default {
       error: ''
     };
   },
+  beforeRouteUpdate(to, from, next) {
+    // react to route changes...
+    // don't forget to call next()
+    console.log(to, from);
+    next();
+  },
   methods: {
     login() {
       if (!(this.email && this.password)) {
@@ -75,6 +81,7 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(user => {
+          console.log('User in login: ', user);
           this.$router.replace('/list');
         })
         .catch(err => {

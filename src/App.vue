@@ -1,11 +1,12 @@
 <template>
   <div id="app" class="wrapper">
     <!-- NAVIGATION -->
-    <b-navbar toggleable type="dark" variant="dark">
+    <b-navbar toggleable type="dark" variant="dark" v-if="authUser">
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
         <b-navbar-brand tag="h1" class="m-3">
-          <font-awesome-icon icon="guitar" class="mr-2"/>Sovrapposizioni
+          <font-awesome-icon icon="guitar" class="mr-2"/>GuitarStudies
+          <span style="font-size:10px">of {{authUser.email}}</span>
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
@@ -40,7 +41,7 @@
       </div>
     </div>
 
-    <div class="container margine-da-navbar">
+    <div class="container" :class="{'margine-da-navbar':authUser}">
       <transition name="fade" mode="out-in">
         <router-view/>
       </transition>
@@ -85,8 +86,7 @@ export default {
       fileImport: 'substitute',
       importedText: '',
       lista: lista,
-      currentUser: currentUser,
-      requiresAuth: requiresAuth
+      authUser: null
     };
   },
   methods: {
@@ -115,7 +115,7 @@ export default {
         .signOut()
         .then(() => {
           console.log('User logged out!');
-          // this.requiresAuth = false;
+          this.authUser = null;
           this.$router.replace('/login');
         });
     }
@@ -127,6 +127,14 @@ export default {
       guitar = guitarDownloaded;
       console.log('Guitar: ', guitar);
       a.isLoading = false;
+    });
+  },
+  created() {
+    // si mette i listeners dentro questo hook
+    // ma poteva essere recuperato anche dall'user ritornato
+    // dalla funzione login
+    firebase.auth().onAuthStateChanged(user => {
+      this.authUser = user;
     });
   }
 };

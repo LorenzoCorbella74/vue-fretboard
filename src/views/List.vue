@@ -133,6 +133,7 @@ export const lista = []; /* oggetto condiviso tra le pagine */
 // Form Validation
 import VeeValidate, { Validator } from 'vee-validate';
 import firebase from '../assets/js/Firebase';
+import { currentUser, requiresAuth } from '../router';
 var unsubscribe;
 
 export default {
@@ -162,7 +163,8 @@ export default {
         { value: 'interi', text: 'A toni interi' }
       ],
       items: lista,
-      ref: firebase.firestore().collection('studies')
+      ref: firebase.firestore().collection('studies'),
+      currentUser: currentUser
       // esempio di struttura
       // {
       //   id: 0,
@@ -174,7 +176,7 @@ export default {
     };
   },
   created() {
-    //let output = [];
+    console.log('User: ', this.currentUser);
     this.ref.get().then(snapshot => {
       snapshot.forEach(doc => {
         let i = this.items.findIndex(x => x.id == doc.id);
@@ -267,6 +269,7 @@ export default {
           if (this.editmode) {
             var newItem = {
               id: this.editedItem.id,
+              userId: this.currentUser.uid,
               title: this.form.title,
               description: this.form.description,
               tipo: this.form.tipo,
@@ -291,6 +294,7 @@ export default {
             var nextIndex = this.items.length; // si simula un id di partenza
             var newItem = {
               title: this.form.title,
+              userId: this.currentUser.uid,
               description: this.form.description,
               tipo: this.form.tipo,
               progress: Number(this.form.progress),

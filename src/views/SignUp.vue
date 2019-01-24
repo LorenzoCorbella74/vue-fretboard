@@ -1,7 +1,7 @@
 <template>
   <div class="container sign-up">
     <div class="row justify-content-center align-items-center" style="height:100vh">
-      <div class="col-sm-6">
+      <div class="col-8">
         <div class="card">
           <div class="card-body">
             <br>

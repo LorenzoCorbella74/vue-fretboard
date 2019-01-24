@@ -19,7 +19,7 @@ export let currentUser = null;
 export let requiresAuth = null;
 
 let router = new Router({
-  mode: "history",
+  mode: "hash",
   base: process.env.BASE_URL,
   routes: [{
       path: '/',
@@ -29,6 +29,11 @@ let router = new Router({
       path: '/login',
       name: 'login',
       component: Login
+      /* ,
+            beforeRouteLeave(to, from, next) {
+              console.log('Login router: ', to, from);
+              next();
+            } */
     },
     {
       path: '/signup',
@@ -38,10 +43,16 @@ let router = new Router({
     {
       path: "/list",
       name: "list",
-      component: List,
+      /* component: List, */
+      component: () => import( /* webpackChunkName: "about" */ "./views/List.vue"),
       meta: {
         requiresAuth: true
       }
+      /* ,
+            beforeRouteEnter(to, from, next) {
+              console.log(to, from);
+              next();
+            } */
     },
     {
       path: "/circolo",
@@ -73,11 +84,11 @@ let router = new Router({
       meta: {
         requiresAuth: true
       },
+
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () =>
-        import( /* webpackChunkName: "about" */ "./views/About.vue")
+      component: () => import( /* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
       path: '*',
@@ -90,12 +101,14 @@ let router = new Router({
 router.beforeEach((to, from, next) => {
   currentUser = firebase.auth().currentUser;
   requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  console.log('Current user: ', currentUser, requiresAuth);
+  console.log('Current user in router: ', currentUser, requiresAuth);
 
   if (requiresAuth && !currentUser) next('login')
   else if (!requiresAuth && currentUser) next('list')
   else next()
 });
+
+router.onError((err) => console.error(err));
 
 /* router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
