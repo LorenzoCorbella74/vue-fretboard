@@ -8,7 +8,7 @@
               email:
               <strong>test@test.it</strong>
               <br>Password:
-              <strong>test</strong>
+              <strong>guitarboy</strong>
             </div>
             <div class="text-center">
               <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
