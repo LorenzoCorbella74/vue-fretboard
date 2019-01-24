@@ -5,7 +5,7 @@
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
         <b-navbar-brand tag="h1" class="m-3">
-          <font-awesome-icon icon="guitar" class="mr-2"/>GuitarStudies
+          <font-awesome-icon icon="guitar" class="mr-2"/>Guitar Studies
           <span style="font-size:10px">of {{currentUser.email}}</span>
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
@@ -68,7 +68,7 @@ import firebase from 'firebase';
 export let guitar = null;
 export let ac = new AudioContext();
 
-export let loggato = false;
+export let isloading = false; // SPINNER GLOBALE
 
 import { lista } from './views/List.vue';
 import { saveAs } from 'file-saver';
@@ -84,7 +84,7 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isLoading: isloading,
       fileImport: 'substitute',
       importedText: '',
       lista: lista,
@@ -113,12 +113,15 @@ export default {
       this.isLoading = false;
     },
     logout() {
+      this.isLoading = true;
       firebase
         .auth()
         .signOut()
         .then(() => {
           console.log('User logged out!');
           this.currentUser = null;
+          this.isLoading = false;
+          this.lista = this.lista.splice(0, this.lista.length); // rimuove tutto....
           this.$router.replace('/login');
         });
     }
@@ -133,11 +136,12 @@ export default {
     });
   },
   created() {
-    // console.log('Utente nel costruttore: ', this.currentUser);
+    // 1) EVENT BUS
     // EventBus.$on('logged-user', user => {
     //   console.log('User: ', user);
     //   this.currentUser = Object.assign({}, user);
     // });
+    // 2) LISTENER AUTH
     // si mette i listeners dentro questo hook
     // ma poteva essere recuperato anche dall'user ritornato
     // dalla funzione login
@@ -149,9 +153,6 @@ export default {
   watch: {
     currentUser: function(newValue, oldValue) {
       console.log('watch in app: ', newValue, oldValue);
-      /* if (newValue) {
-        this.currentUser = Object.assign({}, newValue);
-      } */
     }
   }
 };
@@ -163,7 +164,7 @@ export default {
   background: url('https://unsplash.it/1500/1500/?image=721') center no-repeat;
   /* 
   
-  Lista delle img: https://picsum.photos/images 
+  Lista img sfondo: https://picsum.photos/images 
   1053
   1041
   994 <-

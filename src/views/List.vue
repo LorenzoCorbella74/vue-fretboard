@@ -182,10 +182,10 @@ export default {
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-          let i = this.items.findIndex(x => x.id == doc.id);
+          let i = this.items.findIndex(x => x.id == doc.id && doc.data().userId === this.currentUser.uid);
           console.log('ID trovato: ', i);
-          // Se non trova elementi l'aggiunge
-          if (i == -1) {
+          // Se non trova elementi con lo stesso id e dello stesso autore l'aggiunge
+          if (i == -1 && doc.data().userId === this.currentUser.uid) {
             this.items.push({
               id: doc.id,
               userId: doc.data().userId,
@@ -369,7 +369,7 @@ export default {
   border-bottom: 5px solid aqua;
 }
 .melodica {
-  border-bottom: 5px solid aquamarine;
+  border-bottom: 5px solid orange;
 }
 .armonica {
   border-bottom: 5px solid steelblue;
@@ -378,7 +378,7 @@ export default {
   border-bottom: 5px solid yellow;
 }
 .diminuita {
-  border-bottom: 5px solid coral;
+  border-bottom: 5px solid green;
 }
 .interi {
   border-bottom: 5px solid goldenrod;

@@ -6,6 +6,10 @@
           <div class="card-body">
             <br>
             <br>
+            <div class="text-center">
+              <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
+              <h3>Guitar Studies</h3>
+            </div>
             <div v-if="error" class="alert alert-danger">{{error}}</div>
             <br>
             <div>

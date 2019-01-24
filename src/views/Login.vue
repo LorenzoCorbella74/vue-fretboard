@@ -4,10 +4,19 @@
       <div class="col-8">
         <div class="card">
           <div class="card-body">
-            <div class="alert alert-warning">email: test@test.it
-              <br>Password: test
+            <div class="alert alert-warning">
+              email:
+              <strong>test@test.it</strong>
+              <br>Password:
+              <strong>test</strong>
+            </div>
+            <div class="text-center">
+              <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
+              <h3>Guitar Studies</h3>
             </div>
             <div v-if="error" class="alert alert-danger">{{error}}</div>
+            <br>
+            <br>
             <br>
             <div>
               <h2>Login</h2>
@@ -53,7 +62,8 @@
 
 <script>
 import firebase from 'firebase';
-import { EventBus } from '../main.js';
+// import { EventBus } from '../main.js';
+import { isloading } from '../App.vue';
 
 export default {
   name: 'login',
@@ -62,7 +72,7 @@ export default {
       email: '',
       password: '',
       submitted: false,
-      loading: false,
+      loading: isloading,
       error: ''
     };
   },
@@ -82,12 +92,14 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(user => {
-          console.log('User in login: ', user);
+          this.loading = false;
+          console.log('User in login page: ', user);
           // EventBus.$emit('logged-user', user);
           this.$router.replace('/list');
         })
         .catch(err => {
           // alert(err.message);
+          this.loading = false;
           this.error = err.message;
         });
     }
