@@ -37,7 +37,7 @@ let router = new Router({
     },
     {
       path: "/list",
-      name: "home",
+      name: "list",
       component: List,
       meta: {
         requiresAuth: true
@@ -87,7 +87,7 @@ let router = new Router({
   ]
 })
 
-/* router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
   currentUser = firebase.auth().currentUser;
   requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   console.log('Current user: ', currentUser, requiresAuth);
@@ -95,9 +95,9 @@ let router = new Router({
   if (requiresAuth && !currentUser) next('login')
   else if (!requiresAuth && currentUser) next('list')
   else next()
-}); */
+});
 
-router.beforeEach((to, from, next) => {
+/* router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
   const currentUser = firebase.auth().currentUser
 
@@ -108,6 +108,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-})
+}) */
 
 export default router;
