@@ -53,6 +53,7 @@
 
 <script>
 import firebase from 'firebase';
+import { EventBus } from '../main.js';
 
 export default {
   name: 'login',
@@ -82,6 +83,7 @@ export default {
         .signInWithEmailAndPassword(this.email, this.password)
         .then(user => {
           console.log('User in login: ', user);
+          // EventBus.$emit('logged-user', user);
           this.$router.replace('/list');
         })
         .catch(err => {

@@ -15,7 +15,9 @@ import './assets/styles/lux.min.css';
 // import './assets/styles/lux.min.css';
 //import './assets/styles/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './assets/styles/index.scss'
+import './assets/styles/index.scss';
+
+export const EventBus = new Vue();
 
 // FONT AWESOME
 import {

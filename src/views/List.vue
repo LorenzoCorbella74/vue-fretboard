@@ -133,7 +133,7 @@ export const lista = []; /* oggetto condiviso tra le pagine */
 // Form Validation
 import VeeValidate, { Validator } from 'vee-validate';
 import firebase from '../assets/js/Firebase';
-import { currentUser, requiresAuth } from '../router';
+import { currentUser, requiresAuth } from '../router'; // FIXME: qua si recupera dal router come oggetto condiviso...
 var unsubscribe;
 
 export default {
