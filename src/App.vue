@@ -1,11 +1,11 @@
 <template>
   <div id="app" class="wrapper">
     <!-- NAVIGATION -->
-    <div class="container">
-      <b-navbar toggleable type="dark" variant="dark">
-        <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
+    <b-navbar toggleable type="dark" variant="dark">
+      <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
+      <div class="container">
         <b-navbar-brand tag="h1" class="m-3">
-          <font-awesome-icon icon="music" class="mr-2"/>Sovrapposizioni
+          <font-awesome-icon icon="guitar" class="mr-2"/>Sovrapposizioni
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
@@ -29,8 +29,8 @@
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
-      </b-navbar>
-    </div>
+      </div>
+    </b-navbar>
 
     <!-- OVERLAY -->
     <div class="d-flex justify-content-center align-items-center overlay" v-if="isLoading">
@@ -114,7 +114,8 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.requiresAuth = false;
+          console.log('User logged out!');
+          // this.requiresAuth = false;
           this.$router.replace('/login');
         });
     }
