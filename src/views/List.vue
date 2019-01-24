@@ -176,43 +176,46 @@ export default {
     };
   },
   created() {
-    console.log('User: ', this.currentUser);
-    this.ref.get().then(snapshot => {
-      snapshot.forEach(doc => {
-        let i = this.items.findIndex(x => x.id == doc.id);
-        console.log('ID trovato: ', i);
-        // la 1° volta popola l'array
-        if (i == -1) {
-          this.items.push({
-            id: doc.id,
-            title: doc.data().title,
-            description: doc.data().description,
-            progress: doc.data().progress,
-            tipo: doc.data().tipo,
-            data: doc.data().data,
-            date: doc.data().date
+    console.log('User in List: ', this.currentUser);
+    this.ref
+      .where('userId', '==', this.currentUser.uid)
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          let i = this.items.findIndex(x => x.id == doc.id);
+          console.log('ID trovato: ', i);
+          // Se non trova elementi l'aggiunge
+          if (i == -1) {
+            this.items.push({
+              id: doc.id,
+              userId: doc.data().userId,
+              title: doc.data().title,
+              description: doc.data().description,
+              progress: doc.data().progress,
+              tipo: doc.data().tipo,
+              data: doc.data().data,
+              date: doc.data().date
+            });
+            console.log('ID: ', doc.id);
+          }
+        });
+        unsubscribe = this.ref.onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            if (change.type === 'added') {
+              const Item = { ...change.doc.data(), id: change.doc.id };
+              console.log('Item was added: ', Item);
+            }
+            if (change.type === 'modified') {
+              const updatedNote = this.items.find(item => item.id === change.doc.id);
+              console.log('item was updated: ', updatedNote);
+            }
+            if (change.type === 'removed') {
+              const deletedNote = this.items.find(item => item.id === change.doc.id);
+              console.log('Item was removed: ', deletedNote);
+            }
           });
-          console.log('ID: ', doc.id);
-        }
+        });
       });
-      // console.log('Items from Firebase: ', this.items);
-      unsubscribe = this.ref.onSnapshot(snapshot => {
-        /*         snapshot.docChanges().forEach(change => {
-          if (change.type === 'added') {
-            const Item = { ...change.doc.data(), id: change.doc.id };
-            console.log('Item was added: ', Item);
-          }
-          if (change.type === 'modified') {
-            const updatedNote = this.items.find(item => item.id === change.doc.id);
-            console.log('item was updated: ', updatedNote);
-          }
-          if (change.type === 'removed') {
-            const deletedNote = this.items.find(item => item.id === change.doc.id);
-            console.log('Item was removed: ', deletedNote);
-          }
-        }); */
-      });
-    });
 
     /* eslint-enable no-console */
   },
@@ -222,7 +225,6 @@ export default {
   mounted() {},
   methods: {
     getIconPath(id) {
-      // let randomNumber = Math.floor(Math.random() * 14) + 1;
       let imgNum = Number(id) + 1;
       if (imgNum > 20) {
         imgNum = imgNum % 20;
