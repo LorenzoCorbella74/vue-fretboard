@@ -5,7 +5,7 @@
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
         <b-navbar-brand tag="h1" class="m-3">
-          <font-awesome-icon icon="guitar" class="mr-2"/>Sovrapposizioni
+          <font-awesome-icon icon="guitar" class="mr-2"/>Guitar Studies
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
