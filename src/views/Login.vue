@@ -5,11 +5,11 @@
         <div class="card">
           <div class="card-body">
             <div class="alert alert-warning">
-              DEMO:
+              <h4 class="alert-heading">Demo:</h4>
               <br>Email:
-              <strong>test@test.it</strong>
+              <span class="alert-link">test@test.it</span>
               <br>Password:
-              <strong>guitarboy</strong>
+              <span class="alert-link">guitarboy</span>
             </div>
             <div class="text-center">
               <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
@@ -27,35 +27,39 @@
             <div>
               <br>
               <form @submit.prevent="login">
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input
+                <b-form-group id="formEmailGroup" label="Email" label-for="formEmail">
+                  <b-form-input
+                    id="formEmail"
                     type="email"
-                    v-model="email"
                     name="email"
-                    class="form-control"
-                    :class="{ 'is-invalid': submitted && !email }"
-                  >
-                  <div v-show="submitted && !email" class="invalid-feedback">email is required</div>
-                </div>
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input
+                    v-model="email"
+                    v-validate="'required|email'"
+                    :class="{'is-invalid': submitted && errors.has('email') }"
+                  ></b-form-input>
+                  <small
+                    id="emailHelp"
+                    class="form-text text-muted"
+                  >Non condivideremo mail la tua mail con nessuno</small>
+                  <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group id="formPassGroup" label="Password" label-for="formPass">
+                  <b-form-input
+                    id="formPass"
                     type="password"
-                    v-model="password"
                     name="password"
-                    class="form-control"
-                    :class="{ 'is-invalid': submitted && !password }"
-                  >
-                  <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
-                </div>
+                    v-model="password"
+                    v-validate="{ required: true, min: 6 }"
+                    :class="{'is-invalid': submitted && errors.has('password') }"
+                  ></b-form-input>
+                  <b-form-invalid-feedback>Il campo, richiesto deve essere di almeno 6 caratteri.</b-form-invalid-feedback>
+                </b-form-group>
                 <div class="form-group">
                   <button class="btn btn-primary" :disabled="loading">Login</button>
                 </div>
               </form>
               <br>
               <p class="text-center">
-                <router-link to="/signup">Nuovo? Cre un nuovo account!</router-link>
+                <router-link to="/signup">Nuovo da queste parti? Crea un nuovo account!</router-link>
               </p>
             </div>
           </div>
@@ -89,24 +93,28 @@ export default {
   },
   methods: {
     login() {
-      if (!(this.email && this.password)) {
-        return;
-      }
       this.loading = true;
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(user => {
-          this.loading = false;
-          console.log('User in login page: ', user);
-          // EventBus.$emit('logged-user', user);
-          this.$router.replace('/list');
-        })
-        .catch(err => {
-          // alert(err.message);
-          this.loading = false;
-          this.error = err.message;
-        });
+      this.submitted = true;
+      this.$validator.validate().then(valid => {
+        if (valid) {
+          firebase
+            .auth()
+            .signInWithEmailAndPassword(this.email, this.password)
+            .then(user => {
+              this.loading = false;
+              this.submitted = false;
+              console.log('User in login page: ', user);
+              // EventBus.$emit('logged-user', user);
+              this.$router.replace('/list');
+            })
+            .catch(err => {
+              // alert(err.message);
+              this.loading = false;
+              this.submitted = false;
+              this.error = err.message;
+            });
+        }
+      });
     }
   }
 };

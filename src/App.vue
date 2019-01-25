@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="wrapper">
     <!-- NAVIGATION -->
-    <b-navbar toggleable type="dark" variant="dark" v-if="currentUser">
+    <b-navbar sticky toggleable type="dark" variant="dark" v-if="currentUser">
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
         <b-navbar-brand tag="h1" class="m-3" to="/list">

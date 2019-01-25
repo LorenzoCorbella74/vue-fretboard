@@ -59,7 +59,7 @@ export default {
       const nuovaTastiera = Fretboard({
         tuning: Tunings[this.input.tuning] || Tunings.E_std,
         callback: this.playNote,
-        fretWidth: width < 500 ? 34 : 46
+        fretWidth: width < 600 ? 34 : 46
       });
 
       // istanzia il contenitore SVG per la tastiera

@@ -16,29 +16,29 @@
             <div>
               <br>
               <b></b>
-              <form @submit.prevent="login">
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input
+              <form @submit.prevent="register">
+                <b-form-group id="formEmailGroup" label="Email" label-for="formEmail">
+                  <b-form-input
+                    id="formEmail"
                     type="email"
-                    v-model="email"
                     name="email"
-                    class="form-control"
-                    :class="{ 'is-invalid': submitted && !email }"
-                  >
-                  <div v-show="submitted && !email" class="invalid-feedback">email is required</div>
-                </div>
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input
+                    v-model="email"
+                    v-validate="'required|email'"
+                    :class="{'is-invalid': submitted && errors.has('email') }"
+                  ></b-form-input>
+                  <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group id="formPassGroup" label="Password" label-for="formPass">
+                  <b-form-input
+                    id="formPass"
                     type="password"
-                    v-model="password"
                     name="password"
-                    class="form-control"
-                    :class="{ 'is-invalid': submitted && !password }"
-                  >
-                  <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
-                </div>
+                    v-model="password"
+                    v-validate="{ required: true, min: 6 }"
+                    :class="{'is-invalid': submitted && errors.has('password') }"
+                  ></b-form-input>
+                  <b-form-invalid-feedback>Il campo, richiesto deve essere di almeno 6 caratteri.</b-form-invalid-feedback>
+                </b-form-group>
                 <div class="form-group">
                   <button class="btn btn-primary" :disabled="loading">Sign Up!</button>
                 </div>
@@ -70,24 +70,27 @@ export default {
     };
   },
   methods: {
-    login() {
-      if (!(this.email && this.password)) {
-        return;
-      }
+    register() {
       this.loading = true;
       this.submitted = true;
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then(user => {
-          this.$router.replace('/login');
-          this.loading = false;
-        })
-        .catch(err => {
-          // alert(err.message);
-          this.loading = false;
-          this.error = err.message;
-        });
+      this.$validator.validate().then(valid => {
+        if (valid) {
+          firebase
+            .auth()
+            .createUserWithEmailAndPassword(this.email, this.password)
+            .then(user => {
+              this.$router.replace('/login');
+              this.loading = false;
+              this.submitted = false;
+            })
+            .catch(err => {
+              // alert(err.message);
+              this.loading = false;
+              this.submitted = false;
+              this.error = err.message;
+            });
+        }
+      });
     }
   }
 };

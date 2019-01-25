@@ -1,13 +1,24 @@
 <template>
-  <label class="text-reader">
-    Importa
-    <input type="file" @change="loadTextFromFile">
-    <br>
-    <p>
-      File:
-      <span style="font-style: italic;">{{fileName}}</span>
-    </p>
-  </label>
+  <div>
+    <div class="input-group mb-3">
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          id="inputGroupFile02"
+          @change="loadTextFromFile"
+        >
+        <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+      </div>
+    </div>
+    <div>
+      <br>
+      <p>
+        File:
+        <span style="font-style: italic;">{{fileName}}</span>
+      </p>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -18,12 +29,15 @@ export default {
     };
   },
   methods: {
+    // TODO:
     loadTextFromFile(ev) {
       const file = ev.target.files[0];
-      this.fileName = file.name;
-      const reader = new FileReader();
-      reader.onload = e => this.$emit('load', e.target.result);
-      reader.readAsText(file);
+      if (file) {
+        this.fileName = file.name;
+        const reader = new FileReader();
+        reader.onload = e => this.$emit('load', e.target.result);
+        reader.readAsText(file);
+      }
     }
   }
 };

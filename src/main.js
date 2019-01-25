@@ -43,12 +43,16 @@ import {
   faLayerGroup,
   faSortNumericUp,
   faTimesCircle
-} from '@fortawesome/free-solid-svg-icons'
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  faGithub,
+  faVuejs
+} from '@fortawesome/free-brands-svg-icons';
 import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
 library.add(faMusic, faPlus, faPlay, faEdit, faTrash, faList, faAngleDown, faAngleDoubleLeft, faAngleDoubleRight, faSpinner, faGuitar, faQuestionCircle, faFileImport,
-  faFileExport, faCodeBranch, faClock, faLayerGroup, faSortNumericUp, faTimesCircle)
+  faFileExport, faCodeBranch, faClock, faLayerGroup, faSortNumericUp, faGithub, faVuejs)
 
 // GLOBAL FILTERS
 import {
