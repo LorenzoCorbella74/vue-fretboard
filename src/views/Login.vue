@@ -82,8 +82,16 @@ export default {
       password: '',
       submitted: false,
       loading: isloading,
-      error: ''
+      error: '',
+      ref: firebase
     };
+  },
+  created() {
+    this.ref.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$router.replace('/list');
+      }
+    });
   },
   beforeRouteUpdate(to, from, next) {
     // react to route changes...

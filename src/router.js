@@ -23,7 +23,7 @@ let router = new Router({
   base: process.env.BASE_URL,
   routes: [{
       path: '/',
-      redirect: '/login'
+      redirect: '/list'
     },
     {
       path: '/login',
