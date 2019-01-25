@@ -152,7 +152,7 @@ export const lista = []; /* oggetto condiviso tra le pagine */
 // Form Validation
 import VeeValidate, { Validator } from 'vee-validate';
 import firebase from '../assets/js/Firebase';
-import { currentUser, requiresAuth } from '../router'; // FIXME: qua si recupera dal router come oggetto condiviso...
+import { currentUser } from '../router'; // FIXME: qua si recupera dal router come oggetto condiviso...
 var unsubscribe;
 
 export default {
@@ -195,14 +195,14 @@ export default {
     };
   },
   created() {
-    console.log('User in List: ', this.currentUser);
+    console.log('User ID ', this.currentUser.uid);
     this.ref
       .where('userId', '==', this.currentUser.uid)
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
           let i = this.items.findIndex(x => x.id == doc.id && doc.data().userId === this.currentUser.uid);
-          console.log('ID trovato: ', i);
+          // console.log('ID trovato: ', i);
           // Se non trova elementi con lo stesso id e dello stesso autore l'aggiunge
           if (i == -1 && doc.data().userId === this.currentUser.uid) {
             this.items.push({
@@ -219,7 +219,7 @@ export default {
           }
         });
         unsubscribe = this.ref.onSnapshot(snapshot => {
-          snapshot.docChanges().forEach(change => {
+          /* snapshot.docChanges().forEach(change => {
             if (change.type === 'added') {
               const Item = { ...change.doc.data(), id: change.doc.id };
               console.log('Item was added: ', Item);
@@ -232,7 +232,7 @@ export default {
               const deletedNote = this.items.find(item => item.id === change.doc.id);
               console.log('Item was removed: ', deletedNote);
             }
-          });
+          }); */
         });
       });
 

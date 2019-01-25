@@ -370,8 +370,14 @@ export default {
             let secondroot = this.form.selectedNote;
             let secondtype = name;
             let secondintervalli = SCALES[secondtype];
+            // console.log('Secondo: ', secondroot, secondintervalli);
             let mergeSecondItem = createScale(secondroot, secondintervalli);
             const noteMergiate = mergeScale(this.mergeFirstItem.notes.split(' '), mergeSecondItem.notes);
+            /* console.log(
+              JSON.stringify(noteMergiate),
+              JSON.stringify(this.mergeFirstItem.gradi.split(' ')),
+              JSON.stringify(mergeSecondItem.gradi)
+            ); */
             const gradiMergiati = mergeDegree(
               noteMergiate,
               this.mergeFirstItem.gradi.split(' '),

@@ -542,7 +542,15 @@ export function mergeScale(a, b) {
     return transposeScaleObjByStartingNote(a[0], output);
 }
 
-export function mergeDegree(data, a, b) {
+export function mergeDegree(data, uno, due) {
+    let a, b;
+    if (uno.length > due.length) {
+        a = uno;
+        b = due;
+    } else {
+        a = due;
+        b = uno;
+    }
     let output = [];
     for (let i = 0; i < data.length; i++) {
         const e = data[i];
