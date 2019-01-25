@@ -5,7 +5,13 @@
       <h6>
         {{tastiera.name}}
         <span class="d-inline">
-          <a href="#" class="card-link" @click="playScale()">
+          <a
+            href="#"
+            class="card-link"
+            v-b-tooltip.hover
+            title="Suona su chitarra..."
+            @click="playScale()"
+          >
             <font-awesome-icon icon="play"/>
           </a>
         </span>

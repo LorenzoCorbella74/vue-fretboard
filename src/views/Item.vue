@@ -39,21 +39,38 @@
           @end="drag=false"
         >
           <!-- <transition-group name="list-fretboard" tag="div"> -->
-          <div
-            class="list-fretboard border-dotted"
-            v-for="(i, index) in selectedItem.data"
-            :key="i.id"
-          >
+          <div class="list-fretboard" v-for="(i, index) in selectedItem.data" :key="i.id">
+            <!-- border-dotted -->
             <!-- FRETBOARD -->
             <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
             <div class="posizione-icone">
-              <button type="button" class="btn btn-link" @click="editItem(i.id)" v-if="!i.merge">
+              <button
+                type="button"
+                class="btn btn-link"
+                v-b-tooltip.hover
+                title="Edita soluzione"
+                @click="editItem(i.id)"
+                v-if="!i.merge"
+              >
                 <font-awesome-icon icon="edit"/>
               </button>
-              <button type="button" class="btn btn-link" @click="mergeWithOther(i)" v-if="!i.merge">
+              <button
+                type="button"
+                class="btn btn-link"
+                v-b-tooltip.hover
+                title="Mergia con altra soluzione"
+                @click="mergeWithOther(i)"
+                v-if="!i.merge"
+              >
                 <font-awesome-icon icon="code-branch"/>
               </button>
-              <button type="button" class="btn btn-link float-right" @click="deleteItem(i.id)">
+              <button
+                type="button"
+                class="btn btn-link float-right"
+                v-b-tooltip.hover
+                title="Cancella"
+                @click="deleteItem(i.id)"
+              >
                 <font-awesome-icon icon="trash"/>
               </button>
             </div>

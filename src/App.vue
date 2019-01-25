@@ -4,13 +4,15 @@
     <b-navbar toggleable type="dark" variant="dark" v-if="currentUser">
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
-        <b-navbar-brand tag="h1" class="m-3">
+        <b-navbar-brand tag="h1" class="m-3" to="/list">
           <font-awesome-icon icon="guitar" class="mr-2"/>Guitar Studies
-          <span style="font-size:10px">of {{currentUser.email}}</span>
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
-            <b-nav-item to="/list" right>Studi</b-nav-item>
+            <b-nav-item right>
+              <span style="font-size:12px">{{currentUser.email}}</span>
+            </b-nav-item>
+            <!-- <b-nav-item to="/list" right>Studi</b-nav-item> -->
             <!-- <b-nav-item to="/circolo" right>Circolo V</b-nav-item>
             <b-nav-item to="/interscambio" right>Interscambio modale</b-nav-item>-->
             <!-- <b-nav-item to="/about" right>About</b-nav-item> -->

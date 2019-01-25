@@ -46,17 +46,35 @@
                 <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
                 <div class="d-flex justify-content-around">
                   <div class="p-1">
-                    <button type="button" class="btn btn-link" @click="editItem(card.id)">
+                    <button
+                      type="button"
+                      class="btn btn-link"
+                      v-b-tooltip.hover
+                      title="Edita studio"
+                      @click="editItem(card.id)"
+                    >
                       <font-awesome-icon icon="edit"/>
                     </button>
                   </div>
                   <div class="p-1">
-                    <button type="button" class="btn btn-link" @click="deleteItem(card.id)">
+                    <button
+                      type="button"
+                      class="btn btn-link"
+                      v-b-tooltip.hover
+                      title="Cancella soluzione"
+                      @click="deleteItem(card.id)"
+                    >
                       <font-awesome-icon icon="trash"/>
                     </button>
                   </div>
                   <div class="p-1">
-                    <button type="button" class="btn btn-link" @click="checkItem(card.id)">
+                    <button
+                      type="button"
+                      class="btn btn-link"
+                      v-b-tooltip.hover
+                      title="Aggiungi spunti..."
+                      @click="checkItem(card.id)"
+                    >
                       <font-awesome-icon icon="list"/>
                     </button>
                   </div>

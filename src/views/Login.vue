@@ -5,7 +5,8 @@
         <div class="card">
           <div class="card-body">
             <div class="alert alert-warning">
-              email:
+              DEMO:
+              <br>Email:
               <strong>test@test.it</strong>
               <br>Password:
               <strong>guitarboy</strong>
@@ -13,13 +14,17 @@
             <div class="text-center">
               <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
               <h3>Guitar Studies</h3>
-            </div>
-            <div v-if="error" class="alert alert-danger">{{error}}</div>
-            <br>
-            <br>
-            <br>
-            <div>
+              <br>
               <h2>Login</h2>
+            </div>
+            <!-- <b-alert
+              variant="danger"
+              dismissible
+              :show="showDismissibleAlert"
+              @dismissed="showDismissibleAlert=false"
+            >{{error}}</b-alert>-->
+            <div v-if="error" class="alert alert-danger">{{error}}</div>
+            <div>
               <br>
               <form @submit.prevent="login">
                 <div class="form-group">
@@ -50,7 +55,7 @@
               </form>
               <br>
               <p class="text-center">
-                <router-link to="/signup">New Here? Create a new account</router-link>
+                <router-link to="/signup">Nuovo? Cre un nuovo account!</router-link>
               </p>
             </div>
           </div>

@@ -9,12 +9,13 @@
             <div class="text-center">
               <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
               <h3>Guitar Studies</h3>
+              <br>
+              <h3>Crea un nuovo account</h3>
             </div>
             <div v-if="error" class="alert alert-danger">{{error}}</div>
-            <br>
             <div>
-              <h3>Create a new account</h3>
               <br>
+              <b></b>
               <form @submit.prevent="login">
                 <div class="form-group">
                   <label for="email">Email</label>
