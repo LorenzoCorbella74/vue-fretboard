@@ -36,6 +36,7 @@
             <div class="card" :class="[card.tipo]" @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(index+1)" alt="Card image">
               <div class="card-img-overlay">
+                <span class="badge-position" v-if="card.data.length>0">{{card.data.length}}</span>
                 <h4 class="card-title text-light">{{card.title}}</h4>
                 <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
               </div>
@@ -406,6 +407,16 @@ export default {
 }
 .custom-height {
   height: 64px;
+}
+.badge-position {
+  position: absolute;
+  background-color: transparent;
+  border-radius: 5px;
+  border: 1px dotted #f0ad4e;
+  padding: 1px 5px;
+  right: 5px;
+  top: 5px;
+  color: #f0ad4e;
 }
 </style>
 
