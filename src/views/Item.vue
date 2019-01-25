@@ -80,7 +80,7 @@
       </div>
     </div>
 
-    <b-modal size="lg" ref="myModalRef" :title="calcolaTitolo">
+    <b-modal size="lg" ref="myModalRef" :title="calcolaTitolo" @hidden="handleCancel">
       <form>
         <div class="row">
           <div class="col-md-6">
@@ -274,6 +274,11 @@ export default {
     next();
   },
   methods: {
+    handleCancel() {
+      this.editMode = false;
+      this.mergeMode = false;
+      this.resetForm();
+    },
     forceRerender() {
       this.componentKey++;
     },
