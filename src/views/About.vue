@@ -10,30 +10,48 @@
               e archiviare e gestire comodamente gli studi di tali sovrapposizioni.
             </p>
             <hr class="my-4">
-            <p>La web app usa le seguenti tecnologie:</p>
-            <!-- <font-awesome-icon icon="vuejs" class="p-2" size="4x"/> -->
+            <p>Per le tecnologie usate vedere:
+              <!--  <span>
+                <font-awesome-icon :icon="['fab', 'vuejs' ]" size="4x"/>
+              </span>-->
+            </p>
             <br>
             <b-btn
               class="lead"
               variant="danger"
               href="https://github.com/LorenzoCorbella74/vue-fretboard"
             >
-              <!-- <font-awesome-icon icon="github" class="p-2"/>More Info -->
+              <span class="p-2">
+                <font-awesome-icon :icon="['fab', 'github' ]"/>
+              </span>More Info
             </b-btn>
             <br>
-            <p class="text-center">
-              Made with
-              <span style="color: #e25555;">&#9829;</span> in Rome
-            </p>
           </b-jumbotron>
         </div>
       </div>
+      <footer class="footer">
+        <div class="text-center p-3">
+          <p>
+            Made with
+            <span style="color: #e25555;">&#9829;</span> in Rome
+          </p>
+        </div>
+      </footer>
     </div>
   </div>
 </template>
 
 
 <style>
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  font-weight: 800;
+
+  color: white;
+}
 </style>
 
 

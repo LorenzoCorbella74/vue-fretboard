@@ -40,7 +40,7 @@
                 <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
               </div>
             </div>
-            <div class="card">
+            <div class="card" :class="[card.progress==100? 'bg-warning':'']">
               <div class="card-body">
                 <p class="card-text custom-height">{{card.description | text_truncate(60)}}</p>
                 <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
