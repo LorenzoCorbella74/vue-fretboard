@@ -244,7 +244,7 @@ export default {
   mounted() {},
   methods: {
     getIconPath(id) {
-      let imgNum = Number(id) + 1;
+      let imgNum = Number(id);
       if (imgNum > 20) {
         imgNum = imgNum % 20;
       }
