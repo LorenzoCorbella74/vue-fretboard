@@ -5,15 +5,15 @@
       <h6>
         {{tastiera.name}}
         <span class="d-inline">
-          <a
-            href="#"
-            class="card-link"
+          <button
+            type="button"
+            class="btn btn-link"
             v-b-tooltip.hover
-            title="Suona su chitarra..."
+            title="Suona con la chitarra"
             @click="playScale()"
           >
             <font-awesome-icon icon="play"/>
-          </a>
+          </button>
         </span>
       </h6>
     </div>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { Fretboard, Tunings } from '../assets/js/music-engine.js';
+import { Fretboard, Tunings, createScaleToBePlayed } from '../assets/js/music-engine.js';
 import { ac, guitar } from '../App.vue';
 export default {
   name: 'fretboard-chart',
@@ -94,22 +94,18 @@ export default {
     acoustic_guitar_steel
     */
     playScale() {
-      let scaleDISC = this.tastiera.notes.split(' ').map(e => e.toUpperCase() + 3);
-      let scaleASC = this.tastiera.notes
-        .split(' ')
-        .map(e => e.toUpperCase() + 3)
-        .reverse();
-      let scaleToBePlayed = scaleDISC.concat(this.tastiera.notes[0].toUpperCase() + 4, scaleASC);
-      // console.log(scaleToBePlayed);
-      let time = ac.currentTime + 0.2;
+      let original = this.tastiera.notes.split(' ');
+      let scaleToBePlayed = createScaleToBePlayed(original);
+      console.log('Suonata: ', scaleToBePlayed);
+      let time = ac.currentTime + 0.3;
       scaleToBePlayed.forEach(function(note) {
-        guitar.play(note, time, 0.2);
-        time += 0.2;
+        guitar.play(note, time, 0.3);
+        time += 0.3;
       });
     },
     playNote(note) {
       let noteToBePlayed = note.toUpperCase();
-      guitar.play(note, ac.currentTime + 0.2, 0.2);
+      guitar.play(note, ac.currentTime + 0.3, 0.3);
     }
   },
   watch: {

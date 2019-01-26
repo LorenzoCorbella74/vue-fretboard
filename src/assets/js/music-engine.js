@@ -563,6 +563,30 @@ export function mergeDegree(data, uno, due) {
     }
     return output;
 }
+
+// TODO: per scale a 5° note si scorre e una volta che si "salta" il c si aumenta
+export function createScaleToBePlayed(s) {
+    let a = 3,
+        b = 3;
+    var o = s.map(e => {
+        if (e == "c") {
+            a++;
+        }
+        return e.toUpperCase() + a;
+    });
+    var o_rev = s.map(e => {
+        if (e == "c") {
+            b++;
+        }
+        return e.toUpperCase() + b;
+    }).reverse();
+    let osotto = o[0].charAt(0);
+    let olast = Number(o[o.length - 1].substr(-1));
+    if (osotto == "C" || o.length <= 5) {
+        olast++;
+    }
+    return o.concat(osotto + olast, o_rev);
+}
 /* ------------------- MERGE SCALES ------------------- */
 
 // si istanzia l'oggetto 'TASTIERA' passandogli un eventuale oggetto di configurazione
