@@ -182,7 +182,7 @@ export default {
       optionsScaleUsArp: [{ text: 'Scala', value: 'scala' }, { text: 'Arpeggio', value: 'arpeggio' }],
       optionsNoteUsDegree: [{ text: 'Note', value: 'nota' }, { text: 'Gradi', value: 'grado' }],
       optionsScales: [
-        { text: '- Maggiore e Pentaoniche', value: '', disabled: true },
+        { text: '- Maggiore e Pentatoniche', value: '', disabled: true },
         { text: 'Lydian', value: 'lydian' },
         { text: 'Lydian Penta', value: 'lydian-pentatonic' },
         { text: 'Major (Ionian)', value: 'ionian' },
