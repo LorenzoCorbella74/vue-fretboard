@@ -15,7 +15,7 @@
                 <b-form-radio value="progress">
                   <font-awesome-icon icon="sort-numeric-up"/>
                 </b-form-radio>
-                <b-form-radio value="tipo">
+                <b-form-radio value="tag">
                   <font-awesome-icon icon="layer-group"/>
                 </b-form-radio>
               </b-form-radio-group>
@@ -33,7 +33,7 @@
 
         <div class="row" v-if="items.length>0">
           <div class="col-lg-3 col-sm-6 mb-3" v-for="(card,index) in filteredList" :key="card.id">
-            <div class="card" :class="[card.tipo]" @click="checkItem(card.id)">
+            <div class="card" :class="[card.tag]" @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(index+1)" alt="Card image">
               <div class="card-img-overlay">
                 <span class="badge-position" v-if="card.data.length>0">{{card.data.length}}</span>
@@ -45,6 +45,12 @@
               <div class="card-body">
                 <p class="card-text custom-height">{{card.description | text_truncate(60)}}</p>
                 <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
+                <!-- <vue-tags-input
+                  id="exampleInput4"
+                  v-model="card.tag"
+                  :tags="card.tags"
+                  :allow-edit-tags="false"
+                />-->
                 <div class="d-flex justify-content-around">
                   <div class="p-1">
                     <button
@@ -124,17 +130,25 @@
             placeholder="Indicare"
           ></b-form-input>
         </b-form-group>
-        <b-form-group id="exampleInputGroup4" label="Famiglia" label-for="exampleInput4">
-          <b-form-select
+
+        <b-form-group id="exampleInputGroup4" label="Tags" label-for="exampleInput4">
+          <!-- <b-form-select
             id="exampleInput4"
-            name="tipo"
-            v-model="form.tipo"
+            name="tag"
+            v-model="form.tag"
             :options="optionsTipo"
             :select-size="4"
             v-validate="'required'"
-            :class="{'is-invalid': submitted && errors.has('tipo ') }"
+            :class="{'is-invalid': submitted && errors.has('tag ') }"
+          />-->
+          <vue-tags-input
+            id="exampleInput4"
+            v-model="form.tag"
+            :tags="form.tags"
+            :allow-edit-tags="true"
+            :autocomplete-items="filteredItems"
+            @tags-changed="newTags => form.tags = newTags"
           />
-          <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
       </form>
       <div slot="modal-footer" class="w-100">
@@ -152,11 +166,13 @@ export const lista = []; /* oggetto condiviso tra le pagine */
 // Form Validation
 import VeeValidate, { Validator } from 'vee-validate';
 import firebase from '../assets/js/Firebase';
+import VueTagsInput from '@johmun/vue-tags-input';
 import { currentUser } from '../router'; // FIXME: qua si recupera dal router come oggetto condiviso...
 var unsubscribe;
 
 export default {
   name: 'home',
+  components: { VueTagsInput },
   data: function() {
     return {
       title: 'Studi',
@@ -168,19 +184,19 @@ export default {
         title: '',
         description: '',
         progress: 0,
-        tipo: null
+        tag: '', // è il valore che viene via via riempito
+        tags: []
       },
-      submitted: false,
-      optionsTipo: [
-        { value: null, text: 'Selezionare una scala' },
-        { value: 'maggiore', text: 'Maggiore' },
-        { value: 'minore', text: 'Minore' },
-        { value: 'melodica', text: 'Min. Melodica' },
-        { value: 'armonica', text: 'Min. Armonica' },
-        { value: 'pentatonica', text: 'Pentatonica' },
-        { value: 'diminuita', text: 'Diminuita' },
-        { value: 'interi', text: 'A toni interi' }
+      autocompleteItems: [
+        { text: 'Maggiore' },
+        { text: 'Minore' },
+        { text: 'Melodica' },
+        { text: 'Armonica' },
+        { text: 'Pentatonica' },
+        { text: 'Diminuita' },
+        { text: 'Toni interi' }
       ],
+      submitted: false,
       items: lista,
       ref: firebase.firestore().collection('studies'),
       currentUser: currentUser
@@ -211,7 +227,7 @@ export default {
               title: doc.data().title,
               description: doc.data().description,
               progress: doc.data().progress,
-              tipo: doc.data().tipo,
+              tags: doc.data().tags,
               data: doc.data().data,
               date: doc.data().date
             });
@@ -260,7 +276,7 @@ export default {
       this.form.title = theOne.title;
       this.form.description = theOne.description;
       this.form.progress = theOne.progress;
-      this.form.tipo = theOne.tipo;
+      this.form.tags = theOne.tags;
       this.form.data = theOne.data;
       this.form.date = theOne.date;
       this.editmode = true;
@@ -293,11 +309,12 @@ export default {
               userId: this.currentUser.uid,
               title: this.form.title,
               description: this.form.description,
-              tipo: this.form.tipo,
+              tags: this.form.tags,
               progress: Number(this.form.progress),
               data: this.editedItem.data || [],
               date: this.editedItem.date || new Date().toISOString()
             };
+            console.log('NewItem: ', newItem);
             this.ref
               .doc(this.editedItem.id)
               .update(newItem)
@@ -317,7 +334,7 @@ export default {
               title: this.form.title,
               userId: this.currentUser.uid,
               description: this.form.description,
-              tipo: this.form.tipo,
+              tags: this.form.tags,
               progress: Number(this.form.progress),
               date: new Date().toISOString(),
               data: []
@@ -343,11 +360,16 @@ export default {
       this.form.title = '';
       this.form.description = '';
       this.form.progress = 0;
-      this.form.tipo = null;
+      this.form.tags = [];
       this.submitted = false;
     }
   },
   computed: {
+    filteredItems() {
+      return this.autocompleteItems.filter(i => {
+        return i.text.toLowerCase().indexOf(this.form.tag.toLowerCase()) !== -1;
+      });
+    },
     filteredList() {
       if (this.items.length > 0) {
         const filtered = this.items.filter(e => {
@@ -359,11 +381,11 @@ export default {
         } else if (this.listFilter == 'progress') {
           // discendente: dal numero maggiore al minore
           return filtered.sort((obj1, obj2) => obj2.progress - obj1.progress);
-        } else if (this.listFilter == 'tipo') {
+        } else if (this.listFilter == 'tag') {
           return filtered.sort((a, b) => {
             // Use toUpperCase() to ignore character casing
-            const tipoA = a.tipo.toUpperCase();
-            const tipoB = b.tipo.toUpperCase();
+            const tipoA = a.tag.toUpperCase();
+            const tipoB = b.tag.toUpperCase();
             let comparison = 0;
             if (tipoA > tipoB) {
               comparison = 1;
@@ -381,7 +403,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
+/* style the background and the text color of the input ... */
+.vue-tags-input {
+  background: #f7f7f9;
+}
+
 .maggiore {
   border-bottom: 5px solid red;
 }
