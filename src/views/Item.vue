@@ -454,6 +454,7 @@ export default {
       this.form.selectedNote = null;
       this.form.selectedScale = null;
       this.form.selectedArp = null;
+      this.submitted = false;
     },
     registerFretboard(data, who) {
       this.$set(this.selectedItem.data[who.id], 'notes', data.notes);

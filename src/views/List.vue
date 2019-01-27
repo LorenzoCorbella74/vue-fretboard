@@ -132,7 +132,7 @@
             :options="optionsTipo"
             :select-size="4"
             v-validate="'required'"
-            :class="{'is-invalid': submitted && errors.has('description') }"
+            :class="{'is-invalid': submitted && errors.has('tipo ') }"
           />
           <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
@@ -344,6 +344,7 @@ export default {
       this.form.description = '';
       this.form.progress = 0;
       this.form.tipo = null;
+      this.submitted = false;
     }
   },
   computed: {
