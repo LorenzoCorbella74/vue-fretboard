@@ -118,26 +118,30 @@
             <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
           </div>
           <div class="col-md-6">
-            <b-form-select
-              name="selectedScale"
-              v-if="form.scaleUsArp=='scala'"
-              v-model="form.selectedScale"
-              :options="optionsScales"
-              class="mb-3"
-              v-validate="'required'"
-              :class="{'is-invalid': submitted && errors.has('selectedScale') }"
-            />
-            <b-form-invalid-feedback v-if="form.scaleUsArp=='scala'">Il campo è richiesto</b-form-invalid-feedback>
-            <b-form-select
-              name="selectedArp"
-              v-if="form.scaleUsArp=='arpeggio'"
-              v-model="form.selectedArp"
-              :options="optionsArp"
-              class="mb-3"
-              v-validate="'required'"
-              :class="{'is-invalid': submitted && errors.has('selectedArp') }"
-            />
-            <b-form-invalid-feedback v-if="form.scaleUsArp=='arpeggio'">Il campo è richiesto</b-form-invalid-feedback>
+            <div>
+              <b-form-select
+                name="selectedScale"
+                v-if="form.scaleUsArp=='scala'"
+                v-model="form.selectedScale"
+                :options="optionsScales"
+                class="mb-3"
+                v-validate="'required'"
+                :class="{'is-invalid': submitted && errors.has('selectedScale') }"
+              />
+              <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
+            </div>
+            <div>
+              <b-form-select
+                name="selectedArp"
+                v-if="form.scaleUsArp=='arpeggio'"
+                v-model="form.selectedArp"
+                :options="optionsArp"
+                class="mb-3"
+                v-validate="'required'"
+                :class="{'is-invalid': submitted && errors.has('selectedArp')}"
+              />
+              <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
+            </div>
           </div>
         </div>
       </form>
@@ -336,7 +340,11 @@ export default {
       evt.preventDefault();
       this.submitted = true;
       this.$validator.validate().then(valid => {
-        if (valid) {
+        if (
+          valid ||
+          (this.errors.has('selectedScale') && this.form.scaleUsArp == 'arpeggio') ||
+          (this.errors.has('selectedArp') && this.form.scaleUsArp == 'scala')
+        ) {
           // si edita
           let name = this.form.scaleUsArp == 'scala' ? this.form.selectedScale : this.form.selectedArp;
           if (this.editMode) {
