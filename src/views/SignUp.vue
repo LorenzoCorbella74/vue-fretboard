@@ -8,9 +8,9 @@
             <br>
             <div class="text-center">
               <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
-              <h3>Guitar Studies</h3>
+              <h3>{{$t("SignUp.title")}}</h3>
               <br>
-              <h3>Crea un nuovo account</h3>
+              <h3>{{$t("SignUp.subTitle")}}</h3>
             </div>
             <div v-if="error" class="alert alert-danger">{{error}}</div>
             <div>
@@ -37,15 +37,15 @@
                     v-validate="{ required: true, min: 6 }"
                     :class="{'is-invalid': submitted && errors.has('password') }"
                   ></b-form-input>
-                  <b-form-invalid-feedback>Il campo, richiesto deve essere di almeno 6 caratteri.</b-form-invalid-feedback>
+                  <b-form-invalid-feedback>{{$t("SignUp.pass_msg")}}</b-form-invalid-feedback>
                 </b-form-group>
                 <div class="form-group">
-                  <button class="btn btn-primary" :disabled="loading">Sign Up!</button>
+                  <button class="btn btn-primary" :disabled="loading">{{$t("SignUp.btn_send")}}</button>
                 </div>
               </form>
               <br>
               <p class="text-center">
-                <router-link to="/login">Back</router-link>
+                <router-link to="/login">{{$t("SignUp.register_msg")}}</router-link>
               </p>
             </div>
           </div>
