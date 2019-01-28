@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <!-- my-5 -->
-    <div class="col-md-4">
+    <div class="col-md-5">
       <h6>
         {{tastiera.name}}
         <span class="d-inline">
@@ -16,8 +16,9 @@
           </a>
         </span>
       </h6>
+      <p>{{tastiera.info}}</p>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
       <table class="table table-sm">
         <thead class="thead-light">
           <tr>
@@ -61,6 +62,7 @@ export default {
         callback: this.playNote,
         fretWidth: width < 600 ? 34 : 46
       });
+      nuovaTastiera.info = this.input.info;
 
       // istanzia il contenitore SVG per la tastiera
       nuovaTastiera.makeContainer(this.$el);

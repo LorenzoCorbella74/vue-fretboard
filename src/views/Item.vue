@@ -140,6 +140,19 @@
             <b-form-invalid-feedback v-if="form.scaleUsArp=='arpeggio'">Il campo è richiesto</b-form-invalid-feedback>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-12">
+            <b-form-group id="exampleInputGroup2" label="Note:" label-for="textarea1">
+              <b-form-textarea
+                id="textarea1"
+                v-model="form.info"
+                placeholder="Aggiungi delle note per la soluzione..."
+                :rows="3"
+                :max-rows="6"
+              ></b-form-textarea>
+            </b-form-group>
+          </div>
+        </div>
       </form>
       <div slot="modal-footer" class="w-100">
         <b-btn size="md" class="float-right" variant="primary" type="submit" @click="onSubmit">Salva</b-btn>
@@ -175,6 +188,7 @@ export default {
         noteUsDegree: 'grado',
         selectedArp: null,
         selectedScale: null,
+        info: null,
         selectedNote: null,
         selectedTuning: 'E_std'
       },
@@ -295,6 +309,7 @@ export default {
       this.form.selectedNote = theOne.root;
       this.form.selectedScale = theOne.name;
       this.form.selectedArp = theOne.name;
+      this.form.info = theOne.info;
       this.editMode = true;
       this.editedItem = theOne.id;
     },
@@ -347,6 +362,7 @@ export default {
               typeOutput: this.form.noteUsDegree,
               tuning: this.form.selectedTuning,
               root: this.form.selectedNote,
+              info: this.form.info,
               name: name
             };
             let theIndex = this.selectedItem.data.findIndex(x => x.id == this.editedItem);
@@ -384,6 +400,7 @@ export default {
               type: this.form.scaleUsArp,
               typeOutput: this.form.noteUsDegree,
               tuning: this.form.selectedTuning,
+              info: this.form.info,
               root: this.form.selectedNote,
               name: `${secondroot} ${secondtype} mergiato con ${this.mergeFirstItem.root} ${this.mergeFirstItem.name}`,
               merge: true,
@@ -409,6 +426,7 @@ export default {
               id: this.selectedItem.data.length,
               key: Math.random() * 1000000,
               type: this.form.scaleUsArp,
+              info: this.form.info,
               typeOutput: this.form.noteUsDegree,
               tuning: this.form.selectedTuning,
               root: this.form.selectedNote,
@@ -438,6 +456,7 @@ export default {
       this.form.noteUsDegree = 'grado';
       this.form.selectedTuning = 'E_std';
       this.form.selectedNote = null;
+      this.form.info = null;
       this.form.selectedScale = null;
       this.form.selectedArp = null;
     },
