@@ -48,7 +48,7 @@
                 type="button"
                 class="btn btn-link"
                 v-b-tooltip.hover
-                title="Edita soluzione"
+                :title="$t('Item.btn_edit')"
                 @click="editItem(i.id)"
                 v-if="!i.merge"
               >
@@ -58,7 +58,7 @@
                 type="button"
                 class="btn btn-link"
                 v-b-tooltip.hover
-                title="Mergia con altra soluzione"
+                :title="$t('Item.btn_merge')"
                 @click="mergeWithOther(i)"
                 v-if="!i.merge"
               >
@@ -68,7 +68,7 @@
                 type="button"
                 class="btn btn-link float-right"
                 v-b-tooltip.hover
-                title="Cancella"
+                :title="$t('Item.btn_delete')"
                 @click="deleteItem(i.id)"
               >
                 <font-awesome-icon icon="trash"/>
@@ -104,22 +104,42 @@
         </div>
         <div class="row">
           <div class="col-md-3">
-            <b-form-select v-model="form.selectedTuning" :options="optionsTuning" class="mb-3"/>
+            <b-form-group
+              id="selectTuningGroup"
+              :label="$t('Item.tuning')"
+              label-for="selectedTuning"
+            >
+              <b-form-select
+                id="selectedTuning"
+                v-model="form.selectedTuning"
+                :options="optionsTuning"
+                class="mb-3"
+              />
+            </b-form-group>
           </div>
           <div class="col-md-3">
-            <b-form-select
-              name="selectedNote"
-              v-model="form.selectedNote"
-              :options="optionsNotes"
-              class="mb-3"
-              v-validate="'required'"
-              :class="{'is-invalid': submitted && errors.has('selectedNote') }"
-            />
-            <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
+            <b-form-group id="selectRootGroup" :label="$t('Item.root')" label-for="selectedNote">
+              <b-form-select
+                id="selectedNote"
+                name="selectedNote"
+                v-model="form.selectedNote"
+                :options="optionsNotes"
+                class="mb-3"
+                v-validate="'required'"
+                :class="{'is-invalid': submitted && errors.has('selectedNote') }"
+              />
+              <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
+            </b-form-group>
           </div>
           <div class="col-md-6">
-            <div>
+            <b-form-group
+              id="selectScaletGroup1"
+              :label="$t('Item.radio_label_scale')"
+              label-for="selectedScale"
+              v-if="form.scaleUsArp=='scala'"
+            >
               <b-form-select
+                id="selectedScale"
                 name="selectedScale"
                 v-if="form.scaleUsArp=='scala'"
                 v-model="form.selectedScale"
@@ -128,20 +148,39 @@
                 v-validate="'required'"
                 :class="{'is-invalid': submitted && errors.has('selectedScale') }"
               />
-              <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
-            </div>
-            <div>
+              <b-form-invalid-feedback v-if="form.scaleUsArp=='scala'">Il campo è richiesto</b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group
+              id="selectArpGroup1"
+              :label="$t('Item.radio_label_arpeggio')"
+              label-for="selectedArp"
+              v-if="form.scaleUsArp=='arpeggio'"
+            >
               <b-form-select
+                id="selectedArp"
                 name="selectedArp"
                 v-if="form.scaleUsArp=='arpeggio'"
                 v-model="form.selectedArp"
                 :options="optionsArp"
                 class="mb-3"
                 v-validate="'required'"
-                :class="{'is-invalid': submitted && errors.has('selectedArp')}"
+                :class="{'is-invalid': submitted && errors.has('selectedArp') }"
               />
-              <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
-            </div>
+              <b-form-invalid-feedback v-if="form.scaleUsArp=='arpeggio'">Il campo è richiesto</b-form-invalid-feedback>
+            </b-form-group>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <b-form-group id="exampleInputGroup2" label="Note:" label-for="textarea1">
+              <b-form-textarea
+                id="textarea1"
+                v-model="form.info"
+                :placeholder="$t('Item.textarea_placeholder')"
+                :rows="3"
+                :max-rows="6"
+              ></b-form-textarea>
+            </b-form-group>
           </div>
         </div>
       </form>
@@ -179,12 +218,19 @@ export default {
         noteUsDegree: 'grado',
         selectedArp: null,
         selectedScale: null,
+        info: null,
         selectedNote: null,
         selectedTuning: 'E_std'
       },
       submitted: false,
-      optionsScaleUsArp: [{ text: 'Scala', value: 'scala' }, { text: 'Arpeggio', value: 'arpeggio' }],
-      optionsNoteUsDegree: [{ text: 'Note', value: 'nota' }, { text: 'Gradi', value: 'grado' }],
+      optionsScaleUsArp: [
+        { text: this.$t('Item.radio_label_scale'), value: 'scala' },
+        { text: this.$t('Item.radio_label_arpeggio'), value: 'arpeggio' }
+      ],
+      optionsNoteUsDegree: [
+        { text: this.$t('Item.radio_label_note'), value: 'nota' },
+        { text: this.$t('Item.radio_label_degree'), value: 'grado' }
+      ],
       optionsScales: [
         { text: '- Maggiore e Pentatoniche', value: '', disabled: true },
         { text: 'Lydian', value: 'lydian' },
@@ -299,6 +345,7 @@ export default {
       this.form.selectedNote = theOne.root;
       this.form.selectedScale = theOne.name;
       this.form.selectedArp = theOne.name;
+      this.form.info = theOne.info;
       this.editMode = true;
       this.editedItem = theOne.id;
     },
@@ -355,6 +402,7 @@ export default {
               typeOutput: this.form.noteUsDegree,
               tuning: this.form.selectedTuning,
               root: this.form.selectedNote,
+              info: this.form.info,
               name: name
             };
             let theIndex = this.selectedItem.data.findIndex(x => x.id == this.editedItem);
@@ -398,6 +446,7 @@ export default {
               type: this.form.scaleUsArp,
               typeOutput: this.form.noteUsDegree,
               tuning: this.form.selectedTuning,
+              info: this.form.info,
               root: this.form.selectedNote,
               name: `${secondroot} ${secondtype} mergiato con ${this.mergeFirstItem.root} ${this.mergeFirstItem.name}`,
               merge: true,
@@ -423,6 +472,7 @@ export default {
               id: this.selectedItem.data.length,
               key: Math.random() * 1000000,
               type: this.form.scaleUsArp,
+              info: this.form.info,
               typeOutput: this.form.noteUsDegree,
               tuning: this.form.selectedTuning,
               root: this.form.selectedNote,
@@ -452,6 +502,7 @@ export default {
       this.form.noteUsDegree = 'grado';
       this.form.selectedTuning = 'E_std';
       this.form.selectedNote = null;
+      this.form.info = null;
       this.form.selectedScale = null;
       this.form.selectedArp = null;
       this.submitted = false;
@@ -465,11 +516,11 @@ export default {
   computed: {
     calcolaTitolo() {
       if (this.editMode) {
-        return 'Edita';
+        return this.$t('Item.title_edit');
       } else if (this.mergeMode) {
-        return 'Mergia';
+        return this.$t('Item.title_merge');
       } else {
-        return 'Salva';
+        return this.$t('Item.title_save');
       }
     }
   }

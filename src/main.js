@@ -5,6 +5,12 @@ import router from './router';
 import store from './store';
 import Storage from 'vue-ls';
 
+import {
+  i18n
+} from "./i18n";
+
+console.log("traduzioni: ", i18n);
+
 import VeeValidate, {
   Validator
 } from "vee-validate";
@@ -84,6 +90,7 @@ Vue.use(Storage, {
 new Vue({
   router,
   store,
+  i18n,
   render: h => h(App)
 }).$mount('#app');
 

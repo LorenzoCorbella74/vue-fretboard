@@ -7,7 +7,7 @@
         </div>
         <div class="d-flex flex-row justify-content-between">
           <div class="p-3">
-            <b-form-group label="Filtra:">
+            <b-form-group :label="$t('List.radio_filter')">
               <b-form-radio-group id="radios2" v-model="listFilter" name="radioSubComponent">
                 <b-form-radio value="data">
                   <font-awesome-icon icon="clock"/>
@@ -22,7 +22,7 @@
             </b-form-group>
           </div>
           <div class="p-3">
-            <b-form-input type="text" v-model="textFilter" placeholder="cerca testo..."></b-form-input>
+            <b-form-input type="text" v-model="textFilter" :placeholder="$t('List.input_filter')"></b-form-input>
           </div>
           <div class="p-3">
             <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
@@ -51,7 +51,7 @@
                       type="button"
                       class="btn btn-link"
                       v-b-tooltip.hover
-                      title="Edita studio"
+                      :title="$t('List.btn_edit')"
                       @click="editItem(card.id)"
                     >
                       <font-awesome-icon icon="edit"/>
@@ -62,7 +62,7 @@
                       type="button"
                       class="btn btn-link"
                       v-b-tooltip.hover
-                      title="Cancella soluzione"
+                      :title="$t('List.btn_trash')"
                       @click="deleteItem(card.id)"
                     >
                       <font-awesome-icon icon="trash"/>
@@ -73,7 +73,7 @@
                       type="button"
                       class="btn btn-link"
                       v-b-tooltip.hover
-                      title="Aggiungi spunti..."
+                      :title="$t('List.btn_add')"
                       @click="checkItem(card.id)"
                     >
                       <font-awesome-icon icon="list"/>
@@ -87,27 +87,38 @@
       </div>
     </div>
     <!-- MODALE SALVA EDITA Studio-->
-    <b-modal ref="myModalRef" :title="editmode? 'Edita studio':'Salva studio'">
+    <b-modal
+      ref="myModalRef"
+      :title="editmode? $t('List.modal_edit_title'):$t('List.modal_save_title')"
+    >
       <form>
-        <b-form-group id="exampleInputGroup1" label="Titolo" label-for="formTitle">
+        <b-form-group
+          id="exampleInputGroup1"
+          :label="$t('List.form_label_title')"
+          label-for="formTitle"
+        >
           <b-form-input
             id="formTitle"
             type="text"
             name="titolo"
             v-model="form.title"
-            placeholder="Inserire un titolo"
+            :placeholder="$t('List.form_placeholder_title')"
             v-validate="'required'"
             :class="{'is-invalid': submitted && errors.has('titolo') }"
           ></b-form-input>
           <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
-        <b-form-group id="exampleInputGroup2" label="Descrizione" label-for="exampleInput2">
+        <b-form-group
+          id="exampleInputGroup2"
+          :label="$t('List.form_label_description')"
+          label-for="exampleInput2"
+        >
           <b-form-textarea
             id="exampleInput2"
             type="text"
             name="description"
             v-model="form.description"
-            placeholder="Inserire una descrizione dello studio"
+            :placeholder="$t('List.form_placeholder_description')"
             :rows="3"
             :max-rows="6"
             v-validate="'required'"
@@ -116,7 +127,11 @@
           <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group id="exampleInputGroup3" label="Completamento" label-for="exampleInput3">
+        <b-form-group
+          id="exampleInputGroup3"
+          :label="$t('List.form_label_progress')"
+          label-for="exampleInput3"
+        >
           <b-form-input
             id="exampleInput3"
             type="range"
@@ -124,7 +139,11 @@
             placeholder="Indicare"
           ></b-form-input>
         </b-form-group>
-        <b-form-group id="exampleInputGroup4" label="Famiglia" label-for="exampleInput4">
+        <b-form-group
+          id="exampleInputGroup4"
+          :label="$t('List.form_label_tipo')"
+          label-for="exampleInput4"
+        >
           <b-form-select
             id="exampleInput4"
             name="tipo"
@@ -138,7 +157,13 @@
         </b-form-group>
       </form>
       <div slot="modal-footer" class="w-100">
-        <b-btn size="md" class="float-right" variant="primary" type="submit" @click="onSubmit">Salva</b-btn>
+        <b-btn
+          size="md"
+          class="float-right"
+          variant="primary"
+          type="submit"
+          @click="onSubmit"
+        >{{$t('List.btn_save')}}</b-btn>
       </div>
     </b-modal>
   </div>
@@ -159,7 +184,7 @@ export default {
   name: 'home',
   data: function() {
     return {
-      title: 'Studi',
+      title: '',
       listFilter: 'data',
       textFilter: '',
       max: 100,
@@ -195,7 +220,8 @@ export default {
     };
   },
   created() {
-    console.log('User ID ', this.currentUser.uid);
+    this.title = this.$t('List.title');
+    console.log('User in List: ', this.currentUser);
     this.ref
       .where('userId', '==', this.currentUser.uid)
       .get()

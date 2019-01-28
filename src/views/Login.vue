@@ -13,9 +13,9 @@
             </div>
             <div class="text-center">
               <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
-              <h3>Guitar Studies</h3>
+              <h3>{{$t("Login.title")}}</h3>
               <br>
-              <h2>Login</h2>
+              <h2>{{$t("Login.subTitle")}}</h2>
             </div>
             <!-- <b-alert
               variant="danger"
@@ -36,10 +36,7 @@
                     v-validate="'required|email'"
                     :class="{'is-invalid': submitted && errors.has('email') }"
                   ></b-form-input>
-                  <small
-                    id="emailHelp"
-                    class="form-text text-muted"
-                  >Non condivideremo mail la tua mail con nessuno</small>
+                  <small id="emailHelp" class="form-text text-muted">{{$t("Login.email_msg")}}</small>
                   <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group id="formPassGroup" label="Password" label-for="formPass">
@@ -51,15 +48,15 @@
                     v-validate="{ required: true, min: 6 }"
                     :class="{'is-invalid': submitted && errors.has('password') }"
                   ></b-form-input>
-                  <b-form-invalid-feedback>Il campo, richiesto deve essere di almeno 6 caratteri.</b-form-invalid-feedback>
+                  <b-form-invalid-feedback>{{$t("Login.pass_msg")}}</b-form-invalid-feedback>
                 </b-form-group>
                 <div class="form-group">
-                  <button class="btn btn-primary" :disabled="loading">Login</button>
+                  <button class="btn btn-primary" :disabled="loading">{{$t("Login.btn_send")}}</button>
                 </div>
               </form>
               <br>
               <p class="text-center">
-                <router-link to="/signup">Nuovo da queste parti? Crea un nuovo account!</router-link>
+                <router-link to="/signup">{{$t("Login.register_msg")}}</router-link>
               </p>
             </div>
           </div>

@@ -5,7 +5,8 @@
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
         <b-navbar-brand tag="h1" class="m-3" to="/list">
-          <font-awesome-icon icon="guitar" class="mr-2"/>Guitar Studies
+          <font-awesome-icon icon="guitar" class="mr-2"/>
+          {{$t("App.appTitle")}}
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
@@ -18,16 +19,23 @@
             <!-- <b-nav-item to="/about" right>About</b-nav-item> -->
             <b-nav-item-dropdown text right>
               <b-dropdown-item @click="showImportModal">
-                <font-awesome-icon icon="file-import" class="mr-2"/>Importa
+                <font-awesome-icon icon="file-import" class="mr-2"/>
+                {{$t("App.navbarImport")}}
               </b-dropdown-item>
               <b-dropdown-item href="#" @click="exportFile">
-                <font-awesome-icon icon="file-export" class="mr-2"/>Export
+                <font-awesome-icon icon="file-export" class="mr-2"/>
+                {{$t("App.navbarExport")}}
               </b-dropdown-item>
               <b-dropdown-item to="/about">
-                <font-awesome-icon icon="question-circle" class="mr-2"/>About
+                <font-awesome-icon icon="question-circle" class="mr-2"/>
+                {{$t("App.navbarAbout")}}
               </b-dropdown-item>
               <b-dropdown-item @click="logout">
-                <font-awesome-icon icon="question-circle" class="mr-2"/>Logout
+                <font-awesome-icon icon="question-circle" class="mr-2"/>
+                {{$t("App.navbarLogout")}}
+              </b-dropdown-item>
+              <b-dropdown-item @click="changeLanguage">
+                <font-awesome-icon icon="question-circle" class="mr-2"/>language
               </b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -35,13 +43,8 @@
       </div>
     </b-navbar>
 
-    <!-- OVERLAY -->
-    <div class="d-flex justify-content-center align-items-center overlay" v-if="isLoading">
-      <div class="p-2 text-center text-light">
-        <font-awesome-icon icon="spinner" spin size="5x"/>
-        <div>Loading guitar sounds...</div>
-      </div>
-    </div>
+    <!-- SPINNER  + OVERLAY-->
+    <global-spinner :isLoading="isLoading" :loadingMsg="loadingMsg"></global-spinner>
 
     <div class="container" :class="{'margine-da-navbar':!!currentUser}">
       <transition name="fade" mode="out-in">
@@ -55,8 +58,8 @@
 
         <b-form-group label="Tipo">
           <b-form-radio-group id="radios2" v-model="fileImport" name="radioSubComponent">
-            <b-form-radio value="substitute">Cancella e sostituisci tutto</b-form-radio>
-            <b-form-radio value="merge" disabled>Mergia</b-form-radio>
+            <b-form-radio value="substitute">{{$t("App.fileImportSub")}}</b-form-radio>
+            <b-form-radio value="merge" disabled>{{$t("App.fileImportMerge")}}</b-form-radio>
           </b-form-radio-group>
         </b-form-group>
       </b-form>
@@ -71,22 +74,26 @@ export let guitar = null;
 export let ac = new AudioContext();
 
 export let isloading = false; // SPINNER GLOBALE
+export let loadingMsg = ''; // SPINNER GLOBALE
 
 import { lista } from './views/List.vue';
 import { saveAs } from 'file-saver';
 // import { currentUser, requiresAuth } from './router';
 import FileImporter from './components/FileImporter.vue';
+import GlobalSpinner from './components/GlobalSpinner.vue';
 
 import { EventBus } from './main.js';
 
 export default {
   name: 'App',
   components: {
-    FileImporter
+    FileImporter,
+    GlobalSpinner
   },
   data() {
     return {
       isLoading: isloading,
+      loadingMsg: loadingMsg,
       fileImport: 'substitute',
       importedText: '',
       lista: lista,
@@ -95,6 +102,13 @@ export default {
     };
   },
   methods: {
+    changeLanguage() {
+      if (this.$i18n.locale == 'it') {
+        this.$i18n.locale = 'en';
+      } else {
+        this.$i18n.locale = 'it';
+      }
+    },
     exportFile() {
       let formato = 'text/json;charset=utf-8,';
       let data = JSON.stringify(lista);
@@ -130,6 +144,7 @@ export default {
   },
   mounted() {
     this.isLoading = true;
+    this.loadingMsg = this.$t('App.default_loading_msg');
     const a = this;
     Soundfont.instrument(ac, 'acoustic_guitar_steel').then(function(guitarDownloaded) {
       guitar = guitarDownloaded;
