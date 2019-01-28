@@ -13,6 +13,9 @@ import {
 import {
     App
 } from "./App";
+import {
+    Config
+} from "./Config";
 
 export function en() {
     return {
@@ -21,5 +24,6 @@ export function en() {
         List: List(),
         Login: Login(),
         SignUp: SignUp(),
+        Config: Config(),
     };
 }

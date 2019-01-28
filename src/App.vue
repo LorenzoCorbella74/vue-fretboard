@@ -16,7 +16,9 @@
             <!-- <b-nav-item to="/list" right>Studi</b-nav-item> -->
             <!-- <b-nav-item to="/circolo" right>Circolo V</b-nav-item>
             <b-nav-item to="/interscambio" right>Interscambio modale</b-nav-item>-->
-            <!-- <b-nav-item to="/about" right>About</b-nav-item> -->
+            <b-nav-item to="/config" right>
+              <font-awesome-icon icon="cog" class="mr-2"/>
+            </b-nav-item>
             <b-nav-item-dropdown text right>
               <b-dropdown-item @click="showImportModal">
                 <font-awesome-icon icon="file-import" class="mr-2"/>
@@ -26,7 +28,7 @@
                 <font-awesome-icon icon="file-export" class="mr-2"/>
                 {{$t("App.navbarExport")}}
               </b-dropdown-item>
-              <b-dropdown-item to="/about">
+              <b-dropdown-item to="/config">
                 <font-awesome-icon icon="question-circle" class="mr-2"/>
                 {{$t("App.navbarAbout")}}
               </b-dropdown-item>
@@ -34,9 +36,9 @@
                 <font-awesome-icon icon="question-circle" class="mr-2"/>
                 {{$t("App.navbarLogout")}}
               </b-dropdown-item>
-              <b-dropdown-item @click="changeLanguage">
+              <!--  <b-dropdown-item @click="changeLanguage">
                 <font-awesome-icon icon="question-circle" class="mr-2"/>language
-              </b-dropdown-item>
+              </b-dropdown-item>-->
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -102,13 +104,13 @@ export default {
     };
   },
   methods: {
-    changeLanguage() {
+    /*     changeLanguage() {
       if (this.$i18n.locale == 'it') {
         this.$i18n.locale = 'en';
       } else {
         this.$i18n.locale = 'it';
       }
-    },
+    }, */
     exportFile() {
       let formato = 'text/json;charset=utf-8,';
       let data = JSON.stringify(lista);

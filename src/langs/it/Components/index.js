@@ -13,6 +13,9 @@ import {
 import {
     App
 } from "./App";
+import {
+    Config
+} from "./Config";
 
 export function it() {
     return {
@@ -21,5 +24,6 @@ export function it() {
         List: List(),
         Login: Login(),
         SignUp: SignUp(),
+        Config: Config(),
     };
 }

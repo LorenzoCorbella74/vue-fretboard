@@ -3,7 +3,7 @@
     <div class="home">
       <div class="container bg-white">
         <div class="p-2 page-header">
-          <h1>{{title}}</h1>
+          <h1>{{this.$t('List.title')}}</h1>
         </div>
         <div class="d-flex flex-row justify-content-between">
           <div class="p-3">
@@ -220,7 +220,6 @@ export default {
     };
   },
   created() {
-    this.title = this.$t('List.title');
     console.log('User in List: ', this.currentUser);
     this.ref
       .where('userId', '==', this.currentUser.uid)
