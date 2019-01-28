@@ -13,6 +13,7 @@ Immagini delle chitarre per gentile concessione di [Pexels](https://www.pexels.c
 - [x] E' possibile suonare le scale tramite [soundfont-player](https://github.com/danigb/soundfont-player)
 - [x] responsive svg
 - [x] draggable item
+- [x] localizzato in ITA e ENG
 
 ## Built With
 
@@ -22,6 +23,7 @@ Immagini delle chitarre per gentile concessione di [Pexels](https://www.pexels.c
 - [Font Awesome](http://fontawesome.io)
 - [D3.js](https://d3js.org/)
 - [Vuelidate](https://github.com/monterail/vuelidate)
+- [vue-i18n](https://github.com/kazupon/vue-i18n)
 - [soundfont-player](https://github.com/danigb/soundfont-player)
 - [Firebase](https://firebase.google.com/).
 
