@@ -35,13 +35,8 @@
       </div>
     </b-navbar>
 
-    <!-- OVERLAY -->
-    <div class="d-flex justify-content-center align-items-center overlay" v-if="isLoading">
-      <div class="p-2 text-center text-light">
-        <font-awesome-icon icon="spinner" spin size="5x"/>
-        <div>Loading guitar sounds...</div>
-      </div>
-    </div>
+    <!-- SPINNER  + OVERLAY-->
+    <global-spinner :isLoading="isLoading" :loadingMsg="loadingMsg"></global-spinner>
 
     <div class="container" :class="{'margine-da-navbar':!!currentUser}">
       <transition name="fade" mode="out-in">
@@ -71,22 +66,26 @@ export let guitar = null;
 export let ac = new AudioContext();
 
 export let isloading = false; // SPINNER GLOBALE
+export let loadingMsg = 'Loading guitar sounds...'; // SPINNER GLOBALE
 
 import { lista } from './views/List.vue';
 import { saveAs } from 'file-saver';
 // import { currentUser, requiresAuth } from './router';
 import FileImporter from './components/FileImporter.vue';
+import GlobalSpinner from './components/GlobalSpinner.vue';
 
 import { EventBus } from './main.js';
 
 export default {
   name: 'App',
   components: {
-    FileImporter
+    FileImporter,
+    GlobalSpinner
   },
   data() {
     return {
       isLoading: isloading,
+      loadingMsg: loadingMsg,
       fileImport: 'substitute',
       importedText: '',
       lista: lista,
