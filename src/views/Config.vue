@@ -1,8 +1,9 @@
 <template>
   <div class="about">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
+      <div class="row bg-white">
+        <div class="col-md-6 my-2">
+          <h3 class="page-header">{{$t('Config.page_title')}}</h3>
           <!-- <b-jumbotron header="Buon studio!" lead="La webapp che hai sempre sognato...">
             <br>
             <p>
@@ -27,8 +28,13 @@
             </b-btn>
             <br>
           </b-jumbotron>-->
-          <b-form-group label="test">
-            <b-form-radio-group id="radios2" v-model="selectedLanguage" name="radioSubComponent">
+          <b-form-group :label="$t('Config.radio_language')">
+            <b-form-radio-group
+              id="radios2"
+              v-model="config.language"
+              name="radioSubComponent"
+              @change="selectLanguage"
+            >
               <b-form-radio value="it">Italiano</b-form-radio>
               <b-form-radio value="en">English</b-form-radio>
               <b-form-radio value="es" disabled>Spanish</b-form-radio>
@@ -50,21 +56,30 @@
 </template>
 
 <script>
+import { config } from '../App.vue';
 export default {
   // $t('Config.radio_language')
   data: function() {
     return {
-      selectedLanguage: 'it'
+      config: config
     };
   },
-  watch: {
-    selectedLanguage: function(newVal, oldVal) {
-      if (newVal == 'it') {
-        this.$i18n.locale = 'en';
+  methods: {
+    selectLanguage($e) {
+      console.log('Selezionato: ', $e);
+      if ($e == 'en') {
+        this.config.language = 'en';
+        this.$i18n.locale = this.config.language;
       } else {
-        this.$i18n.locale = 'it';
+        this.config.language = 'it';
+        this.$i18n.locale = this.config.language;
       }
     }
+  },
+  watch: {
+    /* selectedLanguage: function(newVal, oldVal) {
+      
+    } */
   }
 };
 </script>

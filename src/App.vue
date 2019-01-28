@@ -19,7 +19,11 @@
             <b-nav-item to="/config" right>
               <font-awesome-icon icon="cog" class="mr-2"/>
             </b-nav-item>
-            <b-nav-item-dropdown text right>
+            <b-nav-item right @click="logout">
+              {{$t("App.navbarLogout")}}
+              <font-awesome-icon icon="sign-out-alt" class="ml-1"/>
+            </b-nav-item>
+            <!-- <b-nav-item-dropdown text right>
               <b-dropdown-item @click="showImportModal">
                 <font-awesome-icon icon="file-import" class="mr-2"/>
                 {{$t("App.navbarImport")}}
@@ -36,10 +40,10 @@
                 <font-awesome-icon icon="question-circle" class="mr-2"/>
                 {{$t("App.navbarLogout")}}
               </b-dropdown-item>
-              <!--  <b-dropdown-item @click="changeLanguage">
+              <b-dropdown-item @click="changeLanguage">
                 <font-awesome-icon icon="question-circle" class="mr-2"/>language
               </b-dropdown-item>-->
-            </b-nav-item-dropdown>
+            </b-nav-item-dropdown> 
           </b-navbar-nav>
         </b-collapse>
       </div>
@@ -77,6 +81,7 @@ export let ac = new AudioContext();
 
 export let isloading = false; // SPINNER GLOBALE
 export let loadingMsg = ''; // SPINNER GLOBALE
+export let config = {language:'it'}; // CONFIGURAZIONE GLOBALE
 
 import { lista } from './views/List.vue';
 import { saveAs } from 'file-saver';
