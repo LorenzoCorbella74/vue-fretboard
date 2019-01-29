@@ -1,6 +1,6 @@
 export function Config() {
     return {
-        card_language_title: "Scegli la lingua dell\'app",
+        card_language_title: "Scegli la lingua dell'app",
         radio_language: "Lingua",
         card_export_title: 'Esporta/Importa i tuoi studi',
         card_export_content: 'E\' possibile salvare i tuoi studi per poi essere recuperati in un secondo momento.',

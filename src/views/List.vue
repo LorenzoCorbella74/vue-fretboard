@@ -242,7 +242,7 @@ export default {
     };
   },
   created() {
-    console.log('User in List: ', this.currentUser);
+    // console.log('User in List: ', this.currentUser);
     this.ref
       .where('userId', '==', this.currentUser.uid)
       .get()
