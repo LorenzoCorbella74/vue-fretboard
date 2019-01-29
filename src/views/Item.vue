@@ -25,7 +25,7 @@
           <p class="text-muted">{{selectedItem.description}}</p>
         </div>
         <div class="p-2">
-          <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
+          <b-button size="m" variant="outline-warning" @click="addItem" class="px-5">
             <font-awesome-icon icon="plus"/>
           </b-button>
         </div>
@@ -79,7 +79,7 @@
         </draggable>
       </div>
     </div>
-
+    <!-- MODALE -->
     <b-modal size="lg" ref="myModalRef" :title="calcolaTitolo" @hidden="handleCancel">
       <form>
         <div class="row">

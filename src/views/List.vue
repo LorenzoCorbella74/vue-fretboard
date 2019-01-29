@@ -7,7 +7,7 @@
             <h1>{{this.$t('List.title')}}</h1>
           </div>
           <div class="p-2">
-            <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
+            <b-button size="m" variant="outline-warning" @click="addItem" class="px-5">
               <font-awesome-icon icon="plus"/>
             </b-button>
           </div>
@@ -51,7 +51,8 @@
                 <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
                 <span
                   class="badge badge-pill badge-warning badge-position-bottom"
-                  v-for="tag in card.tags"
+                  v-for="(tag,index) in card.tags"
+                  :key="index"
                 >{{tag.text}}</span>
               </div>
             </div>
@@ -154,11 +155,10 @@
         >
           <b-form-input
             id="exampleInput3"
-            type="range"
+            type="number"
             v-model.number="form.progress"
             placeholder="Indicare"
           ></b-form-input>
-          <span>{{form.progress}}</span>
         </b-form-group>
         <b-form-group
           id="exampleInputGroup4"
@@ -189,7 +189,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
+/* import Vue from 'vue'; */
 
 export const lista = []; /* oggetto condiviso tra le pagine */
 
@@ -336,7 +336,7 @@ export default {
       this.$validator.validate().then(valid => {
         if (valid) {
           if (this.editmode) {
-            var newItem = {
+            let newItem = {
               id: this.editedItem.id,
               imageNum: this.editedItem.imageNum,
               userId: this.currentUser.uid,
@@ -362,8 +362,8 @@ export default {
             this.editmode = false;
             this.submitted = false;
           } else {
-            var nextIndex = this.items.length; // si simula un id di partenza
-            var newItem = {
+            let nextIndex = this.items.length; // si simula un id di partenza
+            let newItem = {
               imageNum: nextIndex,
               title: this.form.title,
               userId: this.currentUser.uid,

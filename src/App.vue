@@ -4,15 +4,14 @@
     <b-navbar sticky toggleable type="dark" variant="dark" v-if="currentUser">
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
-        <b-navbar-brand tag="h1" class="m-3" to="/list">
+        <b-navbar-brand tag="h1" class="m-1" to="/list">
           <font-awesome-icon icon="guitar" class="mr-2"/>
           {{$t("App.appTitle")}}
+          <p style="font-size:10px; margin-left:32px" class="text-warning">{{currentUser.email}}</p>
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
-            <b-nav-item right>
-              <span style="font-size:12px">{{currentUser.email}}</span>
-            </b-nav-item>
+            <b-nav-item right></b-nav-item>
             <!-- <b-nav-item to="/list" right>Studi</b-nav-item> -->
             <!-- <b-nav-item to="/circolo" right>Circolo V</b-nav-item>
             <b-nav-item to="/interscambio" right>Interscambio modale</b-nav-item>-->
@@ -23,27 +22,6 @@
               {{$t("App.navbarLogout")}}
               <font-awesome-icon icon="sign-out-alt" class="ml-1"/>
             </b-nav-item>
-            <!-- <b-nav-item-dropdown text right>
-              <b-dropdown-item @click="showImportModal">
-                <font-awesome-icon icon="file-import" class="mr-2"/>
-                {{$t("App.navbarImport")}}
-              </b-dropdown-item>
-              <b-dropdown-item href="#" @click="exportFile">
-                <font-awesome-icon icon="file-export" class="mr-2"/>
-                {{$t("App.navbarExport")}}
-              </b-dropdown-item>
-              <b-dropdown-item to="/config">
-                <font-awesome-icon icon="question-circle" class="mr-2"/>
-                {{$t("App.navbarAbout")}}
-              </b-dropdown-item>
-              <b-dropdown-item @click="logout">
-                <font-awesome-icon icon="question-circle" class="mr-2"/>
-                {{$t("App.navbarLogout")}}
-              </b-dropdown-item>
-              <b-dropdown-item @click="changeLanguage">
-                <font-awesome-icon icon="question-circle" class="mr-2"/>language
-              </b-dropdown-item>-->
-            </b-nav-item-dropdown> 
           </b-navbar-nav>
         </b-collapse>
       </div>
@@ -57,19 +35,6 @@
         <router-view/>
       </transition>
     </div>
-    <!-- MODALE IMPORT -->
-    <b-modal ref="importModal" :title="'Importa'" @ok="importFile">
-      <b-form>
-        <file-importer @load="text = $event" :accept="'text/json'"></file-importer>
-
-        <b-form-group label="Tipo">
-          <b-form-radio-group id="radios2" v-model="fileImport" name="radioSubComponent">
-            <b-form-radio value="substitute">{{$t("App.fileImportSub")}}</b-form-radio>
-            <b-form-radio value="merge" disabled>{{$t("App.fileImportMerge")}}</b-form-radio>
-          </b-form-radio-group>
-        </b-form-group>
-      </b-form>
-    </b-modal>
   </div>
 </template>
 
@@ -81,12 +46,12 @@ export let ac = new AudioContext();
 
 export let isloading = false; // SPINNER GLOBALE
 export let loadingMsg = ''; // SPINNER GLOBALE
-export let config = {language:'it'}; // CONFIGURAZIONE GLOBALE
+export let config = { language: 'it' }; // CONFIGURAZIONE GLOBALE
 
 import { lista } from './views/List.vue';
-import { saveAs } from 'file-saver';
+
 // import { currentUser, requiresAuth } from './router';
-import FileImporter from './components/FileImporter.vue';
+
 import GlobalSpinner from './components/GlobalSpinner.vue';
 
 import { EventBus } from './main.js';
@@ -94,47 +59,18 @@ import { EventBus } from './main.js';
 export default {
   name: 'App',
   components: {
-    FileImporter,
     GlobalSpinner
   },
   data() {
     return {
       isLoading: isloading,
       loadingMsg: loadingMsg,
-      fileImport: 'substitute',
-      importedText: '',
       lista: lista,
       currentUser: null,
       ref: firebase
     };
   },
   methods: {
-    /*     changeLanguage() {
-      if (this.$i18n.locale == 'it') {
-        this.$i18n.locale = 'en';
-      } else {
-        this.$i18n.locale = 'it';
-      }
-    }, */
-    exportFile() {
-      let formato = 'text/json;charset=utf-8,';
-      let data = JSON.stringify(lista);
-      var blob = new Blob([data], {
-        type: formato
-      });
-      saveAs(blob, `export_${new Date().toISOString()}.json`);
-    },
-    showImportModal() {
-      this.$refs.importModal.show();
-    },
-    importFile() {
-      this.isLoading = true;
-      const importedContent = JSON.parse(this.fileContent);
-      importedContent.forEach((e, i) => {
-        this.$set(this.lista, i, e);
-      });
-      this.isLoading = false;
-    },
     logout() {
       this.isLoading = true;
       firebase
