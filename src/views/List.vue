@@ -42,13 +42,17 @@
         </div>
 
         <div class="row" v-if="items.length>0">
-          <div class="col-lg-3 col-sm-6 mb-3" v-for="(card,index) in filteredList" :key="card.id">
+          <div class="col-lg-3 col-sm-6 mb-3" v-for="card in filteredList" :key="card.id">
             <div class="card pointer" :class="[card.tag]" @click="checkItem(card.id)">
-              <img class="card-img-top" :src="getIconPath(card.imageNum+1)" alt="Card image">
+              <img class="card-img-top" :src="getIconPath(card.imageNum)" alt="Card image">
               <div class="card-img-overlay">
-                <span class="badge-position" v-if="card.data.length>0">{{card.data.length}}</span>
+                <span class="badge-position-top" v-if="card.data.length>0">{{card.data.length}}</span>
                 <h4 class="card-title text-light">{{card.title}}</h4>
                 <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
+                <span
+                  class="badge badge-pill badge-warning badge-position-bottom"
+                  v-for="tag in card.tags"
+                >{{tag.text}}</span>
               </div>
             </div>
             <div class="card" :class="[card.progress==100? 'bg-warning':'']">
@@ -139,6 +143,7 @@
             v-model.number="form.progress"
             placeholder="Indicare"
           ></b-form-input>
+          <span>{{form.progress}}</span>
         </b-form-group>
 
         <b-form-group id="exampleInputGroup4" label="Tags" label-for="exampleInput4">
@@ -234,7 +239,7 @@ export default {
           if (i == -1 && doc.data().userId === this.currentUser.uid) {
             this.items.push({
               id: doc.id,
-              imageNum: doc.imageNum,
+              imageNum: doc.data().imageNum,
               userId: doc.data().userId,
               title: doc.data().title,
               description: doc.data().description,
@@ -271,8 +276,8 @@ export default {
   },
   mounted() {},
   methods: {
-    getIconPath(id) {
-      let imgNum = Number(id);
+    getIconPath(num) {
+      let imgNum = Number(num) + 1;
       if (imgNum > 20) {
         imgNum = imgNum % 20;
       }
@@ -433,35 +438,13 @@ export default {
 .vue-tags-input {
   background: #f7f7f9;
 }
-
-.maggiore {
-  border-bottom: 5px solid red;
-}
-.minore {
-  border-bottom: 5px solid aqua;
-}
-.melodica {
-  border-bottom: 5px solid orange;
-}
-.armonica {
-  border-bottom: 5px solid steelblue;
-}
-.pentatonica {
-  border-bottom: 5px solid yellow;
-}
-.diminuita {
-  border-bottom: 5px solid green;
-}
-.interi {
-  border-bottom: 5px solid goldenrod;
-}
 .sub-title {
   font-size: 12px;
 }
 .custom-height {
   height: 64px;
 }
-.badge-position {
+.badge-position-top {
   position: absolute;
   background-color: transparent;
   border-radius: 5px;
@@ -470,6 +453,12 @@ export default {
   right: 5px;
   top: 5px;
   color: #f0ad4e;
+}
+.badge-position-bottom {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  color: black;
 }
 </style>
 
