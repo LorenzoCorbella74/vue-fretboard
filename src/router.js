@@ -101,7 +101,7 @@ let router = new Router({
 router.beforeEach((to, from, next) => {
   currentUser = firebase.auth().currentUser;
   requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  console.log('Current user in router: ', currentUser, requiresAuth);
+  // console.log('Current user in router: ', currentUser, requiresAuth);
 
   if (requiresAuth && !currentUser) next('login')
   else if (!requiresAuth && currentUser) next('list')

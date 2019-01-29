@@ -242,7 +242,7 @@ export default {
     };
   },
   created() {
-    console.log('User in List: ', this.currentUser);
+    // console.log('User in List: ', this.currentUser);
     this.ref
       .where('userId', '==', this.currentUser.uid)
       .get()
@@ -263,7 +263,7 @@ export default {
               data: doc.data().data,
               date: doc.data().date
             });
-            console.log('ID: ', doc.id);
+            // console.log('ID: ', doc.id);
           }
         });
         unsubscribe = this.ref.onSnapshot(snapshot => {
@@ -313,7 +313,7 @@ export default {
       this.form.date = theOne.date;
       this.editmode = true;
       this.editedItem = theOne;
-      console.log('Edited one: ', this.editedItem);
+      // console.log('Edited one: ', this.editedItem);
     },
     checkItem(itemId) {
       this.$router.push(`/item/${itemId}`);
