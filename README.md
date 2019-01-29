@@ -1,22 +1,22 @@
-# VUE FRETBOARD
+# VUE-FRETBOARD
 
 ![tastiera](./src/assets/img/Screen.PNG)
 
-Tool continuazione della web app [notes-on-fretboard](https://github.com/LorenzoCorbella74/notes-on-fretboard) che permette di organizzare gli studi sulle sovrapposizioni di scale e arpeggi visualizzando verticalmente più tastiere di chitarra. La creazione della tastiera è basata sulla preziosa libreria [fretboard](https://github.com/txels/fretboard) basata su [D3.js](https://d3js.org/). Per una demo seguire il [link](https://hardcore-liskov-9c3707.netlify.com/#/). La webapp è ottimizzata per essere responsive fino a ***550px*** pertanto non può essere usata con gli smartphone a meno di avere una visualizzazione "desktop".
-
-Immagini delle chitarre per gentile concessione di [Pexels](https://www.pexels.com) e per lo sfondo  [Unsplash](https://unsplash.it).
+Vue Fretboard, web app based and continuation of [notes-on-fretboard](https://github.com/LorenzoCorbella74/notes-on-fretboard), is able to organize the studies on the superimpositions of scales and arpeggios fingerings by displaying vertically guitar fretboards. The production of guitar fretboards is derived from the precious library [fretboard](https://github.com/txels/fretboard) based on [D3.js](https://d3js.org/).Vue Fretboard is optimised to be responsive up to ***550px*** so it can be used onsmartphones only with a "desktop" visualisation.
+Guitar images courtesy of [Pexels](https://www.pexels.com) and for the image background courtesy of [Unsplash](https://unsplash.it).  For a demo please consider the [link](https://hardcore-liskov-9c3707.netlify.com/#/). 
 
 ## Features
-- [x] visualizzazione diteggiatura in base ad accordatura, scala o arpeggi 
-- [x] visualizzazione delle label delle note con nomi o gradi
-- [x] E' possibile mergiare le scale/arpeggi ed avere un confronto grafico delle note in comune
-- [x] E' possibile suonare le scale tramite [soundfont-player](https://github.com/danigb/soundfont-player)
-- [x] responsive svg
-- [x] draggable item
-- [x] localizzato in ITA e ENG
+- [x] can display fingerings according to tuning, root, scales or arpeggios 
+- [x] notes labels with notes names or degrees
+- [x] can merge scale/arpeggios to have a graphical comparison of the notes in common and distint on each scale. 
+- [x] can play guitar notes via [soundfont-player](https://github.com/danigb/soundfont-player)
+- [x] responsive svg fretboards
+- [x] draggable fretboards
+- [x] Italian and English localisations
 
 ## Built With
 
+### FE
 - HTML5
 - [ Vue.js 2](https://it.vuejs.org/)
 - [Bootstrap 4](https://getbootstrap.com/) & [ Bootstrap Vue](https://bootstrap-vue.js.org)
@@ -25,7 +25,8 @@ Immagini delle chitarre per gentile concessione di [Pexels](https://www.pexels.c
 - [Vuelidate](https://github.com/monterail/vuelidate)
 - [vue-i18n](https://github.com/kazupon/vue-i18n)
 - [soundfont-player](https://github.com/danigb/soundfont-player)
-- [Firebase](https://firebase.google.com/).
+### BE
+- [Firebase Authentication and Cloud Firestore as DB](https://firebase.google.com/).
 
 ## License
 
