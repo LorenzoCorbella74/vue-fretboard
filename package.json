@@ -1,5 +1,5 @@
 {
-  "name": "test-app",
+  "name": "vue-fretboard",
   "version": "0.9.0",
   "private": true,
   "scripts": {
@@ -20,7 +20,7 @@
     "soundfont-player": "^0.11.0",
     "vee-validate": "^2.1.5",
     "vue": "^2.5.21",
-    "vue-i18n": "^8.7.0",
+    "vue-i18n": "^8.8.0",
     "vue-ls": "^3.2.0",
     "vue-router": "^3.0.1",
     "vuedraggable": "^2.17.0",
