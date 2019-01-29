@@ -19,17 +19,26 @@
 
           <b-card class="mb-3" :title="$t('Config.card_export_title')">
             <p class="card-text">{{$t('Config.card_export_content')}}</p>
-
-            <b-link
+            <button
+              type="button"
+              class="btn btn-link"
+              @click="exportFile"
+            >{{$t('Config.card_btn_export')}}</button>
+            <button
+              type="button"
+              class="btn btn-link"
+              @click="showImportModal"
+            >{{$t('Config.card_btn_import')}}</button>
+            <!-- <b-link
               href="#"
               class="card-link btn-secondary"
               @click="exportFile"
-            >{{$t('Config.card_btn_export')}}</b-link>
-            <b-link
+            >{{$t('Config.card_btn_export')}}</b-link>-->
+            <!-- <b-link
               href="#"
               class="card-link btn-secondary"
               @click="showImportModal"
-            >{{$t('Config.card_btn_import')}}</b-link>
+            >{{$t('Config.card_btn_import')}}</b-link>-->
           </b-card>
         </div>
         <div class="col-md-6">
