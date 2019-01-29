@@ -22,15 +22,18 @@
                 <b-form-radio value="progress">Progress
                   <font-awesome-icon icon="sort-numeric-up"/>
                 </b-form-radio>
-                <b-form-radio value="tag">Famiglia
+                <!--  <b-form-radio value="tag">Famiglia
                   <font-awesome-icon icon="layer-group"/>
-                </b-form-radio>
+                </b-form-radio>-->
               </b-form-radio-group>
             </b-form-group>
           </div>
           <div class="p-2 flex-fill">
-            <b-form-input type="text" v-model="textFilter" placeholder="cerca testo o tag..."></b-form-input>
+            <b-form-input type="text" v-model="textFilter" placeholder="cerca testo..."></b-form-input>
           </div>
+          <!-- <div class="p-2 flex-fill">
+            <b-form-input type="text" v-model="tagFilter" placeholder="cerca tag..."></b-form-input>
+          </div>-->
           <!-- <div class="p-3">
             <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
               <font-awesome-icon icon="plus"/>
@@ -41,7 +44,7 @@
         <div class="row" v-if="items.length>0">
           <div class="col-lg-3 col-sm-6 mb-3" v-for="(card,index) in filteredList" :key="card.id">
             <div class="card pointer" :class="[card.tag]" @click="checkItem(card.id)">
-              <img class="card-img-top" :src="getIconPath(index+1)" alt="Card image">
+              <img class="card-img-top" :src="getIconPath(card.imageNum+1)" alt="Card image">
               <div class="card-img-overlay">
                 <span class="badge-position" v-if="card.data.length>0">{{card.data.length}}</span>
                 <h4 class="card-title text-light">{{card.title}}</h4>
@@ -185,6 +188,7 @@ export default {
       title: 'Studi',
       listFilter: 'data',
       textFilter: '',
+      tagFilter: '',
       max: 100,
       editmode: false,
       form: {
@@ -230,6 +234,7 @@ export default {
           if (i == -1 && doc.data().userId === this.currentUser.uid) {
             this.items.push({
               id: doc.id,
+              imageNum: doc.imageNum,
               userId: doc.data().userId,
               title: doc.data().title,
               description: doc.data().description,
@@ -313,6 +318,7 @@ export default {
           if (this.editmode) {
             var newItem = {
               id: this.editedItem.id,
+              imageNum: this.editedItem.imageNum,
               userId: this.currentUser.uid,
               title: this.form.title,
               description: this.form.description,
@@ -338,6 +344,7 @@ export default {
           } else {
             var nextIndex = this.items.length; // si simula un id di partenza
             var newItem = {
+              imageNum: nextIndex,
               title: this.form.title,
               userId: this.currentUser.uid,
               description: this.form.description,
@@ -379,16 +386,24 @@ export default {
     },
     filteredList() {
       if (this.items.length > 0) {
-        const filtered = this.items.filter(e => {
+        const filteredByText = this.items.filter(e => {
           return e.description.toLowerCase().includes(this.textFilter.toLowerCase());
         });
+        /* console.log(filteredByText.length);
+        const filteredByTag = filteredByText.filter(e => {
+          if (e.tags && e.tags.length > 0) {
+            return e.tags.some(a => a.text.toLowerCase().includes(this.tagFilter.toLowerCase()));
+          } else {
+            return true;
+          }
+        }); */
         if (this.listFilter == 'data') {
           // Ascending: dal numero minore al maggiore
-          return filtered.sort((obj1, obj2) => obj1.id - obj2.id);
+          return filteredByText.sort((obj1, obj2) => obj1.id - obj2.id);
         } else if (this.listFilter == 'progress') {
           // discendente: dal numero maggiore al minore
-          return filtered.sort((obj1, obj2) => obj2.progress - obj1.progress);
-        } else if (this.listFilter == 'tag') {
+          return filteredByText.sort((obj1, obj2) => obj2.progress - obj1.progress);
+        } /* else if (this.listFilter == 'tag') {
           return filtered.sort((a, b) => {
             // Use toUpperCase() to ignore character casing
             const tipoA = a.tag.toUpperCase();
@@ -401,7 +416,7 @@ export default {
             }
             return comparison;
           });
-        }
+        } */
       } else {
         return [];
       }
