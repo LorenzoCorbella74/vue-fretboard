@@ -2,38 +2,45 @@
   <div>
     <div class="home">
       <div class="container bg-white">
-        <div class="p-2 page-header">
-          <h1>{{title}}</h1>
-        </div>
         <div class="d-flex flex-row justify-content-between">
-          <div class="p-3">
-            <b-form-group label="Filtra:">
-              <b-form-radio-group id="radios2" v-model="listFilter" name="radioSubComponent">
-                <b-form-radio value="data">
-                  <font-awesome-icon icon="clock"/>
-                </b-form-radio>
-                <b-form-radio value="progress">
-                  <font-awesome-icon icon="sort-numeric-up"/>
-                </b-form-radio>
-                <b-form-radio value="tag">
-                  <font-awesome-icon icon="layer-group"/>
-                </b-form-radio>
-              </b-form-radio-group>
-            </b-form-group>
+          <div class="p-2 page-header">
+            <h1>{{title}}</h1>
           </div>
-          <div class="p-3">
-            <b-form-input type="text" v-model="textFilter" placeholder="cerca testo..."></b-form-input>
-          </div>
-          <div class="p-3">
+          <div class="p-2">
             <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
               <font-awesome-icon icon="plus"/>
             </b-button>
           </div>
         </div>
+        <div class="d-flex flex-row justify-content-between">
+          <div class="p-2 flex-fill">
+            <b-form-group label="Ordina per:">
+              <b-form-radio-group id="radios2" v-model="listFilter" name="radioSubComponent">
+                <b-form-radio value="data">Data
+                  <font-awesome-icon icon="clock"/>
+                </b-form-radio>
+                <b-form-radio value="progress">Progress
+                  <font-awesome-icon icon="sort-numeric-up"/>
+                </b-form-radio>
+                <b-form-radio value="tag">Famiglia
+                  <font-awesome-icon icon="layer-group"/>
+                </b-form-radio>
+              </b-form-radio-group>
+            </b-form-group>
+          </div>
+          <div class="p-2 flex-fill">
+            <b-form-input type="text" v-model="textFilter" placeholder="cerca testo o tag..."></b-form-input>
+          </div>
+          <!-- <div class="p-3">
+            <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
+              <font-awesome-icon icon="plus"/>
+            </b-button>
+          </div>-->
+        </div>
 
         <div class="row" v-if="items.length>0">
           <div class="col-lg-3 col-sm-6 mb-3" v-for="(card,index) in filteredList" :key="card.id">
-            <div class="card" :class="[card.tag]" @click="checkItem(card.id)">
+            <div class="card pointer" :class="[card.tag]" @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(index+1)" alt="Card image">
               <div class="card-img-overlay">
                 <span class="badge-position" v-if="card.data.length>0">{{card.data.length}}</span>
@@ -42,9 +49,9 @@
               </div>
             </div>
             <div class="card" :class="[card.progress==100? 'bg-warning':'']">
-              <div class="card-body">
+              <div class="card-body" style="padding: 10px 16px 2px 16px;">
                 <p class="card-text custom-height">{{card.description | text_truncate(60)}}</p>
-                <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
+                <b-progress :value="card.progress" :max="max" show-value></b-progress>
                 <!-- <vue-tags-input
                   id="exampleInput4"
                   v-model="card.tag"
@@ -52,7 +59,7 @@
                   :allow-edit-tags="false"
                 />-->
                 <div class="d-flex justify-content-around">
-                  <div class="p-1">
+                  <div>
                     <button
                       type="button"
                       class="btn btn-link"
@@ -63,7 +70,7 @@
                       <font-awesome-icon icon="edit"/>
                     </button>
                   </div>
-                  <div class="p-1">
+                  <div>
                     <button
                       type="button"
                       class="btn btn-link"
@@ -74,7 +81,7 @@
                       <font-awesome-icon icon="trash"/>
                     </button>
                   </div>
-                  <div class="p-1">
+                  <!-- <div>
                     <button
                       type="button"
                       class="btn btn-link"
@@ -84,7 +91,7 @@
                     >
                       <font-awesome-icon icon="list"/>
                     </button>
-                  </div>
+                  </div>-->
                 </div>
               </div>
             </div>
@@ -404,6 +411,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.pointer {
+  cursor: pointer;
+}
 /* style the background and the text color of the input ... */
 .vue-tags-input {
   background: #f7f7f9;
