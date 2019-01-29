@@ -2,51 +2,71 @@
   <div>
     <div class="home">
       <div class="container bg-white">
-        <div class="p-2 page-header">
-          <h1>{{this.$t('List.title')}}</h1>
-        </div>
         <div class="d-flex flex-row justify-content-between">
-          <div class="p-3">
-            <b-form-group :label="$t('List.radio_filter')">
-              <b-form-radio-group id="radios2" v-model="listFilter" name="radioSubComponent">
-                <b-form-radio value="data">
-                  <font-awesome-icon icon="clock"/>
-                </b-form-radio>
-                <b-form-radio value="progress">
-                  <font-awesome-icon icon="sort-numeric-up"/>
-                </b-form-radio>
-                <b-form-radio value="tipo">
-                  <font-awesome-icon icon="layer-group"/>
-                </b-form-radio>
-              </b-form-radio-group>
-            </b-form-group>
+          <div class="p-2 page-header">
+            <h1>{{this.$t('List.title')}}</h1>
           </div>
-          <div class="p-3">
-            <b-form-input type="text" v-model="textFilter" :placeholder="$t('List.input_filter')"></b-form-input>
-          </div>
-          <div class="p-3">
+          <div class="p-2">
             <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
               <font-awesome-icon icon="plus"/>
             </b-button>
           </div>
         </div>
+        <div class="d-flex flex-row justify-content-between">
+          <div class="p-2 flex-fill">
+            <b-form-group :label="$t('List.radio_filter')">
+              <b-form-radio-group id="radios2" v-model="listFilter" name="radioSubComponent">
+                <b-form-radio value="data">Data
+                  <font-awesome-icon icon="clock"/>
+                </b-form-radio>
+                <b-form-radio value="progress">Progress
+                  <font-awesome-icon icon="sort-numeric-up"/>
+                </b-form-radio>
+                <!--  <b-form-radio value="tag">Famiglia
+                  <font-awesome-icon icon="layer-group"/>
+                </b-form-radio>-->
+              </b-form-radio-group>
+            </b-form-group>
+          </div>
+          <div class="p-2 flex-fill">
+            <b-form-input type="text" v-model="textFilter" :placeholder="$t('List.input_filter')"></b-form-input>
+          </div>
+          <!-- <div class="p-2 flex-fill">
+            <b-form-input type="text" v-model="tagFilter" placeholder="cerca tag..."></b-form-input>
+          </div>-->
+          <!-- <div class="p-3">
+            <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
+              <font-awesome-icon icon="plus"/>
+            </b-button>
+          </div>-->
+        </div>
 
         <div class="row" v-if="items.length>0">
-          <div class="col-lg-3 col-sm-6 mb-3" v-for="(card,index) in filteredList" :key="card.id">
-            <div class="card" :class="[card.tipo]" @click="checkItem(card.id)">
-              <img class="card-img-top" :src="getIconPath(index+1)" alt="Card image">
+          <div class="col-lg-3 col-sm-6 mb-3" v-for="card in filteredList" :key="card.id">
+            <div class="card pointer" :class="[card.tag]" @click="checkItem(card.id)">
+              <img class="card-img-top" :src="getIconPath(card.imageNum)" alt="Card image">
               <div class="card-img-overlay">
-                <span class="badge-position" v-if="card.data.length>0">{{card.data.length}}</span>
+                <span class="badge-position-top" v-if="card.data.length>0">{{card.data.length}}</span>
                 <h4 class="card-title text-light">{{card.title}}</h4>
                 <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
+                <span
+                  class="badge badge-pill badge-warning badge-position-bottom"
+                  v-for="tag in card.tags"
+                >{{tag.text}}</span>
               </div>
             </div>
             <div class="card" :class="[card.progress==100? 'bg-warning':'']">
-              <div class="card-body">
+              <div class="card-body" style="padding: 10px 16px 2px 16px;">
                 <p class="card-text custom-height">{{card.description | text_truncate(60)}}</p>
-                <b-progress :value="card.progress" :max="max" show-value class="mb-3"></b-progress>
+                <b-progress :value="card.progress" :max="max" show-value></b-progress>
+                <!-- <vue-tags-input
+                  id="exampleInput4"
+                  v-model="card.tag"
+                  :tags="card.tags"
+                  :allow-edit-tags="false"
+                />-->
                 <div class="d-flex justify-content-around">
-                  <div class="p-1">
+                  <div>
                     <button
                       type="button"
                       class="btn btn-link"
@@ -57,7 +77,7 @@
                       <font-awesome-icon icon="edit"/>
                     </button>
                   </div>
-                  <div class="p-1">
+                  <div>
                     <button
                       type="button"
                       class="btn btn-link"
@@ -68,7 +88,7 @@
                       <font-awesome-icon icon="trash"/>
                     </button>
                   </div>
-                  <div class="p-1">
+                  <!-- <div>
                     <button
                       type="button"
                       class="btn btn-link"
@@ -78,7 +98,7 @@
                     >
                       <font-awesome-icon icon="list"/>
                     </button>
-                  </div>
+                  </div>-->
                 </div>
               </div>
             </div>
@@ -138,22 +158,21 @@
             v-model.number="form.progress"
             placeholder="Indicare"
           ></b-form-input>
+          <span>{{form.progress}}</span>
         </b-form-group>
         <b-form-group
           id="exampleInputGroup4"
           :label="$t('List.form_label_tipo')"
           label-for="exampleInput4"
         >
-          <b-form-select
+          <vue-tags-input
             id="exampleInput4"
-            name="tipo"
-            v-model="form.tipo"
-            :options="optionsTipo"
-            :select-size="4"
-            v-validate="'required'"
-            :class="{'is-invalid': submitted && errors.has('tipo ') }"
+            v-model="form.tag"
+            :tags="form.tags"
+            :allow-edit-tags="true"
+            :autocomplete-items="filteredItems"
+            @tags-changed="newTags => form.tags = newTags"
           />
-          <b-form-invalid-feedback>Il campo è richiesto</b-form-invalid-feedback>
         </b-form-group>
       </form>
       <div slot="modal-footer" class="w-100">
@@ -177,35 +196,38 @@ export const lista = []; /* oggetto condiviso tra le pagine */
 // Form Validation
 import VeeValidate, { Validator } from 'vee-validate';
 import firebase from '../assets/js/Firebase';
+import VueTagsInput from '@johmun/vue-tags-input';
 import { currentUser } from '../router'; // FIXME: qua si recupera dal router come oggetto condiviso...
 var unsubscribe;
 
 export default {
   name: 'home',
+  components: { VueTagsInput },
   data: function() {
     return {
       title: '',
       listFilter: 'data',
       textFilter: '',
+      tagFilter: '',
       max: 100,
       editmode: false,
       form: {
         title: '',
         description: '',
         progress: 0,
-        tipo: null
+        tag: '', // è il valore che viene via via riempito
+        tags: []
       },
-      submitted: false,
-      optionsTipo: [
-        { value: null, text: 'Selezionare una scala' },
-        { value: 'maggiore', text: 'Maggiore' },
-        { value: 'minore', text: 'Minore' },
-        { value: 'melodica', text: 'Min. Melodica' },
-        { value: 'armonica', text: 'Min. Armonica' },
-        { value: 'pentatonica', text: 'Pentatonica' },
-        { value: 'diminuita', text: 'Diminuita' },
-        { value: 'interi', text: 'A toni interi' }
+      autocompleteItems: [
+        { text: 'Maggiore' },
+        { text: 'Minore' },
+        { text: 'Melodica' },
+        { text: 'Armonica' },
+        { text: 'Pentatonica' },
+        { text: 'Diminuita' },
+        { text: 'Toni interi' }
       ],
+      submitted: false,
       items: lista,
       ref: firebase.firestore().collection('studies'),
       currentUser: currentUser
@@ -232,11 +254,12 @@ export default {
           if (i == -1 && doc.data().userId === this.currentUser.uid) {
             this.items.push({
               id: doc.id,
+              imageNum: doc.data().imageNum,
               userId: doc.data().userId,
               title: doc.data().title,
               description: doc.data().description,
               progress: doc.data().progress,
-              tipo: doc.data().tipo,
+              tags: doc.data().tags,
               data: doc.data().data,
               date: doc.data().date
             });
@@ -268,8 +291,8 @@ export default {
   },
   mounted() {},
   methods: {
-    getIconPath(id) {
-      let imgNum = Number(id);
+    getIconPath(num) {
+      let imgNum = Number(num) + 1;
       if (imgNum > 20) {
         imgNum = imgNum % 20;
       }
@@ -285,7 +308,7 @@ export default {
       this.form.title = theOne.title;
       this.form.description = theOne.description;
       this.form.progress = theOne.progress;
-      this.form.tipo = theOne.tipo;
+      this.form.tags = theOne.tags;
       this.form.data = theOne.data;
       this.form.date = theOne.date;
       this.editmode = true;
@@ -315,14 +338,16 @@ export default {
           if (this.editmode) {
             var newItem = {
               id: this.editedItem.id,
+              imageNum: this.editedItem.imageNum,
               userId: this.currentUser.uid,
               title: this.form.title,
               description: this.form.description,
-              tipo: this.form.tipo,
+              tags: this.form.tags,
               progress: Number(this.form.progress),
               data: this.editedItem.data || [],
               date: this.editedItem.date || new Date().toISOString()
             };
+            console.log('NewItem: ', newItem);
             this.ref
               .doc(this.editedItem.id)
               .update(newItem)
@@ -339,10 +364,11 @@ export default {
           } else {
             var nextIndex = this.items.length; // si simula un id di partenza
             var newItem = {
+              imageNum: nextIndex,
               title: this.form.title,
               userId: this.currentUser.uid,
               description: this.form.description,
-              tipo: this.form.tipo,
+              tags: this.form.tags,
               progress: Number(this.form.progress),
               date: new Date().toISOString(),
               data: []
@@ -368,27 +394,40 @@ export default {
       this.form.title = '';
       this.form.description = '';
       this.form.progress = 0;
-      this.form.tipo = null;
+      this.form.tags = [];
       this.submitted = false;
     }
   },
   computed: {
+    filteredItems() {
+      return this.autocompleteItems.filter(i => {
+        return i.text.toLowerCase().indexOf(this.form.tag.toLowerCase()) !== -1;
+      });
+    },
     filteredList() {
       if (this.items.length > 0) {
-        const filtered = this.items.filter(e => {
+        const filteredByText = this.items.filter(e => {
           return e.description.toLowerCase().includes(this.textFilter.toLowerCase());
         });
+        /* console.log(filteredByText.length);
+        const filteredByTag = filteredByText.filter(e => {
+          if (e.tags && e.tags.length > 0) {
+            return e.tags.some(a => a.text.toLowerCase().includes(this.tagFilter.toLowerCase()));
+          } else {
+            return true;
+          }
+        }); */
         if (this.listFilter == 'data') {
           // Ascending: dal numero minore al maggiore
-          return filtered.sort((obj1, obj2) => obj1.id - obj2.id);
+          return filteredByText.sort((obj1, obj2) => obj1.id - obj2.id);
         } else if (this.listFilter == 'progress') {
           // discendente: dal numero maggiore al minore
-          return filtered.sort((obj1, obj2) => obj2.progress - obj1.progress);
-        } else if (this.listFilter == 'tipo') {
+          return filteredByText.sort((obj1, obj2) => obj2.progress - obj1.progress);
+        } /* else if (this.listFilter == 'tag') {
           return filtered.sort((a, b) => {
             // Use toUpperCase() to ignore character casing
-            const tipoA = a.tipo.toUpperCase();
-            const tipoB = b.tipo.toUpperCase();
+            const tipoA = a.tag.toUpperCase();
+            const tipoB = b.tag.toUpperCase();
             let comparison = 0;
             if (tipoA > tipoB) {
               comparison = 1;
@@ -397,7 +436,7 @@ export default {
             }
             return comparison;
           });
-        }
+        } */
       } else {
         return [];
       }
@@ -406,27 +445,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.maggiore {
-  border-bottom: 5px solid red;
+<style lang="css" scoped>
+.pointer {
+  cursor: pointer;
 }
-.minore {
-  border-bottom: 5px solid aqua;
-}
-.melodica {
-  border-bottom: 5px solid orange;
-}
-.armonica {
-  border-bottom: 5px solid steelblue;
-}
-.pentatonica {
-  border-bottom: 5px solid yellow;
-}
-.diminuita {
-  border-bottom: 5px solid green;
-}
-.interi {
-  border-bottom: 5px solid goldenrod;
+/* style the background and the text color of the input ... */
+.vue-tags-input {
+  background: #f7f7f9;
 }
 .sub-title {
   font-size: 12px;
@@ -434,7 +459,7 @@ export default {
 .custom-height {
   height: 64px;
 }
-.badge-position {
+.badge-position-top {
   position: absolute;
   background-color: transparent;
   border-radius: 5px;
@@ -443,6 +468,12 @@ export default {
   right: 5px;
   top: 5px;
   color: #f0ad4e;
+}
+.badge-position-bottom {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  color: black;
 }
 </style>
 
