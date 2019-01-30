@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container bg-white" :class="{'sticky-top navbar-sticky':fixNavigationBar}">
+    <div class="container bg-light" :class="{'sticky-top navbar-sticky':fixNavigationBar}">
       <div class="d-flex flex-row justify-content-between text-center mb-2">
         <div class="col-sm-4">
           <a href="#" class="card-link" @click="indietro">
@@ -309,7 +309,8 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.$router, this.$route);
+    //console.log(this.$router, this.$route);
+    // console.log(this.items);
     let theIndex = this.items.findIndex(x => x.id == this.itemId);
     this.selectedItem = this.items[theIndex];
     console.log('Selected item: ', this.selectedItem);

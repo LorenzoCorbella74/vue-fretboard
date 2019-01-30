@@ -328,7 +328,7 @@ export default {
               data: this.editedItem.data || [],
               date: this.editedItem.date || new Date().toISOString()
             };
-            console.log('NewItem: ', newItem);
+            console.log('Updated Item: ', newItem);
             this.ref
               .doc(this.editedItem.id)
               .update(newItem)
