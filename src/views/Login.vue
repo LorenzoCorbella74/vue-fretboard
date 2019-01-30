@@ -26,7 +26,7 @@
             <div v-if="error" class="alert alert-danger">{{error}}</div>
             <div>
               <br>
-              <form @submit.prevent="login">
+              <form>
                 <b-form-group id="formEmailGroup" label="Email" label-for="formEmail">
                   <b-form-input
                     id="formEmail"
@@ -54,7 +54,23 @@
                   <button
                     class="btn btn-primary btn-block"
                     :disabled="loading"
+                    @click.prevent="login"
                   >{{$t("Login.btn_send")}}</button>
+                </div>
+                <div class="text-center my-2">
+                  <p>or</p>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-danger btn-block" @click.prevent="loginWithGoogle">
+                    {{$t("Login.btn_google")}}
+                    <font-awesome-icon :icon="[ 'fab', 'google' ]" class="ml-1"/>
+                  </button>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-info btn-block" @click.prevent="loginWithFacebook">
+                    {{$t("Login.btn_google")}}
+                    <font-awesome-icon :icon="[ 'fab', 'facebook' ]" class="ml-1"/>
+                  </button>
                 </div>
               </form>
               <br>
@@ -123,6 +139,36 @@ export default {
             });
         }
       });
+    },
+    loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(data => {
+          console.log('User in login page: ', data.user, data.credential.accessToken);
+          // EventBus.$emit('logged-user', user);
+          this.$router.replace('/list');
+        })
+        .catch(err => {
+          // alert(err.message);
+          this.error = err.message;
+        });
+    },
+    loginWithFacebook() {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(data => {
+          console.log('User in login page: ', data.user, data.credential.accessToken);
+          // EventBus.$emit('logged-user', user);
+          this.$router.replace('/list');
+        })
+        .catch(err => {
+          // alert(err.message);
+          this.error = err.message;
+        });
     }
   }
 };

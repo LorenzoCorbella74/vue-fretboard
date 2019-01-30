@@ -5,6 +5,7 @@ export function Login() {
         email_msg: "We will not share your email with anyone!",
         pass_msg: "The field required must be at least 6 characters.",
         btn_send: "Enter",
+        btn_google: "Signin with ",
         register_msg: "New here? Create a new account!"
     };
 }
