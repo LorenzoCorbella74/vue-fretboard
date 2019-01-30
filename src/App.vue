@@ -130,7 +130,8 @@ export default {
 
 <style lang="scss">
 .wrapper {
-  background: url('https://unsplash.it/1500/1500/?image=721') center no-repeat;
+  /* background: url('https://unsplash.it/1500/1500/?image=721') center no-repeat; */
+  background: url('./assets/img/wood2-min.jpg') center no-repeat;
   /* 
   
   Lista img sfondo: https://picsum.photos/images 
@@ -188,6 +189,6 @@ export default {
 }
 
 .ti-new-tag-input-wrapper {
-  background-color: #f7f7f9 !important;
+  background-color: #f7f7f9;
 }
 </style>

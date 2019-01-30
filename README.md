@@ -7,7 +7,7 @@ Guitar images courtesy of [Pexels](https://www.pexels.com) and for the image bac
 
 ## Features
 - [x] can display fingerings according to tuning, root, scales or arpeggios 
-- [x] notes labels with notes names or degrees
+- [x] labels with notes' names or degrees
 - [x] can merge scale/arpeggios to have a graphical comparison of the notes in common and distint on each scale. 
 - [x] can play guitar notes via [soundfont-player](https://github.com/danigb/soundfont-player)
 - [x] responsive svg fretboards

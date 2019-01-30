@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="home">
-      <div class="container bg-white mb-1" :class="{'sticky-top navbar-sticky':fixBtnBar}">
+      <div class="container bg-light mb-1" :class="{'sticky-top navbar-sticky':fixBtnBar}">
         <div class="d-flex flex-row justify-content-between">
           <div class="p-2 page-header">
             <h1>{{this.$t('List.title')}}</h1>
@@ -29,7 +29,12 @@
             </b-form-group>
           </div>
           <div class="p-2 flex-fill">
-            <b-form-input type="text" v-model="textFilter" :placeholder="$t('List.input_filter')"></b-form-input>
+            <b-form-input
+              type="text"
+              v-model="textFilter"
+              :placeholder="$t('List.input_filter')"
+              class="only-this-input"
+            ></b-form-input>
           </div>
         </div>
       </div>
@@ -444,6 +449,7 @@ export default {
   max-width: 480px;
   color: #fff;
 }
+
 .sub-title {
   font-size: 12px;
 }
@@ -460,10 +466,8 @@ export default {
   top: 5px;
   color: #f0ad4e;
 }
-/* .badge-position-bottom {
-  position: absolute;
-  bottom: 8px;
-  color: black;
-} */
+.only-this-input {
+  background-color: white !important;
+}
 </style>
 
