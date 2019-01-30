@@ -19,7 +19,7 @@ Guitar images courtesy of [Pexels](https://www.pexels.com) and for the image bac
 ### FE
 - HTML5
 - [ Vue.js 2](https://it.vuejs.org/)
-- [Bootstrap 4](https://getbootstrap.com/) & [ Bootstrap Vue](https://bootstrap-vue.js.org)
+- [Bootstrap 4](https://getbootstrap.com/) & [ Bootstrap Vue](https://bootstrap-vue.js.org) & [Pulse theme by Bootswatch ](https://bootswatch.com/pulse/)
 - [Font Awesome](http://fontawesome.io)
 - [D3.js](https://d3js.org/)
 - [Vuelidate](https://github.com/monterail/vuelidate)
