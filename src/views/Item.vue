@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="container bg-white">
-      <div class="row navbar-special" :class="{'navbar-sticky':fixNavigationBar}">
+    <div class="container bg-white" :class="{'sticky-top navbar-sticky':fixNavigationBar}">
+      <div class="d-flex flex-row justify-content-between text-center mb-2">
         <div class="col-sm-4">
           <a href="#" class="card-link" @click="indietro">
             <font-awesome-icon icon="angle-double-left" size="2x"/>
@@ -29,7 +29,8 @@
           </b-button>
         </div>
       </div>
-
+    </div>
+    <div class="container bg-white">
       <div class="d-flex flex-column">
         <draggable
           v-model="selectedItem.data"
@@ -540,15 +541,12 @@ export default {
 </script>
 
 <style scoped>
-.navbar-special {
-  position: fixed; /* Make it stick/fixed */
-  top: 0px; /* Hide the navbar 50 px outside of the top view */
-  width: 100%; /* Full width */
-  transition: top 0.3s; /* Transition effect when sliding down (and up) */
-}
 .navbar-sticky {
-  top: 130px;
+  top: 105px;
   z-index: 500;
+  width: inherit;
+  height: inherit;
+  border-bottom: 1px grey solid;
 }
 /* @import './styles/app.scss'; */
 /* .posizione-icone {
