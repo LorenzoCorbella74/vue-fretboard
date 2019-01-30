@@ -39,7 +39,7 @@
               <img class="card-img-top" :src="getIconPath(card.imageNum)" alt="Card image">
               <div class="card-img-overlay">
                 <span class="badge-position-top" v-if="card.data.length>0">{{card.data.length}}</span>
-                <h4 class="card-title text-light">{{card.title}}</h4>
+                <h5 class="card-title text-light">{{card.title}}</h5>
                 <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
                 <span
                   class="badge badge-pill badge-warning"
