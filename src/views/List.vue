@@ -33,10 +33,10 @@
           </div>
         </div>
       </div>
-      <div class="container bg-white">
+      <div class="container">
         <div class="row" v-if="items.length>0">
           <div class="col-lg-3 col-sm-6 my-2" v-for="card in filteredList" :key="card.id">
-            <div class="card pointer" :class="[card.tag]" @click="checkItem(card.id)">
+            <div class="card border-dark pointer" :class="[card.tag]" @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(card.imageNum)" alt="Card image">
               <div class="card-img-overlay">
                 <span class="badge-position-top" v-if="card.data.length>0">{{card.data.length}}</span>
