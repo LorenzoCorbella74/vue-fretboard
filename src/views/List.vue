@@ -31,14 +31,6 @@
           <div class="p-2 flex-fill">
             <b-form-input type="text" v-model="textFilter" :placeholder="$t('List.input_filter')"></b-form-input>
           </div>
-          <!-- <div class="p-2 flex-fill">
-            <b-form-input type="text" v-model="tagFilter" placeholder="cerca tag..."></b-form-input>
-          </div>-->
-          <!-- <div class="p-3">
-            <b-button size="m" :variant="'outline-primary'" @click="addItem" class="px-5">
-              <font-awesome-icon icon="plus"/>
-            </b-button>
-          </div>-->
         </div>
 
         <div class="row" v-if="items.length>0">
@@ -47,25 +39,21 @@
               <img class="card-img-top" :src="getIconPath(card.imageNum)" alt="Card image">
               <div class="card-img-overlay">
                 <span class="badge-position-top" v-if="card.data.length>0">{{card.data.length}}</span>
-                <h4 class="card-title text-light">{{card.title}}</h4>
+                <h5 class="card-title text-light">{{card.title}}</h5>
                 <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
                 <span
-                  class="badge badge-pill badge-warning badge-position-bottom"
+                  class="badge badge-pill badge-warning"
                   v-for="(tag,index) in card.tags"
                   :key="index"
+                  style="color:black; margin-right:3px;font-size:10px"
                 >{{tag.text}}</span>
+                <!-- :style="'left:'+25*(index+1)+'px'" -->
               </div>
             </div>
             <div class="card" :class="[card.progress==100? 'bg-warning':'']">
               <div class="card-body" style="padding: 10px 16px 2px 16px;">
                 <p class="card-text custom-height">{{card.description | text_truncate(60)}}</p>
                 <b-progress :value="card.progress" :max="max" show-value></b-progress>
-                <!-- <vue-tags-input
-                  id="exampleInput4"
-                  v-model="card.tag"
-                  :tags="card.tags"
-                  :allow-edit-tags="false"
-                />-->
                 <div class="d-flex justify-content-around">
                   <div>
                     <button
@@ -89,17 +77,6 @@
                       <font-awesome-icon icon="trash"/>
                     </button>
                   </div>
-                  <!-- <div>
-                    <button
-                      type="button"
-                      class="btn btn-link"
-                      v-b-tooltip.hover
-                      :title="$t('List.btn_add')"
-                      @click="checkItem(card.id)"
-                    >
-                      <font-awesome-icon icon="list"/>
-                    </button>
-                  </div>-->
                 </div>
               </div>
             </div>
@@ -231,14 +208,6 @@ export default {
       items: lista,
       ref: firebase.firestore().collection('studies'),
       currentUser: currentUser
-      // esempio di struttura
-      // {
-      //   id: 0,
-      //   title: 'Esempio 1',
-      //   description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.',
-      //   progress:0
-      //   data: []
-      // }
     };
   },
   created() {
@@ -263,7 +232,7 @@ export default {
               data: doc.data().data,
               date: doc.data().date
             });
-            console.log('ID: ', doc.id);
+            // console.log('ID: ', doc.id);
           }
         });
         unsubscribe = this.ref.onSnapshot(snapshot => {
@@ -313,7 +282,7 @@ export default {
       this.form.date = theOne.date;
       this.editmode = true;
       this.editedItem = theOne;
-      console.log('Edited one: ', this.editedItem);
+      // console.log('Edited one: ', this.editedItem);
     },
     checkItem(itemId) {
       this.$router.push(`/item/${itemId}`);
@@ -457,7 +426,7 @@ export default {
   font-size: 12px;
 }
 .custom-height {
-  height: 64px;
+  height: 58px;
 }
 .badge-position-top {
   position: absolute;
@@ -471,10 +440,8 @@ export default {
 }
 .badge-position-bottom {
   position: absolute;
-  left: 20px;
-  bottom: 20px;
+  bottom: 8px;
   color: black;
 }
 </style>
-
 

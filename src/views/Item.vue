@@ -1,24 +1,23 @@
 <template>
   <div>
     <div class="container bg-white">
-      <div class="d-flex flex-row justify-content-around">
-        <div class="p-2">
+      <div class="row navbar-special" :class="{'navbar-sticky':fixNavigationBar}">
+        <div class="col-sm-4">
           <a href="#" class="card-link" @click="indietro">
             <font-awesome-icon icon="angle-double-left" size="2x"/>
           </a>
         </div>
-        <div class="p-2">
+        <div class="col-sm-4">
           <a href="#" class="card-link" @click="toList">
             <font-awesome-icon icon="list" size="2x"/>
           </a>
         </div>
-        <div class="p-2">
+        <div class="col-sm-4">
           <a href="#" class="card-link" @click="avanti">
             <font-awesome-icon icon="angle-double-right" size="2x"/>
           </a>
         </div>
       </div>
-
       <div class="d-flex flex-row justify-content-between">
         <div class="p-2">
           <h3>{{selectedItem.title}}</h3>
@@ -38,44 +37,43 @@
           @start="drag=true"
           @end="drag=false"
         >
-          <!-- <transition-group name="list-fretboard" tag="div"> -->
-          <div class="list-fretboard" v-for="(i, index) in selectedItem.data" :key="i.id">
-            <!-- border-dotted -->
-            <!-- FRETBOARD -->
-            <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
-            <div class="posizione-icone">
-              <button
-                type="button"
-                class="btn btn-link"
-                v-b-tooltip.hover
-                :title="$t('Item.btn_edit')"
-                @click="editItem(i.id)"
-                v-if="!i.merge"
-              >
-                <font-awesome-icon icon="edit"/>
-              </button>
-              <button
-                type="button"
-                class="btn btn-link"
-                v-b-tooltip.hover
-                :title="$t('Item.btn_merge')"
-                @click="mergeWithOther(i)"
-                v-if="!i.merge"
-              >
-                <font-awesome-icon icon="code-branch"/>
-              </button>
-              <button
-                type="button"
-                class="btn btn-link float-right"
-                v-b-tooltip.hover
-                :title="$t('Item.btn_delete')"
-                @click="deleteItem(i.id)"
-              >
-                <font-awesome-icon icon="trash"/>
-              </button>
+          <transition-group name="list-fretboard" tag="div">
+            <div v-for="i in selectedItem.data" :key="i.id">
+              <!-- FRETBOARD -->
+              <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
+              <div class="posizione-icone">
+                <button
+                  type="button"
+                  class="btn btn-link"
+                  v-b-tooltip.hover
+                  :title="$t('Item.btn_edit')"
+                  @click="editItem(i.id)"
+                  v-if="!i.merge"
+                >
+                  <font-awesome-icon icon="edit"/>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-link"
+                  v-b-tooltip.hover
+                  :title="$t('Item.btn_merge')"
+                  @click="mergeWithOther(i)"
+                  v-if="!i.merge"
+                >
+                  <font-awesome-icon icon="code-branch"/>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-link float-right"
+                  v-b-tooltip.hover
+                  :title="$t('Item.btn_delete')"
+                  @click="deleteItem(i.id)"
+                >
+                  <font-awesome-icon icon="trash"/>
+                </button>
+              </div>
             </div>
-          </div>
-          <!-- </transition-group> -->
+          </transition-group>
         </draggable>
       </div>
     </div>
@@ -305,7 +303,8 @@ export default {
         { text: 'Drop D', value: 'Drop_D' },
         { text: 'G open', value: 'G_open' }
       ],
-      ref: firebase.firestore().collection('studies')
+      ref: firebase.firestore().collection('studies'),
+      fixNavigationBar: false
     };
   },
   mounted() {
@@ -315,15 +314,28 @@ export default {
     console.log('Selected item: ', this.selectedItem);
     console.log('ItemId: ', this.itemId);
   },
+  created() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   // per reagire ai cambiamenti dei parametri dell'url...
   beforeRouteUpdate(to, from, next) {
-    console.log(to, from);
+    // console.log(to, from);
     let theIndex = this.items.findIndex(x => x.id == to.params.id);
     this.selectedItem = this.items[theIndex];
     this.forceRerender();
     next();
   },
   methods: {
+    handleScroll(event) {
+      if (document.body.scrollTop > 32 || document.documentElement.scrollTop > 32) {
+        this.fixNavigationBar = true;
+      } else {
+        this.fixNavigationBar = false;
+      }
+    },
     handleCancel() {
       this.editMode = false;
       this.mergeMode = false;
@@ -528,6 +540,16 @@ export default {
 </script>
 
 <style scoped>
+.navbar-special {
+  position: fixed; /* Make it stick/fixed */
+  top: 0px; /* Hide the navbar 50 px outside of the top view */
+  width: 100%; /* Full width */
+  transition: top 0.3s; /* Transition effect when sliding down (and up) */
+}
+.navbar-sticky {
+  top: 130px;
+  z-index: 500;
+}
 /* @import './styles/app.scss'; */
 /* .posizione-icone {
   margin: -15% 0 0 0;
@@ -555,7 +577,7 @@ export default {
 }
 
 .list-fretboard-leave-active {
-  /*position: absolute;*/
+  position: absolute;
 }
 
 .list-fretboard-move {
