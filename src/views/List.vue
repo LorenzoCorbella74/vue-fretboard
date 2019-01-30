@@ -43,16 +43,21 @@
           <div class="col-lg-3 col-sm-6 my-2" v-for="card in filteredList" :key="card.id">
             <div class="card border-dark pointer" :class="[card.tag]" @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(card.imageNum)" alt="Card image">
-              <div class="card-img-overlay">
+              <div class="card-img-overlay d-flex flex-column">
                 <span class="badge-position-top" v-if="card.data.length>0">{{card.data.length}}</span>
                 <h5 class="card-title text-light">{{card.title}}</h5>
-                <h6 class="card-subtitle mb-2 text-light sub-title">{{card.date | date_format}}</h6>
-                <span
-                  class="badge badge-pill badge-warning"
-                  v-for="(tag,index) in card.tags"
-                  :key="index"
-                  style="color:black; margin-right:3px;font-size:10px"
-                >{{tag.text}}</span>
+                <h6
+                  class="card-subtitle mb-2 text-light sub-title"
+                  style="margin-bottom: auto"
+                >{{card.date | date_format}}</h6>
+                <div style="margin-top: auto;">
+                  <span
+                    class="badge-pill badge-warning"
+                    v-for="(tag,index) in card.tags"
+                    :key="index"
+                    style="color:black; margin-right:3px;font-size:10px"
+                  >{{tag.text}}</span>
+                </div>
                 <!-- :style="'left:'+25*(index+1)+'px'" -->
               </div>
             </div>
@@ -154,7 +159,7 @@
             :tags="form.tags"
             :allow-edit-tags="true"
             :autocomplete-items="filteredItems"
-            @tags-changed="newTags => form.tags = newTags"
+            @tags-changed="newTags => form.tags = form.tags = newTags"
           />
         </b-form-group>
       </form>
@@ -445,9 +450,9 @@ export default {
 }
 /* style the background and the text color of the input ... */
 .vue-tags-input {
-  background: #f7f7f9;
+  /*  background: #f7f7f9; */
   max-width: 480px;
-  color: #fff;
+  /*  color: #fff; */
 }
 
 .sub-title {
