@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="home">
-      <div class="container bg-white">
+      <div class="container bg-white mb-1" :class="{'sticky-top navbar-sticky':fixBtnBar}">
         <div class="d-flex flex-row justify-content-between">
           <div class="p-2 page-header">
             <h1>{{this.$t('List.title')}}</h1>
@@ -32,9 +32,10 @@
             <b-form-input type="text" v-model="textFilter" :placeholder="$t('List.input_filter')"></b-form-input>
           </div>
         </div>
-
+      </div>
+      <div class="container bg-white">
         <div class="row" v-if="items.length>0">
-          <div class="col-lg-3 col-sm-6 mb-3" v-for="card in filteredList" :key="card.id">
+          <div class="col-lg-3 col-sm-6 my-2" v-for="card in filteredList" :key="card.id">
             <div class="card pointer" :class="[card.tag]" @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(card.imageNum)" alt="Card image">
               <div class="card-img-overlay">
@@ -52,7 +53,7 @@
             </div>
             <div class="card" :class="[card.progress==100? 'bg-warning':'']">
               <div class="card-body" style="padding: 10px 16px 2px 16px;">
-                <p class="card-text custom-height">{{card.description | text_truncate(60)}}</p>
+                <p class="card-text custom-height">{{card.description | text_truncate(56)}}</p>
                 <b-progress :value="card.progress" :max="max" show-value></b-progress>
                 <div class="d-flex justify-content-around">
                   <div>
@@ -207,10 +208,13 @@ export default {
       submitted: false,
       items: lista,
       ref: firebase.firestore().collection('studies'),
-      currentUser: currentUser
+      currentUser: currentUser,
+      fixBtnBar: false
     };
   },
   created() {
+    window.addEventListener('scroll', this.handleScroll);
+
     // console.log('User in List: ', this.currentUser);
     this.ref
       .where('userId', '==', this.currentUser.uid)
@@ -257,9 +261,17 @@ export default {
   },
   destroyed() {
     unsubscribe();
+    window.removeEventListener('scroll', this.handleScroll);
   },
   mounted() {},
   methods: {
+    handleScroll() {
+      if (document.body.scrollTop > 32 || document.documentElement.scrollTop > 32) {
+        this.fixBtnBar = true;
+      } else {
+        this.fixBtnBar = false;
+      }
+    },
     getIconPath(num) {
       let imgNum = Number(num) + 1;
       if (imgNum > 20) {
@@ -305,7 +317,7 @@ export default {
       this.$validator.validate().then(valid => {
         if (valid) {
           if (this.editmode) {
-            let newItem = {
+            var newItem = {
               id: this.editedItem.id,
               imageNum: this.editedItem.imageNum,
               userId: this.currentUser.uid,
@@ -332,7 +344,7 @@ export default {
             this.submitted = false;
           } else {
             let nextIndex = this.items.length; // si simula un id di partenza
-            let newItem = {
+            var newItem = {
               imageNum: nextIndex,
               title: this.form.title,
               userId: this.currentUser.uid,
@@ -415,6 +427,14 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.navbar-sticky {
+  top: 105px;
+  z-index: 500;
+  width: inherit;
+  height: inherit;
+  border-bottom: 1px grey solid;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -438,10 +458,10 @@ export default {
   top: 5px;
   color: #f0ad4e;
 }
-.badge-position-bottom {
+/* .badge-position-bottom {
   position: absolute;
   bottom: 8px;
   color: black;
-}
+} */
 </style>
 
