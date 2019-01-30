@@ -2,15 +2,15 @@
   <div class="container">
     <div class="row justify-content-center align-items-center" style="height:100vh">
       <div class="col-8">
+        <div class="alert alert-warning">
+          <h4 class="alert-heading">Demo:</h4>
+          <br>Email:
+          <span class="alert-link">test@test.it</span>
+          <br>Password:
+          <span class="alert-link">guitarboy</span>
+        </div>
         <div class="card">
           <div class="card-body">
-            <div class="alert alert-warning">
-              <h4 class="alert-heading">Demo:</h4>
-              <br>Email:
-              <span class="alert-link">test@test.it</span>
-              <br>Password:
-              <span class="alert-link">guitarboy</span>
-            </div>
             <div class="text-center">
               <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
               <h3>{{$t("Login.title")}}</h3>
@@ -51,7 +51,10 @@
                   <b-form-invalid-feedback>{{$t("Login.pass_msg")}}</b-form-invalid-feedback>
                 </b-form-group>
                 <div class="form-group">
-                  <button class="btn btn-primary" :disabled="loading">{{$t("Login.btn_send")}}</button>
+                  <button
+                    class="btn btn-primary btn-block"
+                    :disabled="loading"
+                  >{{$t("Login.btn_send")}}</button>
                 </div>
               </form>
               <br>

@@ -37,6 +37,7 @@
           :options="{group:'people'}"
           @start="drag=true"
           @end="drag=false"
+          :move="checkMove"
         >
           <transition-group name="list-fretboard" tag="div">
             <div v-for="i in selectedItem.data" :key="i.id">
@@ -331,6 +332,17 @@ export default {
     next();
   },
   methods: {
+    checkMove: function(evt) {
+      this.ref
+        .doc(this.selectedItem.id)
+        .update(this.selectedItem)
+        .then(docRef => {
+          console.log('Scale succesfully moved...');
+        })
+        .catch(error => {
+          alert('Error moving scale in study: ', error);
+        });
+    },
     handleScroll(event) {
       if (document.body.scrollTop > 32 || document.documentElement.scrollTop > 32) {
         this.fixNavigationBar = true;

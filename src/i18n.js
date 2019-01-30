@@ -7,7 +7,7 @@ import {
 Vue.use(VueI18n);
 
 export const i18n = new VueI18n({
-  locale: "it", // set locale
+  locale: "en", // set locale
   fallbackLocale: "en",
   messages: messages() // set locale messages
 });

@@ -441,6 +441,8 @@ export default {
 /* style the background and the text color of the input ... */
 .vue-tags-input {
   background: #f7f7f9;
+  max-width: 480px;
+  color: #fff;
 }
 .sub-title {
   font-size: 12px;

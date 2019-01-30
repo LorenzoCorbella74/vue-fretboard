@@ -12,9 +12,11 @@
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
         <b-navbar-brand tag="h1" class="m-1" to="/list">
-          <font-awesome-icon icon="guitar" class="mr-2"/>
+          <font-awesome-icon :icon="[ 'fab', 'vuejs' ]" class="mr-1"/>+
+          <font-awesome-icon icon="guitar" class="mr-1"/>
+          =
           {{$t("App.appTitle")}}
-          <p style="font-size:10px; margin-left:32px" class="text-warning">{{currentUser.email}}</p>
+          <p style="font-size:10px; margin-left:82px" class="text-warning">{{currentUser.email}}</p>
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
@@ -175,5 +177,17 @@ export default {
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
+}
+
+.progress {
+  height: 12px !important;
+}
+
+.form-control {
+  background-color: #f7f7f9 !important;
+}
+
+.ti-new-tag-input-wrapper {
+  background-color: #f7f7f9 !important;
 }
 </style>

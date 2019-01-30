@@ -10,7 +10,7 @@
               <font-awesome-icon icon="guitar" class="p-2" size="4x"/>
               <h3>{{$t("SignUp.title")}}</h3>
               <br>
-              <h3>{{$t("SignUp.subTitle")}}</h3>
+              <h3>{{$t("SignUp.subTitle")}}! :-)</h3>
             </div>
             <div v-if="error" class="alert alert-danger">{{error}}</div>
             <div>
@@ -40,7 +40,10 @@
                   <b-form-invalid-feedback>{{$t("SignUp.pass_msg")}}</b-form-invalid-feedback>
                 </b-form-group>
                 <div class="form-group">
-                  <button class="btn btn-primary" :disabled="loading">{{$t("SignUp.btn_send")}}</button>
+                  <button
+                    class="btn btn-primary btn-block"
+                    :disabled="loading"
+                  >{{$t("SignUp.btn_send")}}</button>
                 </div>
               </form>
               <br>

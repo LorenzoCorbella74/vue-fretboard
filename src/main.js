@@ -17,7 +17,7 @@ import VeeValidate, {
 
 // STILI
 // import 'bootstrap/dist/css/bootstrap.min.css'
-import './assets/styles/lux.min.css';
+import './assets/styles/pulse.min.css';
 // import './assets/styles/lux.min.css';
 //import './assets/styles/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
