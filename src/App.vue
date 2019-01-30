@@ -1,7 +1,14 @@
 <template>
   <div id="app" class="wrapper">
     <!-- NAVIGATION -->
-    <b-navbar sticky toggleable type="dark" variant="dark" v-if="currentUser">
+    <b-navbar
+      sticky
+      toggleable
+      type="dark"
+      variant="dark"
+      v-if="currentUser"
+      class="custom-padding"
+    >
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
         <b-navbar-brand tag="h1" class="m-1" to="/list">
@@ -135,6 +142,10 @@ export default {
   background-size: cover;
   min-height: 100vh;
   color: rgb(55, 55, 55);
+}
+
+.custom-padding {
+  padding: 18px 12px 12px 12px !important;
 }
 
 .margine-da-navbar {

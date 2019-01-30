@@ -37,44 +37,43 @@
           @start="drag=true"
           @end="drag=false"
         >
-          <!-- <transition-group name="list-fretboard" tag="div"> -->
-          <div class="list-fretboard" v-for="(i, index) in selectedItem.data" :key="i.id">
-            <!-- border-dotted -->
-            <!-- FRETBOARD -->
-            <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
-            <div class="posizione-icone">
-              <button
-                type="button"
-                class="btn btn-link"
-                v-b-tooltip.hover
-                :title="$t('Item.btn_edit')"
-                @click="editItem(i.id)"
-                v-if="!i.merge"
-              >
-                <font-awesome-icon icon="edit"/>
-              </button>
-              <button
-                type="button"
-                class="btn btn-link"
-                v-b-tooltip.hover
-                :title="$t('Item.btn_merge')"
-                @click="mergeWithOther(i)"
-                v-if="!i.merge"
-              >
-                <font-awesome-icon icon="code-branch"/>
-              </button>
-              <button
-                type="button"
-                class="btn btn-link float-right"
-                v-b-tooltip.hover
-                :title="$t('Item.btn_delete')"
-                @click="deleteItem(i.id)"
-              >
-                <font-awesome-icon icon="trash"/>
-              </button>
+          <transition-group name="list-fretboard" tag="div">
+            <div v-for="i in selectedItem.data" :key="i.id">
+              <!-- FRETBOARD -->
+              <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
+              <div class="posizione-icone">
+                <button
+                  type="button"
+                  class="btn btn-link"
+                  v-b-tooltip.hover
+                  :title="$t('Item.btn_edit')"
+                  @click="editItem(i.id)"
+                  v-if="!i.merge"
+                >
+                  <font-awesome-icon icon="edit"/>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-link"
+                  v-b-tooltip.hover
+                  :title="$t('Item.btn_merge')"
+                  @click="mergeWithOther(i)"
+                  v-if="!i.merge"
+                >
+                  <font-awesome-icon icon="code-branch"/>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-link float-right"
+                  v-b-tooltip.hover
+                  :title="$t('Item.btn_delete')"
+                  @click="deleteItem(i.id)"
+                >
+                  <font-awesome-icon icon="trash"/>
+                </button>
+              </div>
             </div>
-          </div>
-          <!-- </transition-group> -->
+          </transition-group>
         </draggable>
       </div>
     </div>
@@ -578,7 +577,7 @@ export default {
 }
 
 .list-fretboard-leave-active {
-  /*position: absolute;*/
+  position: absolute;
 }
 
 .list-fretboard-move {
