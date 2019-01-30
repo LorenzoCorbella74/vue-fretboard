@@ -98,16 +98,16 @@ export default {
     playScale() {
       let original = this.tastiera.notes.split(' ');
       let scaleToBePlayed = createScaleToBePlayed(original);
-      console.log('Suonata: ', scaleToBePlayed);
-      let time = ac.currentTime + 0.3;
+      // console.log('Suonata: ', scaleToBePlayed);
+      let time = ac.currentTime + 0.25;
       scaleToBePlayed.forEach(function(note) {
-        guitar.play(note, time, 0.3);
-        time += 0.3;
+        guitar.play(note, time, 0.25);
+        time += 0.25;
       });
     },
     playNote(note) {
       let noteToBePlayed = note.toUpperCase();
-      guitar.play(note, ac.currentTime + 0.3, 0.3);
+      guitar.play(note, ac.currentTime + 0.25, 0.25);
     }
   },
   watch: {
