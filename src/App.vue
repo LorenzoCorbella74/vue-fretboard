@@ -22,8 +22,8 @@
           <b-navbar-nav class="ml-auto">
             <b-nav-item right></b-nav-item>
             <!-- <b-nav-item to="/list" right>Studi</b-nav-item> -->
-            <!-- <b-nav-item to="/circolo" right>Circolo V</b-nav-item>
-            <b-nav-item to="/interscambio" right>Interscambio modale</b-nav-item>-->
+            <b-nav-item to="/circolo" right>{{$t("App.navbarCircle")}}</b-nav-item>
+            <b-nav-item to="/interscambio" right>{{$t("App.navbarModal")}}</b-nav-item>
             <b-nav-item to="/config" right>
               <font-awesome-icon icon="cog" class="mr-2"/>
             </b-nav-item>

@@ -16,6 +16,12 @@ import {
 import {
     Config
 } from "./Config";
+import {
+    Circolo
+} from "./Circolo";
+import {
+    Interscambio
+} from "./Interscambio";
 
 export function it() {
     return {
@@ -25,5 +31,7 @@ export function it() {
         Login: Login(),
         SignUp: SignUp(),
         Config: Config(),
+        Circolo: Circolo(),
+        Interscambio: Interscambio()
     };
 }
