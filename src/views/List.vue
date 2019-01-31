@@ -276,7 +276,7 @@ export default {
   mounted() {},
   methods: {
     handleScroll() {
-      if (document.body.scrollTop > 32 || document.documentElement.scrollTop > 32) {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
         this.fixBtnBar = true;
       } else {
         this.fixBtnBar = false;
@@ -438,7 +438,7 @@ export default {
 
 <style lang="css" scoped>
 .navbar-sticky {
-  top: 105px;
+  top: 87px;
   z-index: 500;
   width: inherit;
   height: inherit;
