@@ -39,10 +39,12 @@
           </table>
         </div>
       </div>
+    </div>
 
+    <div class="container text-center">
       <div class="row">
         <div class="col-md-6" v-for="a in selectedScales">
-          <b-card class="mb-3" :title="a.mode|capitalize">
+          <b-card class="my-2" :title="a.mode|capitalize">
             <table class="table table-borderless table-hover table-sm">
               <thead class="thead-light">
                 <tr>

@@ -290,7 +290,16 @@ function calculateDegrees(intervalArray) {
 }
 
 // ritorna un array di note che parte da startNote
-function transposeScaleByStartingNote(startNote) {
+export function transposeSpecificScaleByStartingNote(startNote, scale) {
+    var indexToSplit = scale.indexOf(startNote);
+    var first = scale.slice(0, indexToSplit);
+    var second = scale.slice(indexToSplit);
+    return second.concat(first);
+}
+
+
+// ritorna un array di note che parte da startNote
+export function transposeScaleByStartingNote(startNote) {
     var indexToSplit = NOTES.indexOf(startNote);
     var first = NOTES.slice(0, indexToSplit);
     var second = NOTES.slice(indexToSplit);
@@ -416,16 +425,6 @@ function calcolaAccordo(gradiScala) {
     return outStr;
 }
 
-function scorriArray(intervalli) {
-    var newArr = [];
-    // for loop to apply slice to sub-arrays
-    for (var i = 0, len = intervalli.length; i < len; i++) {
-        newArr[i] = intervalli[i].slice();
-    }
-    let first = newArr.shift();
-    return newArr.concat(first);
-}
-
 // ritorna un array di note che rappresenta la scala in base agli intervalli passati
 export function createScale(startNote, intervalli) {
     let output = {
@@ -481,7 +480,7 @@ function formatText(scalename) {
 
 /* ------------------- MERGE SCALES ------------------- */
 
-function transposeScaleObjByStartingNote(startNote, scale) {
+export function transposeScaleObjByStartingNote(startNote, scale) {
     var indexToSplit;
     scale.some(function (item, i) {
         if (item["value"] === startNote) {
