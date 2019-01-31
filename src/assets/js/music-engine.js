@@ -404,16 +404,26 @@ function analize(noteScala, gradi) {
 
 function calcolaAccordo(gradiScala) {
     let outStr = '';
-    if (gradiScala.indexOf("b3") != -1 && gradiScala.indexOf("b7") != -1) {
-        outStr = 'm7';
-    } else if (gradiScala.indexOf("b3") != -1 && gradiScala.indexOf("b5") != -1) {
+    if (gradiScala.indexOf("b3") != -1 && gradiScala.indexOf("b5") != -1) {
         outStr = 'm7/b5';
+    } else if (gradiScala.indexOf("b3") != -1 && gradiScala.indexOf("b7") != -1) {
+        outStr = 'm7';
     } else if (gradiScala.indexOf("b7") != -1) {
         outStr = '7';
     } else if (gradiScala.indexOf("7") != -1) {
         outStr = 'maj7';
     }
     return outStr;
+}
+
+function scorriArray(intervalli) {
+    var newArr = [];
+    // for loop to apply slice to sub-arrays
+    for (var i = 0, len = intervalli.length; i < len; i++) {
+        newArr[i] = intervalli[i].slice();
+    }
+    let first = newArr.shift();
+    return newArr.concat(first);
 }
 
 // ritorna un array di note che rappresenta la scala in base agli intervalli passati
@@ -435,13 +445,16 @@ export function createScale(startNote, intervalli) {
             output.notes.push(notes[progressIndex]);
         }
     });
+    // alalize aggiunge .inside, .dissonances, .consonant
     output = Object.assign(output, analize(output.notes, output.gradi));
     output.accordo = calcolaAccordo(output.gradi);
+    output.sons = [];
+
     return output;
 }
 
 // ritorna un array di note a partire da una nota iniziale ed un relativo grado
-function createScaleOnDegree(startNote, scale, degree) {
+export function createScaleOnDegree(startNote, scale, degree) {
     let i = degree - 1;
     var mag = createScale(startNote, scale).notes; // "scala di riferimento"
     var ind = transposeIntervalsByStartingDegree(i, scale);
@@ -610,6 +623,51 @@ function detectJumpOverC(scale) {
         }
     }
     return result;
+}
+
+function calculateRootsOfCircleOfFifth(scale) {
+    let out = [];
+    let semitonArray = [42, 35, 28, 21, 14, 7];
+    semitonArray.forEach((e) => out.push(moveUpByNumOfSemitones(e, scale)));
+    out.push(createScale('c', SCALES.ionian))
+    semitonArray.reverse().forEach((e) => out.push(moveDownByNumOfSemitones(e, scale)));
+    return out;
+}
+
+
+
+export function createTableOfCircleOfFifth(note) {
+    let roots = calculateRootsOfCircleOfFifth(note);
+    let scalaArray = [
+        SCALES.ionian,
+        SCALES.dorian,
+        SCALES.phrygian,
+        SCALES.lydian,
+        SCALES.mixolydian,
+        SCALES.aeolian,
+        SCALES.locrian
+    ];
+    roots.forEach(root => {
+        let majors = []
+        scalaArray.forEach((e, i) => majors.push(createScale(root.notes[i], e)));
+        root.majors = majors;
+    });
+    return roots;
+}
+export function tableModalInterchange(note) {
+    let scalaArray = [
+        SCALES.ionian,
+        SCALES.dorian,
+        SCALES.phrygian,
+        SCALES.lydian,
+        SCALES.mixolydian,
+        SCALES.aeolian,
+        SCALES.locrian
+    ];
+    let out = []
+    scalaArray.forEach((e, i) => out.push(createScale(note, e)));
+
+    return out;
 }
 /* ------------------- MERGE SCALES ------------------- */
 
