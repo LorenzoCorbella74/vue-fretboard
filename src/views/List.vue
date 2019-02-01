@@ -40,7 +40,12 @@
       </div>
       <div class="container">
         <div class="row" v-if="items.length>0">
-          <div class="col-lg-3 col-sm-6 my-2" v-for="card in filteredList" :key="card.id">
+          <div
+            class="col-lg-3 col-sm-6 my-2"
+            v-for="card in filteredList"
+            :key="card.id"
+            :id="'studio'+card.id"
+          >
             <div class="card border-dark pointer" :class="[card.tag]" @click="checkItem(card.id)">
               <img class="card-img-top" :src="getIconPath(card.imageNum)" alt="Card image">
               <div class="card-img-overlay d-flex flex-column">
@@ -346,6 +351,12 @@ export default {
                 // aggiorna il modello FE
                 let theIndex = this.items.findIndex(x => x.id == this.editedItem.id);
                 this.$set(this.items, theIndex, newItem);
+                let who = this.items[theIndex].id;
+                // https://mbj36.xyz/set-timeout-vs-next-tick/
+                setTimeout(() => {
+                  let e = document.querySelector(`#studio${who}`);
+                  if (e) e.scrollIntoView({ behavior: 'smooth' });
+                }, 0);
               })
               .catch(error => {
                 alert('Error editing study: ', error);
@@ -370,6 +381,12 @@ export default {
                 this.submitted = false;
                 newItem.id = docRef.id;
                 this.$set(this.items, nextIndex, newItem);
+                let who = this.items[nextIndex].id;
+                // https://mbj36.xyz/set-timeout-vs-next-tick/
+                setTimeout(() => {
+                  let e = document.querySelector(`#studio${who}`);
+                  if (e) e.scrollIntoView({ behavior: 'smooth' });
+                }, 0);
               })
               .catch(error => {
                 alert('Error adding study: ', error);
