@@ -27,7 +27,10 @@
         </thead>
         <tbody>
           <tr>
-            <td v-for="n in tastiera.notesSplitted">{{n|capitalize}}</td>
+            <td
+              v-for="(n,i) in tastiera.notesSplitted"
+              :class="{'table-danger':comparison[i]}"
+            >{{n|capitalize}}</td>
           </tr>
         </tbody>
       </table>
@@ -40,17 +43,20 @@ import { Fretboard, Tunings, createScaleToBePlayed } from '../assets/js/music-en
 import { ac, guitar } from '../App.vue';
 export default {
   name: 'fretboard-chart',
-  props: ['input'],
+  props: ['input', 'all'],
   data: function(params) {
     return {
       tastiera: {},
-      width: 0
+      width: 0,
+      notesOfFirst: []
     };
   },
   mounted() {
     window.addEventListener('resize', this.onResize);
     this.onResize();
     this.inizialize(this.width);
+
+    console.log();
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.onResize);
@@ -110,6 +116,25 @@ export default {
       guitar.play(note, ac.currentTime + 0.25, 0.25);
     }
   },
+  computed: {
+    comparison() {
+      let output = [];
+      if (this.input.id > 0 && this.tastiera && this.notesOfFirst.length > 0) {
+        this.tastiera.notesSplitted.forEach((e, i) => {
+          let indice = this.notesOfFirst.findIndex(k => k == e);
+          if (indice !== -1) {
+            output.push(false);
+          } else {
+            output.push(true);
+          }
+        });
+      } else {
+        output = [];
+      }
+      // console.log('confronto: ', this.tastiera.notesSplitted, output);
+      return output;
+    }
+  },
   watch: {
     width: function(a, b) {
       // console.log('Width: ', a, b);
@@ -117,6 +142,18 @@ export default {
       if (elem) {
         elem.parentNode.removeChild(elem);
         this.inizialize(a);
+      }
+    },
+    all: {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        let index = newValue.findIndex(e => e.id == this.input.id);
+        if (newValue && newValue.length > 0) {
+          // update compare array
+          this.notesOfFirst = newValue[0].notes.split(' ');
+          // console.log('notesOfFirst: ', this.notesOfFirst, index);
+        }
       }
     }
   }

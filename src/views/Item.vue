@@ -42,7 +42,12 @@
           <transition-group name="list-fretboard" tag="div">
             <div v-for="i in selectedItem.data" :key="i.id">
               <!-- FRETBOARD -->
-              <fretboard-chart :input="i" :key="i.key" v-on:tastiera="registerFretboard($event,i)"></fretboard-chart>
+              <fretboard-chart
+                :input="i"
+                :all="selectedItem.data"
+                :key="i.key"
+                v-on:tastiera="registerFretboard($event,i)"
+              ></fretboard-chart>
               <div class="posizione-icone">
                 <button
                   type="button"
@@ -562,14 +567,14 @@ export default {
   border-bottom: 1px grey solid;
 }
 /* @import './styles/app.scss'; */
-/* .posizione-icone {
-  margin: -15% 0 0 0;
+.posizione-icone {
+  margin: 6px auto;
 }
 @media (max-width: 992px) {
   .posizione-icone {
-    margin: -45% 0 0 0;
+    margin: 6px auto;
   }
-} */
+}
 .border-dotted {
   border: 1px grey dotted;
   padding: 12px;
