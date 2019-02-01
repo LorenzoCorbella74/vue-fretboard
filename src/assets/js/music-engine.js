@@ -425,6 +425,46 @@ function calcolaAccordo(gradiScala) {
     return outStr;
 }
 
+function flipAndCapitalizeNote(note) {
+    // console.log(note)
+    if (!note) return;
+    if (note.length == 2 && note[1] == "b") {
+        note = "b" + note[0].toUpperCase();
+        return note;
+    } else {
+        return note.charAt(0).toUpperCase() + note.substr(1);
+    }
+}
+
+function getReadableScaleNames(arr) {
+    let output = [];
+    arr = arr.map(e => e.toLowerCase());
+    let a = arr.map(e => e.toLowerCase().charAt(0));
+    for (let index = 0; index < a.length; index++) {
+        const element = a[index];
+        let primo = a.indexOf(element);
+        let ultimo = a.lastIndexOf(element);
+        // console.log(index, element, primo, ultimo);
+        if (primo != ultimo && primo < ultimo) {
+            let ultimoIndexNote = NOTES.findIndex(x => x == arr[ultimo]);
+            // console.log(ultimo, ultimoIndexNote, index, arr[index]);
+            output.push(arr[index]);
+            output.push(NOTESENH[ultimoIndexNote]);
+            index = ultimo;
+        } else if (
+            output[output.length - 1] && output[output.length - 1].charAt(0) == element.charAt(0)
+        ) {
+            let ultimoIndexNote = NOTES.findIndex(x => x == arr[ultimo]);
+            // console.log(ultimo, ultimoIndexNote);
+            output.push(NOTESENH[ultimoIndexNote]);
+        } else {
+            output.push(arr[index]);
+        }
+    }
+    return output.map(flipAndCapitalizeNote);
+}
+
+
 // ritorna un array di note che rappresenta la scala in base agli intervalli passati
 export function createScale(startNote, intervalli) {
     let output = {
@@ -448,7 +488,8 @@ export function createScale(startNote, intervalli) {
     output = Object.assign(output, analize(output.notes, output.gradi));
     output.accordo = calcolaAccordo(output.gradi);
     output.sons = [];
-
+    output.readAbleNotes = getReadableScaleNames(output.notes);
+    console.log(output);
     return output;
 }
 
@@ -975,6 +1016,7 @@ export const Fretboard = function (config) {
         instance.merged = true;
         instance.name = name;
         instance.notes = note.map(e => e.value).join(' ');
+        instance.readAbleNotes = getReadableScaleNames(note.map(e => e.value));
         instance.colors = note.map(e => e.style);
         instance.gradi = typeof gradi === 'string' ? gradi : gradi.join(' ');
         instance.clear(); // cancella tutto e ridisegna la tastiera
@@ -986,9 +1028,8 @@ export const Fretboard = function (config) {
         let data = createScale(root, intervalli);
         instance.name = formatText(scaleName) + ' over ' + root.toUpperCase() + data.accordo;
         instance.notes = data.notes.join(' ');
+        instance.readAbleNotes = data.readAbleNotes;
         instance.gradi = data.gradi.join(' ');
-        // console.log('Note: ', instance.notes, )
-        // console.log('Gradi: ', instance.gradi, )
         instance.clear(); // cancella tutto e ridisegna la tastiera
         instance.addNotes(instance.notes, tipo, tipovisualizzazione); // ridisegna le note "c d e f# g a b", "scala", "grado"
     };

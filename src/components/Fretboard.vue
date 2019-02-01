@@ -29,9 +29,9 @@
           <tr>
             <td
               class="text-center"
-              v-for="(n,i) in tastiera.notesSplitted"
+              v-for="(n,i) in tastiera.readAbleNotes"
               :class="{'table-danger':comparison[i]}"
-            >{{n|capitalize}}</td>
+            >{{n}}</td>
           </tr>
         </tbody>
       </table>
@@ -45,7 +45,7 @@ import { ac, guitar } from '../App.vue';
 export default {
   name: 'fretboard-chart',
   props: ['input', 'all'],
-  data: function(params) {
+  data: function() {
     return {
       tastiera: {},
       width: 0,
@@ -146,7 +146,6 @@ export default {
       }
     },
     all: {
-      immediate: true,
       deep: true,
       handler(newValue, oldValue) {
         let index = newValue.findIndex(e => e.id == this.input.id);
