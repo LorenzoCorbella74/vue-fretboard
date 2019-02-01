@@ -22,12 +22,13 @@
       <table class="table table-sm">
         <thead class="thead-light">
           <tr>
-            <th v-for="g in tastiera.gradiSplitted">{{g}}</th>
+            <th v-for="g in tastiera.gradiSplitted" class="text-center">{{g}}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td
+              class="text-center"
               v-for="(n,i) in tastiera.notesSplitted"
               :class="{'table-danger':comparison[i]}"
             >{{n|capitalize}}</td>
