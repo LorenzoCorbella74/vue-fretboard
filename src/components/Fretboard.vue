@@ -1,5 +1,5 @@
 <template>
-  <div class="row" :id="tastiera.id">
+  <div class="row" :id="'mia'+tastiera.id">
     <!-- my-5 -->
     <div class="col-md-5">
       <h6>

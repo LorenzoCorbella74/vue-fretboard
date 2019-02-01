@@ -446,8 +446,10 @@ export default {
                 this.items[this.itemId] = Object.assign({}, this.selectedItem);
                 this.mergeMode = false;
                 this.submitted = false;
-                let e = document.querySelector('#' + this.selectedItem.data[theIndex].refId);
-                e.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                  let e = document.querySelector('#mia' + this.selectedItem.data[theIndex].refId);
+                  e.scrollIntoView({ behavior: 'smooth' });
+                }, 0);
               })
               .catch(error => {
                 alert('Error editing scale in study: ', error);
@@ -495,8 +497,10 @@ export default {
                 this.items[this.itemId] = Object.assign({}, this.selectedItem);
                 this.mergeMode = false;
                 this.submitted = false;
-                let e = document.querySelector('#' + this.selectedItem.data[theIndex].refId);
-                e.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                  let e = document.querySelector('#mia' + this.selectedItem.data[theIndex].refId);
+                  e.scrollIntoView({ behavior: 'smooth' });
+                }, 0);
               })
               .catch(error => {
                 alert('Error saving scale in study: ', error);
@@ -523,8 +527,10 @@ export default {
                 this.items[this.itemId] = Object.assign({}, this.selectedItem);
                 this.submitted = false;
                 // SOURCE: https://css-tricks.com/snippets/jquery/smooth-scrolling/
-                let e = document.querySelector('#' + this.selectedItem.data[theIndex].refId);
-                e.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                  let e = document.querySelector('#mia' + this.selectedItem.data[theIndex].refId);
+                  e.scrollIntoView({ behavior: 'smooth' });
+                }, 0);
               })
               .catch(error => {
                 alert('Error saving scale in study: ', error);
