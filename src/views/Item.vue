@@ -349,7 +349,7 @@ export default {
         });
     },
     handleScroll(event) {
-      if (document.body.scrollTop > 32 || document.documentElement.scrollTop > 32) {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
         this.fixNavigationBar = true;
       } else {
         this.fixNavigationBar = false;
@@ -560,7 +560,7 @@ export default {
 
 <style scoped>
 .navbar-sticky {
-  top: 105px;
+  top: 87px;
   z-index: 500;
   width: inherit;
   height: inherit;

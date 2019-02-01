@@ -148,7 +148,7 @@ export default {
 }
 
 .custom-padding {
-  padding: 18px 12px 12px 12px !important;
+  padding: 6px 12px 6px 12px !important;
 }
 
 .margine-da-navbar {
