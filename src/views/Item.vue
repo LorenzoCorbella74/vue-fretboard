@@ -200,7 +200,6 @@
 import { lista } from './List.vue';
 import Fretboard from '../components/Fretboard.vue';
 import { mergeScale, mergeDegree, createScale, SCALES } from '../assets/js/music-engine.js';
-import { scrollIt } from '../assets/js/scroll.js';
 import firebase from '../assets/js/Firebase';
 import draggable from 'vuedraggable';
 
