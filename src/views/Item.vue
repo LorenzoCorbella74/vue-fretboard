@@ -200,6 +200,7 @@
 import { lista } from './List.vue';
 import Fretboard from '../components/Fretboard.vue';
 import { mergeScale, mergeDegree, createScale, SCALES } from '../assets/js/music-engine.js';
+import { scrollIt } from '../assets/js/scroll.js';
 import firebase from '../assets/js/Firebase';
 import draggable from 'vuedraggable';
 
@@ -446,6 +447,8 @@ export default {
                 this.items[this.itemId] = Object.assign({}, this.selectedItem);
                 this.mergeMode = false;
                 this.submitted = false;
+                let e = document.querySelector('#' + this.selectedItem.data[theIndex].refId);
+                e.scrollIntoView({ behavior: 'smooth' });
               })
               .catch(error => {
                 alert('Error editing scale in study: ', error);
@@ -484,6 +487,7 @@ export default {
               note: noteMergiate,
               gradi: gradiMergiati
             });
+            let theIndex = this.selectedItem.data.length - 1;
             this.ref
               .doc(this.itemId)
               .update(this.selectedItem)
@@ -492,6 +496,8 @@ export default {
                 this.items[this.itemId] = Object.assign({}, this.selectedItem);
                 this.mergeMode = false;
                 this.submitted = false;
+                let e = document.querySelector('#' + this.selectedItem.data[theIndex].refId);
+                e.scrollIntoView({ behavior: 'smooth' });
               })
               .catch(error => {
                 alert('Error saving scale in study: ', error);
@@ -509,6 +515,7 @@ export default {
               root: this.form.selectedNote,
               name: this.form.scaleUsArp == 'scala' ? this.form.selectedScale : this.form.selectedArp
             });
+            let theIndex = this.selectedItem.data.length - 1;
             this.ref
               .doc(this.itemId)
               .update(this.selectedItem)
@@ -516,6 +523,9 @@ export default {
                 // aggiorna il modello FE
                 this.items[this.itemId] = Object.assign({}, this.selectedItem);
                 this.submitted = false;
+                // SOURCE: https://css-tricks.com/snippets/jquery/smooth-scrolling/
+                let e = document.querySelector('#' + this.selectedItem.data[theIndex].refId);
+                e.scrollIntoView({ behavior: 'smooth' });
               })
               .catch(error => {
                 alert('Error saving scale in study: ', error);
@@ -541,6 +551,7 @@ export default {
     registerFretboard(data, who) {
       this.$set(this.selectedItem.data[who.id], 'notes', data.notes);
       this.$set(this.selectedItem.data[who.id], 'gradi', data.gradi);
+      this.$set(this.selectedItem.data[who.id], 'refId', data.id);
       // console.log('Registering data: ', this.selectedItem.data[who.id]);
     }
   },
