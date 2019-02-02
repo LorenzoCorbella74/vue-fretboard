@@ -67,7 +67,8 @@ export default {
       const nuovaTastiera = Fretboard({
         tuning: Tunings[this.input.tuning] || Tunings.E_std,
         callback: this.playNote,
-        fretWidth: width < 600 ? 34 : 46
+        fretWidth: width < 600 ? 34 : 46,
+        frets: width > 1000 ? 15 : 12
       });
       nuovaTastiera.info = this.input.info;
 

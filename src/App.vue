@@ -12,11 +12,10 @@
       <b-navbar-toggle target="nav_text_collapse"></b-navbar-toggle>
       <div class="container">
         <b-navbar-brand tag="h1" class="m-1" to="/list">
-          <font-awesome-icon :icon="[ 'fab', 'vuejs' ]" class="mr-1"/>+
+          <!-- <font-awesome-icon :icon="[ 'fab', 'vuejs' ]" class="mr-1"/>+ -->
           <font-awesome-icon icon="guitar" class="mr-1"/>
-          =
           {{$t("App.appTitle")}}
-          <p style="font-size:10px; margin-left:82px" class="text-warning">{{currentUser.email}}</p>
+          <p style="font-size:10px; margin-left:28px" class="text-warning">{{currentUser.email}}</p>
         </b-navbar-brand>
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
@@ -29,6 +28,13 @@
             </b-nav-item>
             <b-nav-item right @click="logout">
               {{$t("App.navbarLogout")}}
+              <img
+                v-if="currentUser.providerData && currentUser.providerData[0] && currentUser.providerData[0].photoURL"
+                :src="currentUser.providerData[0].photoURL"
+                alt="USER"
+                height="36"
+                class="mr-1"
+              >
               <font-awesome-icon icon="sign-out-alt" class="ml-1"/>
             </b-nav-item>
           </b-navbar-nav>
@@ -116,6 +122,7 @@ export default {
     // ma poteva essere recuperato anche dall'user ritornato
     // dalla funzione login
     this.ref.auth().onAuthStateChanged(user => {
+      console.log(user);
       this.currentUser = user;
     });
   },
