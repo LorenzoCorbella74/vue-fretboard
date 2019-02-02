@@ -223,9 +223,7 @@ export const SCALES = {
 };
 
 // helper per ritornare il valore
-const verbatim = function (d) {
-    return d;
-};
+const verbatim = (d => d);
 
 // In base al nome della nota calcola lo spostamento sulla tastiera
 function asOffset(note) {
@@ -335,6 +333,7 @@ function moveUpByNumOfSemitones(howManySemitone, fromNote) {
     return createScale(join[11 - numOfSemiton], SCALES.ionian);
 }
 
+// tona un array di numeri indicanti il num di spostamenti
 function transformInt(intervalli) {
     return intervalli.map((e) => {
         let out;
@@ -364,6 +363,7 @@ function transformInt(intervalli) {
     });
 }
 
+// ritorna il nome della scala passando gli intervalli
 function getName(intervalli) {
     for (const key in SCALES) {
         if (SCALES.hasOwnProperty(key) && SCALES[key].toString() == intervalli.toString()) {
@@ -372,6 +372,7 @@ function getName(intervalli) {
     }
 }
 
+// ritorna un array
 function compare(list1, list2, isUnion) {
     var result = [];
     for (var i = 0; i < list1.length; i++) {
@@ -387,6 +388,7 @@ function compare(list1, list2, isUnion) {
     return result;
 }
 
+// 
 function analize(noteScala, gradi) {
     let gradiArr = []
     for (const key in gradi) {
@@ -435,7 +437,8 @@ function flipAndCapitalizeNote(note) {
         return note.charAt(0).toUpperCase() + note.substr(1);
     }
 }
-
+// dato un array di note ["C", "D", "D#", "F", "G", "G#", "A#"]
+// torna un array senza note ripetute ["C", "D", "bE", "F", "G", "bA", "bB"]
 function getReadableScaleNames(arr) {
     let output = [];
     arr = arr.map(e => e.toLowerCase());
@@ -445,7 +448,7 @@ function getReadableScaleNames(arr) {
         let primo = a.indexOf(element);
         let ultimo = a.lastIndexOf(element);
         // console.log(index, element, primo, ultimo);
-        if (primo != ultimo && primo < ultimo) {
+        if (primo != ultimo && primo < ultimo && ultimo == a.lenght - 1) {
             let ultimoIndexNote = NOTES.findIndex(x => x == arr[ultimo]);
             // console.log(ultimo, ultimoIndexNote, index, arr[index]);
             output.push(arr[index]);
@@ -489,7 +492,7 @@ export function createScale(startNote, intervalli) {
     output.accordo = calcolaAccordo(output.gradi);
     output.sons = [];
     output.readAbleNotes = getReadableScaleNames(output.notes);
-    console.log(output);
+    // console.log(output);
     return output;
 }
 

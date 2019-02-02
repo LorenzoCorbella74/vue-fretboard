@@ -30,10 +30,7 @@
                 :class="{'table-primary':selectedOne == i,'table-warning':selectedTwo == i}"
               >
                 <th class="text-left">{{scala.mode|capitalize}}</th>
-                <td
-                  v-for="n in scala.sons"
-                  @click="selectScale(scala)"
-                >{{n.key + n.accordo|capitalize}}</td>
+                <td v-for="n in scala.sonsAccordiNote" @click="selectScale(scala)">{{n}}</td>
               </tr>
             </tbody>
           </table>
@@ -96,13 +93,22 @@ export default {
     this.handleChange('c');
   },
   methods: {
-    handleChange(evt) {
-      const roots = tableModalInterchange(evt);
+    handleChange(nota) {
+      this.selectedScales.length = 0;
+      let roots = tableModalInterchange(nota);
       for (let r = 0; r < roots.length; r++) {
-        const superRoot = roots[r];
+        let superRoot = roots[r];
         superRoot.sons = [];
         for (let i = 1; i <= 7; i++) {
           superRoot.sons.push(createScaleOnDegree(superRoot.notes[0], superRoot.intervalli, i));
+        }
+        superRoot.sonsAccordi = superRoot.sons.map(e => e.accordo);
+      }
+      for (let a = 0; a < roots.length; a++) {
+        const element = roots[a];
+        element.sonsAccordiNote = [];
+        for (let b = 0; b < element.readAbleNotes.length; b++) {
+          element.sonsAccordiNote.push(element.readAbleNotes[b] + element.sonsAccordi[b]);
         }
       }
       console.log('Modal interchange: ', roots);

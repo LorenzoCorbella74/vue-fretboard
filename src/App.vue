@@ -89,7 +89,8 @@ export default {
           console.log('User logged out!');
           this.currentUser = null;
           this.isLoading = false;
-          this.lista = this.lista.splice(0, this.lista.length); // rimuove tutto....
+          // this.lista = this.lista.splice(0, this.lista.length); // rimuove tutto....
+          this.lista.length = 0;
           this.$router.replace('/login');
         });
     }
