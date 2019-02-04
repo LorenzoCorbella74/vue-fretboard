@@ -4,7 +4,7 @@
       <div class="container bg-light mb-1" :class="{'sticky-top navbar-sticky':fixBtnBar}">
         <div class="d-flex flex-row justify-content-between">
           <div class="p-2 page-header">
-            <h1>{{this.$t('List.title')}}</h1>
+            <h1>{{$t('List.title')}}</h1>
           </div>
           <div class="p-2">
             <b-button size="m" variant="outline-warning" @click="addItem" class="px-5">

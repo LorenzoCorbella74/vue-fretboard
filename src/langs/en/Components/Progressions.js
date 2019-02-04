@@ -1,6 +1,6 @@
-export function List() {
+export function Progressions() {
     return {
-        title: 'Studies',
+        title: 'Chord progressions',
         input_filter: 'Find text...',
         radio_filter: 'Filter by',
         btn_edit: "Edit",
@@ -9,11 +9,9 @@ export function List() {
         // MODALE
         form_label_title: "Title",
         form_placeholder_title: "Insert a title",
-        modal_edit_title: 'Edit study',
-        modal_save_title: 'Save study',
+        modal_edit_title: 'Edit progression',
+        modal_save_title: 'Save progression',
         form_label_description: "Description",
-        form_label_progress: "Progress",
-        form_label_tipo: "Family",
         form_placeholder_description: "Insert a desciption",
         btn_save: 'Save'
     };

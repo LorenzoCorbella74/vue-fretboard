@@ -22,6 +22,9 @@ import {
 import {
     Interscambio
 } from "./Interscambio";
+import {
+    Progressions
+} from "./Progressions";
 
 export function it() {
     return {
@@ -32,6 +35,7 @@ export function it() {
         SignUp: SignUp(),
         Config: Config(),
         Circolo: Circolo(),
+        Progressions: Progressions(),
         Interscambio: Interscambio()
     };
 }
