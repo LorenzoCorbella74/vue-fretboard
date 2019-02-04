@@ -11,6 +11,7 @@ import Interscambio from './views/Interscambio.vue';
 import NotFound from './views/NotFound.vue';
 import SignUp from './views/SignUp.vue';
 import Login from './views/Login.vue';
+import Progressions from './views/Progressions.vue';
 
 Vue.use(Router);
 
@@ -66,6 +67,14 @@ let router = new Router({
       path: "/interscambio",
       name: "interscambio",
       component: Interscambio,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/progressions",
+      name: "progressions",
+      component: Progressions,
       meta: {
         requiresAuth: true
       }
