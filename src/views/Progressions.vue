@@ -90,7 +90,7 @@
       <div class="row">
         <!-- FORM -->
         <div class="col-sm-6">
-          <h2 class="page-header invisible">Chords Progression</h2>
+          <!-- <h2 class="page-header invisible">Chords Progression</h2> -->
           <b-form-group
             id="exampleInputGroup1"
             :label="$t('Progressions.form_label_title')"
@@ -170,7 +170,7 @@
         </div>
         <!-- DATA -->
         <div class="col-sm-6">
-          <h2 class="page-header invisible">Data:</h2>
+          <!-- <h2 class="page-header invisible">Data:</h2> -->
           <div class="row">
             <div class="col-sm-12">
               <h5>Notes:</h5>
@@ -235,7 +235,7 @@ export default {
       selectedChord: 'Maj7',
       notes: [],
       selectedNote: 'C',
-      timeSignatures: Array.range(1, 24).map(e => e + '/4'),
+      timeSignatures: Array.range(1, 16).map(e => e + '/4'),
       selectedTimeSignature: '4/4',
       progressions: progressions,
       ref: firebase.firestore().collection('progressions'),
