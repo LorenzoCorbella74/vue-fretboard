@@ -86,6 +86,7 @@
       ref="progressionsModal"
       size="lg"
       :title="editmode? $t('Progressions.modal_edit_title'):$t('Progressions.modal_save_title')"
+      @hidden="handleCancel"
     >
       <div class="row">
         <!-- FORM -->
@@ -137,7 +138,7 @@
           </div>
           <div class="row">
             <ul
-              :class="[Number(item.timeSignature.charAt(0))>4? 'col-sm-12':'col-sm-6']"
+              :class="[item.timeSignature && Number(item.timeSignature.charAt(0))>4? 'col-sm-12':'col-sm-6']"
               v-for="(item,i) in list"
             >
               <li
@@ -301,6 +302,10 @@ export default {
   },
   mounted() {},
   methods: {
+    handleCancel() {
+      this.editMode = false;
+      this.resetForm();
+    },
     handleScroll() {
       if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
         this.fixBtnBar = true;
@@ -317,12 +322,12 @@ export default {
       let theOne = this.progressions.find(e => e.id == itemId);
       this.form.title = theOne.title;
       this.form.description = theOne.description;
-      if (theOne.data.length > 0) {
+      /* if (theOne.data.length > 0) {
         theOne.data.forEach((e, i) => {
           this.$set(this.list, i, e);
         });
-      }
-      // this.list = theOne.data;
+      } */
+      this.list = theOne.data;
       this.form.date = theOne.date;
       this.editmode = true;
       this.editedItem = theOne;
@@ -350,7 +355,7 @@ export default {
               userId: this.currentUser.uid,
               title: this.form.title,
               description: this.form.description,
-              data: this.list || [],
+              data: this.editedItem.data || [],
               date: this.editedItem.date || new Date().toISOString()
             };
             console.log('Updated Item: ', newItem);
@@ -371,12 +376,9 @@ export default {
               .catch(error => {
                 alert('Error editing study: ', error);
               });
-            this.editmode = false;
-            this.submitted = false;
           } else {
             let nextIndex = this.progressions.length; // si simula un id di partenza
             var newItem = {
-              imageNum: nextIndex,
               title: this.form.title,
               userId: this.currentUser.uid,
               description: this.form.description,
@@ -403,6 +405,7 @@ export default {
           // si chiude la modale
           this.$refs.progressionsModal.hide();
           this.resetForm();
+          this.resetToDefaults();
         }
       });
     },
@@ -410,6 +413,7 @@ export default {
       this.form.title = '';
       this.form.description = '';
       this.list.length = 0;
+      this.editmode = false;
       this.submitted = false;
     },
     play(progression) {
