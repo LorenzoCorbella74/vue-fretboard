@@ -465,8 +465,8 @@ export default {
       // player.start(name, when, options)
       progressions.forEach(function(accordo, i) {
         accordo.forEach((nota, i) => {
-          guitar.play(nota, global_time, { duration: times[i] * bpm, gain: 0.6 });
-          ambient.play(nota, global_time, { duration: times[i] * bpm, gain: 0.4 });
+          guitar.play(nota, global_time, { duration: times[i] * bpm, gain: 0.5 });
+          ambient.play(nota, global_time, { duration: times[i] * bpm, gain: 0.1 });
         });
         global_time += times[i] * bpm; // è il tempo di durata di ogni accordo...
       });

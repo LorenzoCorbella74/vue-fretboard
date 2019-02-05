@@ -117,7 +117,7 @@ export default {
       // a.isLoading = false;
       Soundfont.instrument(ac, 'pad_2_warm').then(function(strumento) {
         ambient = strumento;
-        console.log('Guitar: ', ambient);
+        console.log('Ambient: ', ambient);
         a.isLoading = false;
       });
     });
