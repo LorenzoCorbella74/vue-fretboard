@@ -29,6 +29,10 @@
             <div class="card-body" style="padding: 10px 16px 2px 16px;">
               <!-- <h6 class="card-text"></h6> -->
               <p class="card-text custom-height">{{card.description | text_truncate(56)}}</p>
+              <!-- :class="[who==index?'badge-primary': 'badge-secondary'] -->
+              <p>
+                <span v-for="(c,index) in card.data" class="badge badge-pill">{{c.root+c.chord}}</span>
+              </p>
               <div class="d-flex justify-content-around">
                 <div>
                   <button
@@ -92,6 +96,10 @@
         <!-- FORM -->
         <div class="col-sm-6">
           <!-- <h2 class="page-header invisible">Chords Progression</h2> -->
+          <b-form-group id="exampleInputGroup0" label="BPM" label-for="formBpm">
+            <b-form-input id="formBpm" type="number" v-model.number="form.bpm"></b-form-input>
+          </b-form-group>
+          <!-- <h2 class="page-header invisible">Chords Progression</h2> -->
           <b-form-group
             id="exampleInputGroup1"
             :label="$t('Progressions.form_label_title')"
@@ -140,6 +148,7 @@
             <ul
               :class="[item.timeSignature && Number(item.timeSignature.charAt(0))>4? 'col-sm-12':'col-sm-6']"
               v-for="(item,i) in list"
+              :key="i"
             >
               <li
                 class="list-group-item"
@@ -224,10 +233,13 @@ import * as Array from 'tonal-array';
 import { currentUser } from '../router';
 import VeeValidate, { Validator } from 'vee-validate';
 import firebase from '../assets/js/Firebase';
+import { createChordNotes } from '../assets/js/music-engine.js';
+import { ac, guitar, ambient } from '../App.vue';
 
 var unsubscribe;
 
 export const progressions = []; /* oggetto condiviso tra le pagine */
+var loop = null;
 
 export default {
   data() {
@@ -247,7 +259,8 @@ export default {
       list: [],
       form: {
         title: '',
-        description: ''
+        description: '',
+        bpm: 80
       },
       editableList: [],
       fixBtnBar: false
@@ -272,6 +285,7 @@ export default {
               id: doc.id,
               userId: doc.data().userId,
               title: doc.data().title,
+              bpm: doc.data().bpm,
               description: doc.data().description,
               data: doc.data().data,
               date: doc.data().date
@@ -322,15 +336,17 @@ export default {
       let theOne = this.progressions.find(e => e.id == itemId);
       this.form.title = theOne.title;
       this.form.description = theOne.description;
-      /* if (theOne.data.length > 0) {
+      this.form.bpm = theOne.bpm;
+      if (theOne.data && theOne.data.length > 0) {
         theOne.data.forEach((e, i) => {
           this.$set(this.list, i, e);
         });
-      } */
-      this.list = theOne.data;
+      }
+      // this.list = theOne.data;
       this.form.date = theOne.date;
       this.editmode = true;
       this.editedItem = theOne;
+      console.log('Editiamo: ', this.editedItem);
     },
     deleteProgression(itemId) {
       let i = this.progressions.findIndex(x => x.id == itemId);
@@ -345,7 +361,7 @@ export default {
         });
     },
     onSubmit(evt) {
-      evt.preventDefault();
+      // evt.preventDefault();
       this.submitted = true;
       this.$validator.validate().then(valid => {
         if (valid) {
@@ -355,7 +371,8 @@ export default {
               userId: this.currentUser.uid,
               title: this.form.title,
               description: this.form.description,
-              data: this.editedItem.data || [],
+              bpm: this.form.bpm,
+              data: JSON.parse(JSON.stringify(this.list)) || [],
               date: this.editedItem.date || new Date().toISOString()
             };
             console.log('Updated Item: ', newItem);
@@ -367,6 +384,10 @@ export default {
                 let theIndex = this.progressions.findIndex(x => x.id == this.editedItem.id);
                 this.$set(this.progressions, theIndex, newItem);
                 let who = this.progressions[theIndex].id;
+                // si chiude la modale
+                this.$refs.progressionsModal.hide();
+                this.resetForm();
+                this.resetToDefaults();
                 // https://mbj36.xyz/set-timeout-vs-next-tick/
                 setTimeout(() => {
                   let e = document.querySelector(`#studio${who}`);
@@ -380,10 +401,11 @@ export default {
             let nextIndex = this.progressions.length; // si simula un id di partenza
             var newItem = {
               title: this.form.title,
+              bpm: this.form.bpm,
               userId: this.currentUser.uid,
               description: this.form.description,
               date: new Date().toISOString(),
-              data: this.list
+              data: JSON.parse(JSON.stringify(this.list))
             };
             this.ref
               .add(newItem)
@@ -392,6 +414,10 @@ export default {
                 newItem.id = docRef.id;
                 this.$set(this.progressions, nextIndex, newItem);
                 let who = this.progressions[nextIndex].id;
+                // si chiude la modale
+                this.$refs.progressionsModal.hide();
+                this.resetForm();
+                this.resetToDefaults();
                 // https://mbj36.xyz/set-timeout-vs-next-tick/
                 setTimeout(() => {
                   let e = document.querySelector(`#studio${who}`);
@@ -400,27 +426,56 @@ export default {
               })
               .catch(error => {
                 alert('Error adding study: ', error);
+                // si chiude la modale
+                this.$refs.progressionsModal.hide();
+                this.resetForm();
+                this.resetToDefaults();
               });
           }
-          // si chiude la modale
-          this.$refs.progressionsModal.hide();
-          this.resetForm();
-          this.resetToDefaults();
         }
       });
     },
     resetForm() {
       this.form.title = '';
       this.form.description = '';
-      this.list.length = 0;
+      this.form.bpm = 80;
+      this.list.splice(0);
       this.editmode = false;
       this.submitted = false;
     },
     play(progression) {
-      console.log(progression);
+      let cp = progression.data.map(e => Chord.notes(e.root + e.chord));
+      let times = progression.data.map(e => Number(e.timeSignature.charAt(0))); // indicano quanti beat ci stanno in ogni battuta
+      let totalTime = times.reduce((a, b) => a + b, 0);
+      // console.log(progression, times, totalTime);
+      let progressions = [];
+      cp.forEach(element => {
+        progressions.push(element.map(e => e.toLowerCase()));
+      });
+      progressions = progressions.map(e => createChordNotes(e));
+      let bpm = 60 / progression.bpm;
+      console.log(cp, progressions, bpm);
+      let global_time = ac.currentTime + 0.25;
+
+      // Add an event listener
+      /* guitar.on('event', function(event, time, obj, opts) {
+        console.log(event, time, obj, opts);
+      }); */
+
+      // player.start(name, when, options)
+      progressions.forEach(function(accordo, i) {
+        accordo.forEach((nota, i) => {
+          guitar.play(nota, global_time, { duration: times[i] * bpm, gain: 0.6 });
+          ambient.play(nota, global_time, { duration: times[i] * bpm, gain: 0.4 });
+        });
+        global_time += times[i] * bpm; // è il tempo di durata di ogni accordo...
+      });
+      loop = setTimeout(() => this.play(progression), totalTime * bpm * 1000);
     },
     stop(progression) {
-      console.log(progression);
+      guitar.stop();
+      ambient.stop();
+      clearTimeout(loop);
     },
 
     /* -------------------------------------- MODALE -------------------------------------- */
@@ -443,6 +498,7 @@ export default {
       this.selectedItem = item;
     },
     add() {
+      // let theIndex = this.selectedItem.data.length - 1;
       this.list.push({
         root: this.selectedNote,
         chord: this.selectedChord,

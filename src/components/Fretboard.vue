@@ -106,7 +106,7 @@ export default {
     playScale() {
       let original = this.tastiera.notes.split(' ');
       let scaleToBePlayed = createScaleToBePlayed(original);
-      // console.log('Suonata: ', scaleToBePlayed);
+      console.log('Suonata: ', original, scaleToBePlayed);
       let time = ac.currentTime + 0.25;
       scaleToBePlayed.forEach(function(note) {
         guitar.play(note, time, 0.25);

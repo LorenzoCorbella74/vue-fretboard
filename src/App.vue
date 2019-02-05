@@ -58,11 +58,14 @@
 import Soundfont from 'soundfont-player';
 import firebase from 'firebase';
 export let guitar = null;
+export let ambient = null;
 export let ac = new AudioContext();
 
 export let isloading = false; // SPINNER GLOBALE
 export let loadingMsg = ''; // SPINNER GLOBALE
 export let config = { language: 'it' }; // CONFIGURAZIONE GLOBALE
+
+import { Note, Interval, Distance, Scale, Chord } from 'tonal';
 
 import { lista } from './views/List.vue';
 
@@ -107,9 +110,16 @@ export default {
     this.loadingMsg = this.$t('App.default_loading_msg');
     const a = this;
     Soundfont.instrument(ac, 'acoustic_guitar_steel').then(function(guitarDownloaded) {
+      console.log('Loaded from: ', guitarDownloaded.url);
+      console.log('Loaded notes: ', Object.keys(guitarDownloaded.buffers).map(e => Note.fromMidi(e)));
       guitar = guitarDownloaded;
       console.log('Guitar: ', guitar);
-      a.isLoading = false;
+      // a.isLoading = false;
+      Soundfont.instrument(ac, 'pad_2_warm').then(function(strumento) {
+        ambient = strumento;
+        console.log('Guitar: ', ambient);
+        a.isLoading = false;
+      });
     });
   },
   created() {

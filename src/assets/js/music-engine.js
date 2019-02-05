@@ -647,6 +647,20 @@ export function createScaleToBePlayed(s) {
     return o.concat(osotto + olast, o_rev);
 }
 
+export function createChordNotes(s) {
+    let a = 3,
+        b = 3;
+    let indexJump = detectJumpOverC(s);
+    // console.log('index: ', indexJump);
+    var o = s.map((e, i) => {
+        if (i == indexJump) {
+            a++;
+        }
+        return e.toUpperCase() + a;
+    });
+    return o;
+}
+
 function getFirstChar(c) {
     return c.charAt(0);
 }
