@@ -462,13 +462,13 @@ export default {
         console.log(event, time, obj, opts);
       }); */
 
-      // player.start(name, when, options)
       progressions.forEach(function(accordo, i) {
-        accordo.forEach((nota, i) => {
-          guitar.play(nota, global_time, { duration: times[i] * bpm, gain: 0.5 });
-          ambient.play(nota, global_time, { duration: times[i] * bpm, gain: 0.1 });
+        accordo.forEach((nota, i2) => {
+          // player.start(name, when, options)
+          guitar.play(nota, global_time + i2 * 0.25, { duration: times[i] * bpm, gain: 0.5 }); // arpeggio
+          ambient.play(nota, global_time, { duration: times[i] * bpm, gain: 0.1, decay: 0.25, attack: 0.25 }); // accordo
         });
-        global_time += times[i] * bpm; // è il tempo di durata di ogni accordo...
+        global_time += times[i] * bpm; // è il tempo tra un accordo ed il successivo...
       });
       loop = setTimeout(() => this.play(progression), totalTime * bpm * 1000);
     },
