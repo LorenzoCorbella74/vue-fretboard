@@ -648,8 +648,7 @@ export function createScaleToBePlayed(s) {
 }
 
 export function createChordNotes(s) {
-    let a = 3,
-        b = 3;
+    let a = 3;
     let indexJump = detectJumpOverC(s);
     // console.log('index: ', indexJump);
     var o = s.map((e, i) => {
@@ -674,7 +673,7 @@ function detectJumpOverC(scale) {
     for (let i = 0; i < scale.length; i++) {
         const first = scale[i];
         const last = scale[i + 1];
-        if (getFirstChar(first) == "b" || getFirstChar(last) == "d") {
+        if (getFirstChar(first) == "b" || last && getFirstChar(last) == "d") {
             result = i + 1;
             break;
         }

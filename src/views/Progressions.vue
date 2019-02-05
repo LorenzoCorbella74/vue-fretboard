@@ -454,7 +454,7 @@ export default {
       });
       progressions = progressions.map(e => createChordNotes(e));
       let bpm = 60 / progression.bpm;
-      console.log(cp, progressions, bpm);
+      // console.log(cp, progressions, bpm);
       let global_time = ac.currentTime + 0.25;
 
       // Add an event listener
