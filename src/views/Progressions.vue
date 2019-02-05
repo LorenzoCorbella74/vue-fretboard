@@ -453,7 +453,7 @@ export default {
         progressions.push(element.map(e => e.toLowerCase()));
       });
       progressions = progressions.map(e => createChordNotes(e));
-      let bpm = 60 / progression.bpm;
+      let bpm = 60 / progression.bpm; // durata del singolo beat in secondi
       // console.log(cp, progressions, bpm);
       let global_time = ac.currentTime + 0.25;
 
@@ -470,7 +470,7 @@ export default {
         });
         global_time += times[i] * bpm; // è il tempo tra un accordo ed il successivo...
       });
-      loop = setTimeout(() => this.play(progression), totalTime * bpm * 1000);
+      loop = setTimeout(() => this.play(progression), totalTime * bpm * 1000 - 1); // - 1 si anticipa
     },
     stop(progression) {
       guitar.stop();
