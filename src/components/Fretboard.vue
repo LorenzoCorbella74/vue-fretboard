@@ -65,9 +65,19 @@
         <strong>All chords that fits this scale:</strong>
         <br>
         <span
-          v-for="r in tastiera.chordsForThisScale"
+          v-for="(r,rindex) in tastiera.chordsForThisScale"
+          :id="'popover'+rindex"
           class="badge badge-pill mr-1 mb-1 badge-secondary"
-        >{{r}}</span>
+        >
+          {{r}}
+          <b-popover
+            :target="'popover'+rindex"
+            placement="top"
+            :title="r"
+            triggers="click"
+            :content="tastiera.chordsForThisScaleIntervals[rindex].toString()"
+          ></b-popover>
+        </span>
       </div>
     </div>
   </div>
@@ -77,6 +87,7 @@
 import { Fretboard, Tunings, createScaleToBePlayed } from '../assets/js/music-engine.js';
 import * as Key from 'tonal-key';
 import * as Scale from 'tonal-scale';
+import { Chord } from 'tonal';
 import { ac, guitar } from '../App.vue';
 export default {
   name: 'fretboard-chart',
@@ -123,6 +134,7 @@ export default {
       nuovaTastiera.relatives = Key.modeNames().map(name => Key.relative(name, nuovaTastiera.keyName));
       nuovaTastiera.paralells = Key.modeNames().map(name => nuovaTastiera.tonic + ' ' + name);
       nuovaTastiera.chordsForThisScale = Scale.chords(this.input.name);
+      nuovaTastiera.chordsForThisScaleIntervals = nuovaTastiera.chordsForThisScale.map(e => Chord.intervals(e));
 
       // istanzia il contenitore SVG per la tastiera
       nuovaTastiera.makeContainer(this.$el);
@@ -166,7 +178,7 @@ export default {
       });
     },
     playNote(note) {
-      let noteToBePlayed = note.toUpperCase();
+      // let noteToBePlayed = note.toUpperCase();
       guitar.play(note, ac.currentTime + 0.25, 0.25);
     }
   },
