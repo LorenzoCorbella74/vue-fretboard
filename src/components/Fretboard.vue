@@ -15,17 +15,25 @@
             <font-awesome-icon icon="play"/>
           </button>
         </span>
+        <span class="d-inline">
+          <button type="button" class="btn btn-link" @click="toggleDetail">
+            <font-awesome-icon icon="info-circle"/>
+          </button>
+        </span>
       </h6>
       <p>{{tastiera.info}}</p>
     </div>
     <div class="col-md-6">
-      <table class="table table-sm">
+      <table class="table table-sm" v-if="detailStep==1">
         <thead class="thead-light">
           <tr>
             <th v-for="g in tastiera.gradiSplitted" class="text-center">{{g}}</th>
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td v-for="t in tastiera.intervals" class="text-center">{{t}}</td>
+          </tr>
           <tr>
             <td
               class="text-center"
@@ -35,12 +43,40 @@
           </tr>
         </tbody>
       </table>
+
+      <table class="table table-sm" v-if="detailStep==2">
+        <tbody>
+          <tr>
+            <th>Degrees</th>
+            <td v-for="d in tastiera.degrees" class="text-center">{{d}}</td>
+          </tr>
+          <tr>
+            <th>Chords</th>
+            <td v-for="a in tastiera.accordi" class="text-center">{{a}}</td>
+          </tr>
+          <tr>
+            <th>Second. V°</th>
+            <td v-for="ds in tastiera.domSecondarie" class="text-center">{{ds}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div v-if="detailStep==3">
+        <strong>All chords that fits this scale:</strong>
+        <br>
+        <span
+          v-for="r in tastiera.chordsForThisScale"
+          class="badge badge-pill mr-1 mb-1 badge-secondary"
+        >{{r}}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { Fretboard, Tunings, createScaleToBePlayed } from '../assets/js/music-engine.js';
+import * as Key from 'tonal-key';
+import * as Scale from 'tonal-scale';
 import { ac, guitar } from '../App.vue';
 export default {
   name: 'fretboard-chart',
@@ -49,20 +85,27 @@ export default {
     return {
       tastiera: {},
       width: 0,
-      notesOfFirst: []
+      notesOfFirst: [],
+      detailStep: 1
     };
   },
   mounted() {
     window.addEventListener('resize', this.onResize);
     this.onResize();
     this.inizialize(this.width);
-
-    console.log();
+    console.log(this.input);
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.onResize);
   },
   methods: {
+    toggleDetail() {
+      if (this.detailStep == 3) {
+        this.detailStep = 1;
+      } else {
+        this.detailStep++;
+      }
+    },
     inizialize(width) {
       const nuovaTastiera = Fretboard({
         tuning: Tunings[this.input.tuning] || Tunings.E_std,
@@ -71,6 +114,15 @@ export default {
         frets: width > 1000 ? 15 : 12
       });
       nuovaTastiera.info = this.input.info;
+      nuovaTastiera.keyName = this.input.root + ' ' + this.input.name;
+      nuovaTastiera.degrees = Key.degrees(nuovaTastiera.keyName);
+      nuovaTastiera.accordi = Key.chords(nuovaTastiera.keyName);
+      nuovaTastiera.intervals = Scale.intervals(this.input.name);
+      nuovaTastiera.domSecondarie = Key.secDomChords(nuovaTastiera.keyName);
+      nuovaTastiera.tonic = Key.props(nuovaTastiera.keyName).tonic;
+      nuovaTastiera.relatives = Key.modeNames().map(name => Key.relative(name, nuovaTastiera.keyName));
+      nuovaTastiera.paralells = Key.modeNames().map(name => nuovaTastiera.tonic + ' ' + name);
+      nuovaTastiera.chordsForThisScale = Scale.chords(this.input.name);
 
       // istanzia il contenitore SVG per la tastiera
       nuovaTastiera.makeContainer(this.$el);
@@ -92,7 +144,7 @@ export default {
       // si trasmette al padre i dati della scala
       let objCopy = JSON.parse(JSON.stringify(nuovaTastiera));
       this.$emit('tastiera', Object.assign({}, objCopy));
-      // console.log('Tastiera: ', this.tastiera);
+      console.log('Tastiera: ', this.tastiera);
     },
     onResize() {
       this.width = this.$el.offsetWidth;
@@ -141,7 +193,7 @@ export default {
     width: function(a, b) {
       // console.log('Width: ', a, b);
       const elem = document.querySelector(`#${this.tastiera.id}`);
-      if (elem) {
+      if (a != b && elem) {
         elem.parentNode.removeChild(elem);
         this.inizialize(a);
       }

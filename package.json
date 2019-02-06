@@ -19,6 +19,8 @@
     "firebase": "^5.8.0",
     "soundfont-player": "^0.11.0",
     "tonal": "^2.1.2",
+    "tonal-array": "^2.1.2",
+    "tonal-key": "^2.1.2",
     "vee-validate": "^2.1.5",
     "vue": "^2.5.21",
     "vue-i18n": "^8.8.0",
