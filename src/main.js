@@ -52,7 +52,8 @@ import {
   faCog,
   faSignOutAlt,
   faSave,
-  faStop
+  faStop,
+  faArrowsAltH
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -64,7 +65,7 @@ import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
 library.add(faMusic, faPlus, faPlay, faEdit, faTrash, faList, faAngleDown, faAngleDoubleLeft, faAngleDoubleRight, faSpinner, faGuitar, faQuestionCircle, faFileImport,
-  faFileExport, faCodeBranch, faClock, faLayerGroup, faSortNumericUp, faGithub, faVuejs, faCog, faSignOutAlt, faGoogle, faFacebook, faSave, faStop)
+  faFileExport, faCodeBranch, faClock, faLayerGroup, faSortNumericUp, faGithub, faVuejs, faCog, faSignOutAlt, faGoogle, faFacebook, faSave, faStop, faArrowsAltH)
 
 // GLOBAL FILTERS
 import {

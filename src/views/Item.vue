@@ -23,6 +23,11 @@
           <h3>{{selectedItem.title}}</h3>
           <p class="text-muted">{{selectedItem.description}}</p>
         </div>
+        <div class="p-2" v-if="selectedItem.data.length>1">
+          <b-button size="m" variant="outline-warning" @click="transpose" class="px-5">Transpose
+            <font-awesome-icon icon="arrows-alt-h"/>
+          </b-button>
+        </div>
         <div class="p-2">
           <b-button size="m" variant="outline-warning" @click="addItem" class="px-5">
             <font-awesome-icon icon="plus"/>
@@ -337,6 +342,24 @@ export default {
     next();
   },
   methods: {
+    transpose() {
+      /* let theIndex = this.selectedItem.data.findIndex(x => x.id == this.editedItem);
+            this.selectedItem.data[theIndex] = Object.assign({}, newItem);
+            this.ref
+              .doc(this.itemId)
+              .update(this.selectedItem)
+              .then(docRef => {
+                // aggiorna il modello FE
+                this.items[this.itemId] = Object.assign({}, this.selectedItem);
+                setTimeout(() => {
+                  let e = document.querySelector('#mia' + this.selectedItem.data[theIndex].refId);
+                  e.scrollIntoView({ behavior: 'smooth' });
+                }, 0);
+              })
+              .catch(error => {
+                alert('Error transposing scale in study: ', error);
+              }); */
+    },
     checkMove: function(evt) {
       this.ref
         .doc(this.selectedItem.id)
