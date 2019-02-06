@@ -19,12 +19,23 @@
         </div>
       </div>
       <div class="d-flex flex-row justify-content-between">
-        <div class="p-2">
+        <div class="p-2 flex-grow-1">
           <h3>{{selectedItem.title}}</h3>
           <p class="text-muted">{{selectedItem.description}}</p>
         </div>
-        <div class="p-2" v-if="selectedItem.data.length>1">
-          <b-button size="m" variant="outline-warning" @click="transpose" class="px-5">Transpose
+        <div class="p-2">
+          <!-- v-if="selectedItem && selectedItem.data && selectedItem.data.length>1" -->
+          <b-form-select
+            style="width:80px"
+            name="selectIntervalsTranspose"
+            v-model="intervalTranspose"
+            :options="optionsIntervals"
+            class="mb-3 mr-2"
+          />
+        </div>
+        <div class="p-2">
+          <!-- v-if="selectedItem && selectedItem.data && selectedItem.data.length>1" -->
+          <b-button size="m" variant="outline-warning" @click="transpose" class="px-5">
             <font-awesome-icon icon="arrows-alt-h"/>
           </b-button>
         </div>
@@ -207,6 +218,7 @@ import Fretboard from '../components/Fretboard.vue';
 import { mergeScale, mergeDegree, createScale, SCALES } from '../assets/js/music-engine.js';
 import firebase from '../assets/js/Firebase';
 import draggable from 'vuedraggable';
+import { Note, Interval, Distance, Scale, Chord } from 'tonal';
 
 export default {
   name: 'Item',
@@ -233,6 +245,13 @@ export default {
         selectedTuning: 'E_std'
       },
       submitted: false,
+      intervalTranspose: null,
+      optionsIntervals: Scale.intervals('chromatic').map(e => {
+        let a = {};
+        a.text = e;
+        a.value = e;
+        return a;
+      }),
       optionsScaleUsArp: [
         { text: this.$t('Item.radio_label_scale'), value: 'scala' },
         { text: this.$t('Item.radio_label_arpeggio'), value: 'arpeggio' }
@@ -343,22 +362,29 @@ export default {
   },
   methods: {
     transpose() {
-      /* let theIndex = this.selectedItem.data.findIndex(x => x.id == this.editedItem);
-            this.selectedItem.data[theIndex] = Object.assign({}, newItem);
-            this.ref
-              .doc(this.itemId)
-              .update(this.selectedItem)
-              .then(docRef => {
-                // aggiorna il modello FE
-                this.items[this.itemId] = Object.assign({}, this.selectedItem);
-                setTimeout(() => {
-                  let e = document.querySelector('#mia' + this.selectedItem.data[theIndex].refId);
-                  e.scrollIntoView({ behavior: 'smooth' });
-                }, 0);
-              })
-              .catch(error => {
-                alert('Error transposing scale in study: ', error);
-              }); */
+      console.log(this.selectedItem.data);
+      if (this.intervalTranspose) {
+        this.selectedItem.data.forEach(element => {
+          element = Object.assign(element, {
+            root: Distance.transpose(element.root, this.intervalTranspose).toLowerCase(),
+            key: Math.random() * 1000000
+          });
+        });
+      }
+      this.ref
+        .doc(this.selectedItem.id)
+        .update(this.selectedItem)
+        .then(docRef => {
+          // aggiorna il modello FE
+          this.items[this.selectedItem.id] = Object.assign({}, this.selectedItem);
+          /*          setTimeout(() => {
+            let e = document.querySelector('#mia' + this.selectedItem.data[theIndex].refId);
+            e.scrollIntoView({ behavior: 'smooth' });
+          }, 0); */
+        })
+        .catch(error => {
+          alert('Error transposing scale in study: ', error);
+        });
     },
     checkMove: function(evt) {
       this.ref

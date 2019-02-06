@@ -140,7 +140,7 @@ export default {
       }
       nuovaTastiera.notesSplitted = nuovaTastiera.notes.split(' ');
       nuovaTastiera.gradiSplitted = nuovaTastiera.gradi.split(' ');
-      this.tastiera = nuovaTastiera;
+      this.tastiera = Object.assign({}, nuovaTastiera);
       // si trasmette al padre i dati della scala
       let objCopy = JSON.parse(JSON.stringify(nuovaTastiera));
       this.$emit('tastiera', Object.assign({}, objCopy));
@@ -206,6 +206,19 @@ export default {
           // update compare array
           this.notesOfFirst = newValue[0].notes.split(' ');
           // console.log('notesOfFirst: ', this.notesOfFirst, index);
+        }
+      }
+    },
+    input: {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        if ((oldValue && newValue.key != oldValue.key) || (newValue.key && !oldValue)) {
+          const elem = document.querySelector(`#${this.tastiera.id}`);
+          if (elem) {
+            elem.parentNode.removeChild(elem);
+            this.inizialize(this.width);
+          }
         }
       }
     }
