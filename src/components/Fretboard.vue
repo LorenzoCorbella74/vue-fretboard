@@ -39,7 +39,7 @@
         </tbody>
       </table>
 
-      <table class="table table-sm" v-if="detailStep==2">
+      <table class="table table-sm" v-if="detailStep==3">
         <tbody>
           <tr>
             <th>Degrees</th>
@@ -56,7 +56,7 @@
         </tbody>
       </table>
 
-      <div v-if="detailStep==3">
+      <div v-if="detailStep==2">
         <strong>All chords that fits this scale:</strong>
         <br>
         <span
