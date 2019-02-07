@@ -20,24 +20,30 @@
         <b-collapse is-nav id="nav_text_collapse">
           <b-navbar-nav class="ml-auto">
             <b-nav-item right></b-nav-item>
-            <!-- <b-nav-item to="/list" right>Studi</b-nav-item> -->
+            <b-nav-item to="/list" right>{{$t("App.navbarStudies")}}</b-nav-item>
             <b-nav-item to="/progressions" right>{{$t("App.navbarProgressions")}}</b-nav-item>
             <b-nav-item to="/circolo" right>{{$t("App.navbarCircle")}}</b-nav-item>
             <b-nav-item to="/interscambio" right>{{$t("App.navbarModal")}}</b-nav-item>
-            <b-nav-item to="/config" right>
-              <font-awesome-icon icon="cog" class="mr-2"/>
-            </b-nav-item>
-            <b-nav-item right @click="logout">
-              {{$t("App.navbarLogout")}}
-              <img
-                v-if="currentUser.providerData && currentUser.providerData[0] && currentUser.providerData[0].photoURL"
-                :src="currentUser.providerData[0].photoURL"
-                alt="USER"
-                height="36"
-                class="mr-1"
-              >
-              <font-awesome-icon icon="sign-out-alt" class="ml-1"/>
-            </b-nav-item>
+
+            <b-nav-item-dropdown right>
+              <!-- Using button-content slot -->
+              <template slot="button-content">
+                <img
+                  v-if="currentUser.providerData && currentUser.providerData[0] && currentUser.providerData[0].photoURL"
+                  :src="currentUser.providerData[0].photoURL"
+                  alt="USER"
+                  height="36"
+                  class="mr-1 rounded-circle"
+                >
+              </template>
+              <b-dropdown-item to="/config">
+                <font-awesome-icon icon="cog" class="mr-2"/>Configuration
+              </b-dropdown-item>
+              <b-dropdown-item @click="logout">
+                <font-awesome-icon icon="sign-out-alt" class="ml-1"/>
+                {{$t("App.navbarLogout")}}
+              </b-dropdown-item>
+            </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
       </div>
