@@ -107,8 +107,8 @@ export default {
       for (let a = 0; a < roots.length; a++) {
         const element = roots[a];
         element.sonsAccordiNote = [];
-        for (let b = 0; b < element.readAbleNotes.length; b++) {
-          element.sonsAccordiNote.push(element.readAbleNotes[b] + element.sonsAccordi[b]);
+        for (let b = 0; b < element.notes.length; b++) {
+          element.sonsAccordiNote.push(element.notes[b] + element.sonsAccordi[b]);
         }
       }
       console.log('Modal interchange: ', roots);

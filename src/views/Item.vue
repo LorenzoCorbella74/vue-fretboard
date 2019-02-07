@@ -261,7 +261,288 @@ export default {
         { text: this.$t('Item.radio_label_degree'), value: 'grado' }
       ],
       optionsScales: [
-        { text: '- Maggiore e Pentatoniche', value: '', disabled: true },
+        {
+          text: 'aeolian',
+          value: 'aeolian'
+        },
+        {
+          text: 'altered',
+          value: 'altered'
+        },
+        {
+          text: 'augmented',
+          value: 'augmented'
+        },
+        {
+          text: 'augmented heptatonic',
+          value: 'augmented heptatonic'
+        },
+        {
+          text: 'bebop',
+          value: 'bebop'
+        },
+        {
+          text: 'bebop dominant',
+          value: 'bebop dominant'
+        },
+        {
+          text: 'bebop locrian',
+          value: 'bebop locrian'
+        },
+        {
+          text: 'bebop major',
+          value: 'bebop major'
+        },
+        {
+          text: 'bebop minor',
+          value: 'bebop minor'
+        },
+        {
+          text: 'chromatic',
+          value: 'chromatic'
+        },
+        {
+          text: 'composite blues',
+          value: 'composite blues'
+        },
+        {
+          text: 'diminished',
+          value: 'diminished'
+        },
+        {
+          text: 'dorian',
+          value: 'dorian'
+        },
+        {
+          text: 'dorian #4',
+          value: 'dorian #4'
+        },
+        {
+          text: 'double harmonic lydian',
+          value: 'double harmonic lydian'
+        },
+        {
+          text: 'double harmonic major',
+          value: 'double harmonic major'
+        },
+        {
+          text: 'egyptian',
+          value: 'egyptian'
+        },
+        {
+          text: 'enigmatic',
+          value: 'enigmatic'
+        },
+        {
+          text: 'flamenco',
+          value: 'flamenco'
+        },
+        {
+          text: 'flat six pentatonic',
+          value: 'flat six pentatonic'
+        },
+        {
+          text: 'flat three pentatonic',
+          value: 'flat three pentatonic'
+        },
+        {
+          text: 'half-whole diminished',
+          value: 'half-whole diminished'
+        },
+        {
+          text: 'harmonic major',
+          value: 'harmonic major'
+        },
+        {
+          text: 'harmonic minor',
+          value: 'harmonic minor'
+        },
+        {
+          text: 'ionian augmented',
+          value: 'ionian augmented'
+        },
+        {
+          text: 'ionian pentatonic',
+          value: 'ionian pentatonic'
+        },
+        {
+          text: 'leading whole tone',
+          value: 'leading whole tone'
+        },
+        {
+          text: 'locrian',
+          value: 'locrian'
+        },
+        {
+          text: 'locrian #2',
+          value: 'locrian #2'
+        },
+        {
+          text: 'locrian major',
+          value: 'locrian major'
+        },
+        {
+          text: 'locrian pentatonic',
+          value: 'locrian pentatonic'
+        },
+        {
+          text: 'lydian',
+          value: 'lydian'
+        },
+        {
+          text: 'lydian #5P pentatonic',
+          value: 'lydian #5P pentatonic'
+        },
+        {
+          text: 'lydian #9',
+          value: 'lydian #9'
+        },
+        {
+          text: 'lydian augmented',
+          value: 'lydian augmented'
+        },
+        {
+          text: 'lydian diminished',
+          value: 'lydian diminished'
+        },
+        {
+          text: 'lydian dominant',
+          value: 'lydian dominant'
+        },
+        {
+          text: 'lydian dominant pentatonic',
+          value: 'lydian dominant pentatonic'
+        },
+        {
+          text: 'lydian minor',
+          value: 'lydian minor'
+        },
+        {
+          text: 'lydian pentatonic',
+          value: 'lydian pentatonic'
+        },
+        {
+          text: 'major',
+          value: 'major'
+        },
+        {
+          text: 'major blues',
+          value: 'major blues'
+        },
+        {
+          text: 'major flat two pentatonic',
+          value: 'major flat two pentatonic'
+        },
+        {
+          text: 'major pentatonic',
+          value: 'major pentatonic'
+        },
+        {
+          text: 'melodic minor',
+          value: 'melodic minor'
+        },
+        {
+          text: 'melodic minor fifth mode',
+          value: 'melodic minor fifth mode'
+        },
+        {
+          text: 'melodic minor second mode',
+          value: 'melodic minor second mode'
+        },
+        {
+          text: 'minor #7M pentatonic',
+          value: 'minor #7M pentatonic'
+        },
+        {
+          text: 'minor bebop',
+          value: 'minor bebop'
+        },
+        {
+          text: 'minor blues',
+          value: 'minor blues'
+        },
+        {
+          text: 'minor hexatonic',
+          value: 'minor hexatonic'
+        },
+        {
+          text: 'minor pentatonic',
+          value: 'minor pentatonic'
+        },
+        {
+          text: 'minor six diminished',
+          value: 'minor six diminished'
+        },
+        {
+          text: 'minor six pentatonic',
+          value: 'minor six pentatonic'
+        },
+        {
+          text: 'mixolydian',
+          value: 'mixolydian'
+        },
+        {
+          text: 'mixolydian pentatonic',
+          value: 'mixolydian pentatonic'
+        },
+        {
+          text: 'mystery #1',
+          value: 'mystery #1'
+        },
+        {
+          text: 'neopolitan',
+          value: 'neopolitan'
+        },
+        {
+          text: 'neopolitan major',
+          value: 'neopolitan major'
+        },
+        {
+          text: 'neopolitan major pentatonic',
+          value: 'neopolitan major pentatonic'
+        },
+        {
+          text: 'neopolitan minor',
+          value: 'neopolitan minor'
+        },
+        {
+          text: 'oriental',
+          value: 'oriental'
+        },
+        {
+          text: 'persian',
+          value: 'persian'
+        },
+        {
+          text: 'phrygian',
+          value: 'phrygian'
+        },
+        {
+          text: 'phrygian dominant',
+          value: 'phrygian dominant'
+        },
+        {
+          text: 'six tone symmetric',
+          value: 'six tone symmetric'
+        },
+        {
+          text: 'spanish heptatonic',
+          value: 'spanish heptatonic'
+        },
+        {
+          text: 'super locrian pentatonic',
+          value: 'super locrian pentatonic'
+        },
+        {
+          text: 'whole tone',
+          value: 'whole tone'
+        },
+        {
+          text: 'whole tone pentatonic',
+          value: 'whole tone pentatonic'
+        }
+      ],
+      /* { text: '- Maggiore e Pentatoniche', value: '', disabled: true },
         { text: 'Lydian', value: 'lydian' },
         { text: 'Lydian Penta', value: 'lydian-pentatonic' },
         { text: 'Major (Ionian)', value: 'ionian' },
@@ -302,8 +583,8 @@ export default {
         { text: 'Whole Tone', value: 'whole-tone' },
         // Diminuita
         { text: 'Diminished st', value: 'diminished-st' },
-        { text: 'Diminished ts', value: 'diminished-ts' }
-      ],
+        { text: 'Diminished ts', value: 'diminished-ts' } */
+
       optionsArp: [
         { text: 'Maj', value: 'maj' },
         { text: '7', value: '7' },
@@ -508,34 +789,31 @@ export default {
             // si mergia
           } else if (this.mergeMode) {
             let secondroot = this.form.selectedNote;
-            let secondtype = name;
-            let secondintervalli = SCALES[secondtype];
-            // console.log('Secondo: ', secondroot, secondintervalli);
-            let mergeSecondItem = createScale(secondroot, secondintervalli);
-            const noteMergiate = mergeScale(this.mergeFirstItem.notes.split(' '), mergeSecondItem.notes);
+            let secondNotes = Scale.notes(secondroot, name);
+            const noteMergiate = mergeScale(this.mergeFirstItem.notes, secondNotes);
             /* console.log(
               JSON.stringify(noteMergiate),
               JSON.stringify(this.mergeFirstItem.gradi.split(' ')),
               JSON.stringify(mergeSecondItem.gradi)
             ); */
-            const gradiMergiati = mergeDegree(
-              noteMergiate,
-              this.mergeFirstItem.gradi.split(' '),
-              mergeSecondItem.gradi
-            );
-            console.log('Mergiato: ', noteMergiate, gradiMergiati);
+            // const gradiMergiati = mergeDegree(
+            //   noteMergiate,
+            //   this.mergeFirstItem.gradi.split(' '),
+            //   mergeSecondItem.gradi
+            // );
+            console.log('Mergiato: ', this.mergeFirstItem.notes, secondNotes, noteMergiate);
             this.selectedItem.data.push({
               id: this.selectedItem.data.length,
               key: Math.random() * 1000000,
               type: this.form.scaleUsArp,
               typeOutput: this.form.noteUsDegree,
               tuning: this.form.selectedTuning,
-              info: this.form.info,
               root: this.form.selectedNote,
-              name: `${secondroot} ${secondtype} mergiato con ${this.mergeFirstItem.root} ${this.mergeFirstItem.name}`,
+              secondName: name,
+              name: `${secondroot} ${name} mergiato con ${this.mergeFirstItem.root} ${this.mergeFirstItem.name}`,
               merge: true,
-              note: noteMergiate,
-              gradi: gradiMergiati
+              noteMergiate: noteMergiate,
+              intervals: noteMergiate //  gradiMergiati
             });
             let theIndex = this.selectedItem.data.length - 1;
             this.ref

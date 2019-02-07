@@ -1,6 +1,5 @@
 <template>
   <div class="row" :id="'mia'+tastiera.id">
-    <!-- my-5 -->
     <div class="col-md-5">
       <h6>
         {{tastiera.name}}
@@ -15,29 +14,25 @@
             <font-awesome-icon icon="play"/>
           </button>
         </span>
-        <span class="d-inline">
+        <span class="d-inline" v-if="!tastiera.merge">
           <button type="button" class="btn btn-link" @click="toggleDetail">
             <font-awesome-icon icon="info-circle"/>
           </button>
         </span>
       </h6>
-      <p>{{tastiera.info}}</p>
     </div>
     <div class="col-md-6">
       <table class="table table-sm" v-if="detailStep==1">
         <thead class="thead-light">
           <tr>
-            <th v-for="g in tastiera.gradiSplitted" class="text-center">{{g}}</th>
+            <th v-for="t in tastiera.intervals" class="text-center">{{t}}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td v-for="t in tastiera.intervals" class="text-center">{{t}}</td>
-          </tr>
-          <tr>
             <td
               class="text-center"
-              v-for="(n,i) in tastiera.readAbleNotes"
+              v-for="(n,i) in tastiera.notes"
               :class="{'table-danger':comparison[i]}"
             >{{n}}</td>
           </tr>
@@ -124,34 +119,26 @@ export default {
         fretWidth: width < 600 ? 34 : 46,
         frets: width > 1000 ? 15 : 12
       });
-      nuovaTastiera.info = this.input.info;
-      nuovaTastiera.keyName = this.input.root + ' ' + this.input.name;
-      nuovaTastiera.degrees = Key.degrees(nuovaTastiera.keyName);
-      nuovaTastiera.accordi = Key.chords(nuovaTastiera.keyName);
-      nuovaTastiera.intervals = Scale.intervals(this.input.name);
-      nuovaTastiera.domSecondarie = Key.secDomChords(nuovaTastiera.keyName);
-      nuovaTastiera.tonic = Key.props(nuovaTastiera.keyName).tonic;
-      nuovaTastiera.relatives = Key.modeNames().map(name => Key.relative(name, nuovaTastiera.keyName));
-      nuovaTastiera.paralells = Key.modeNames().map(name => nuovaTastiera.tonic + ' ' + name);
-      nuovaTastiera.chordsForThisScale = Scale.chords(this.input.name);
-      nuovaTastiera.chordsForThisScaleIntervals = nuovaTastiera.chordsForThisScale.map(e => Chord.intervals(e));
 
       // istanzia il contenitore SVG per la tastiera
       nuovaTastiera.makeContainer(this.$el);
       // si genera la diteggiatura
       if (!this.input.merge) {
-        nuovaTastiera.scale(this.input.root + ' ' + this.input.name, this.input.type, this.input.typeOutput);
+        nuovaTastiera.scale(this.input.root, this.input.name, this.input.type, this.input.typeOutput);
       } else {
+        console.log(this.input);
         nuovaTastiera.mergedScale(
-          this.input.note,
-          this.input.gradi,
+          this.input.root,
+          this.input.secondName,
+          this.input.noteMergiate,
+          this.input.intervals,
           this.input.type,
           this.input.typeOutput,
           this.input.name
         );
       }
-      nuovaTastiera.notesSplitted = nuovaTastiera.notes.split(' ');
-      nuovaTastiera.gradiSplitted = nuovaTastiera.gradi.split(' ');
+      // nuovaTastiera.notes = nuovaTastiera.notes.split(' ');
+      // nuovaTastiera.gradiSplitted = nuovaTastiera.gradi.split(' ');
       this.tastiera = Object.assign({}, nuovaTastiera);
       // si trasmette al padre i dati della scala
       let objCopy = JSON.parse(JSON.stringify(nuovaTastiera));
@@ -168,7 +155,7 @@ export default {
     acoustic_guitar_steel
     */
     playScale() {
-      let original = this.tastiera.notes.split(' ');
+      let original = this.tastiera.notes;
       let scaleToBePlayed = createScaleToBePlayed(original);
       console.log('Suonata: ', original, scaleToBePlayed);
       let time = ac.currentTime + 0.25;
@@ -186,7 +173,7 @@ export default {
     comparison() {
       let output = [];
       if (this.input.id > 0 && this.tastiera && this.notesOfFirst.length > 0) {
-        this.tastiera.notesSplitted.forEach((e, i) => {
+        this.tastiera.notes.forEach((e, i) => {
           let indice = this.notesOfFirst.findIndex(k => k == e);
           if (indice !== -1) {
             output.push(false);
@@ -216,7 +203,7 @@ export default {
         let index = newValue.findIndex(e => e.id == this.input.id);
         if (newValue && newValue.length > 0) {
           // update compare array
-          this.notesOfFirst = newValue[0].notes.split(' ');
+          this.notesOfFirst = newValue[0].notes;
           // console.log('notesOfFirst: ', this.notesOfFirst, index);
         }
       }

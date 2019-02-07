@@ -1,12 +1,40 @@
 import * as d3 from 'd3';
+import {
+    Note,
+    Interval,
+    Distance,
+    Scale,
+    Chord
+} from "tonal";
+import * as Key from "tonal-key";
 
-const colors_dim = ['yellow', '#87CEFA', '#F4D03F', '#8FBC8F', 'Tomato', '#a78999', 'lightgray', '#C70039']; // 8 note
+/* const colors_dim = ['yellow', '#87CEFA', '#F4D03F', '#8FBC8F', 'Tomato', '#a78999', 'lightgray', '#C70039']; // 8 note
 const colors = ['yellow', '#87CEFA', '#F4D03F', '#8FBC8F', 'Tomato', '#a78999', 'lightgray']; // 7 note
 const colors_penta = ['yellow', '#87CEFA', '#F4D03F', 'Tomato', 'lightgray']; // 5 note
 const colors_penta_six = ['yellow', '#87CEFA', '#F4D03F', 'SlateBlue', 'Tomato', 'lightgray']; // 6 note
 const colors_triads_seven = ['yellow', '#F4D03F', 'Tomato', 'lightgray']; // 4 note
 const colors_triads = ['yellow', '#F4D03F', 'Tomato']; // 3 note
-const colors_merge = ['#F4D03F', 'lightgray', 'gray']; // 3 note
+const colors_merge = ['#F4D03F', 'lightgray', 'gray']; // 3 note */
+
+const colors_merge = ['#F4D03F', 'lightgray', 'gray'];
+const COLOURS = {
+    "1P": 'yellow',
+    "2m": '#87CEFA',
+    "2M": '#87CEFA',
+    "2A": '#87CEFA',
+    "3m": '#F4D03F',
+    "3M": '#F4D03F',
+    "4P": '#8FBC8F',
+    "4A": 'blue',
+    "5d": 'Tomato',
+    "5P": 'Tomato',
+    "5A": 'Tomato',
+    "6m": '#a78999',
+    "6M": '#a78999',
+    "7d": 'lightgray',
+    "7m": 'lightgray',
+    "7M": 'gray'
+};
 
 // ACCORDATURE
 export const Tunings = {
@@ -16,7 +44,7 @@ export const Tunings = {
     G_open: ['d2', 'g2', 'd3', 'g3', 'b4', 'd4']
 };
 
-const intervalMap8 = {
+/* const intervalMap8 = {
     '2': {
         '1': 'b9',
         '2': '9',
@@ -165,10 +193,10 @@ const intervalMap4 = {
         '10': 'b7',
         '11': '7',
     }
-};
+}; */
 const NOTES = 'a a# b c c# d d# e f f# g g#'.split(' '); // è l'array di note
 const NOTESENH = 'a bb b c db d eb e f gb g ab'.split(' '); // è l'array di note
-export const SCALES = {
+/* export const SCALES = {
     'maj': ["2t", "ts", "2ts"],
     'maj7': ["2t", "ts", "2t", 's'],
     '7': ["2t", "ts", "ts", 't'],
@@ -220,7 +248,7 @@ export const SCALES = {
 
     'diminished-st': ["s", "t", "s", "t", "s", "t", "s", "t"],
     'diminished-ts': ["t", "s", "t", "s", "t", "s", "t", "s"],
-};
+}; */
 
 // helper per ritornare il valore
 const verbatim = (d => d);
@@ -245,7 +273,7 @@ function absNote(note) {
     }
 }
 
-function sumInterval(intervalArray) {
+/* function sumInterval(intervalArray) {
     let trasformati = transformInt(intervalArray);
     return trasformati.reduce((a, b) => a + b);
 }
@@ -280,12 +308,14 @@ function calculateDegrees(intervalArray) {
         let subarray = intervalArray.slice(0, i + 1);
         let oo = sumInterval(subarray);
         if (oo < 12) {
-            //out[`${i + 2}`] = /*  `${oo}`;  */ mapToBeUsed[`${i + 2}`][`${oo}`]; oggetto
-            out.push(mapToBeUsed[`${i + 2}`][`${oo}`]); // array
-        }
-    }
-    return out;
+            //out[`${i + 2}`] = /*  `${oo}`;  
+mapToBeUsed[`${i + 2}`][`${oo}`];
+oggetto
+out.push(mapToBeUsed[`${i + 2}`][`${oo}`]); // array
 }
+}
+return out;
+}*/
 
 // ritorna un array di note che parte da startNote
 export function transposeSpecificScaleByStartingNote(startNote, scale) {
@@ -899,6 +929,7 @@ export const Fretboard = function (config) {
     // Notes on fretboard
     // 'a2' 1 red
     instance.addNoteOnString = function (note, string, color, tipovisualizzazione, grado) {
+        // console.log(note, string, color, tipovisualizzazione, grado);
         const absPitch = absNote(note); // ES: 33
         color = color || 'black';
         const absString = (instance.strings - string);
@@ -906,7 +937,7 @@ export const Fretboard = function (config) {
         let content = tipovisualizzazione == 'nota' ? note.substring(0, note.length - 1).toUpperCase() : grado;
         if ((absPitch >= basePitch) && (absPitch <= basePitch + instance.frets)) {
 
-            if (grado == 'T') {
+            if (grado == '1P') {
                 instance.svgContainer
                     .append('rect')
                     .attr('class', 'note')
@@ -919,7 +950,7 @@ export const Fretboard = function (config) {
                     //.attr("transform", (d,i) => `rotate(${90})`)
                     .style("fill", color)
                     .on('click', () => instance.playNote(note));
-            } else if (grado == 'b3' || grado == '3' || grado == 'b5' || grado == '5' || grado == 'b7' || grado == '7') {
+            } else if (grado == '3M' || grado == '3m' || grado == '5P' || grado == '5A' || grado == '5d' || grado == '7m' || grado == '7M' || grado == '7d') {
                 instance.svgContainer
                     .append('rect')
                     .attr("rx", 8)
@@ -973,47 +1004,43 @@ export const Fretboard = function (config) {
     };
 
     // recuperare i colori giusti in base al tipo di scala (7,5 note) o accordo (3,4,5,6 note)
-    instance.getRightColor = function (i, type, numNotes) {
-        if (type == 'scala') {
-            let out;
-            switch (numNotes) {
-                case 5:
-                    out = colors_penta[i];
-                    break;
-                case 6:
-                    out = colors_penta_six[i];
-                    break;
-                case 7:
-                    out = colors[i];
-                    break;
-                case 8:
-                    out = colors_dim[i];
-                    break;
-                default:
-                    break;
+    /*     instance.getRightColor = function (i, type, numNotes) {
+            if (type == 'scala') {
+                let out;
+                switch (numNotes) {
+                    case 5:
+                        out = colors_penta[i];
+                        break;
+                    case 6:
+                        out = colors_penta_six[i];
+                        break;
+                    case 7:
+                        out = colors[i];
+                        break;
+                    case 8:
+                        out = colors_dim[i];
+                        break;
+                    default:
+                        break;
+                }
+                return out;
+            } else if (type == 'arpeggio') {
+                return numNotes > 3 ? colors_triads_seven[i] : colors_triads[i];
             }
-            return out;
-        } else if (type == 'arpeggio') {
-            return numNotes > 3 ? colors_triads_seven[i] : colors_triads[i];
-        }
-    }
+        } */
 
     instance.addNotes = function (notes, tipo, tipovisualizzazione, colorForMerge) {
-        // console.log(notes, tipo, tipovisualizzazione);
-        const NOTES = notes.split(' ');
+        // console.log('Notes:', notes, tipo, tipovisualizzazione, colorForMerge);
         let showColor;
-        let allDegrees;
-        if (tipovisualizzazione == 'grado') {
-            allDegrees = instance.gradi.split(' ');
-        }
-        for (let i = 0; i < NOTES.length; i++) {
+        // TODO: si prende il colore in base all'intervallo...
+        for (let i = 0; i < notes.length; i++) {
             if (!colorForMerge) {
-                showColor = instance.getRightColor(i, tipo, NOTES.length);
+                showColor = COLOURS[instance.intervals[i]]; //instance.getRightColor(i, tipo, notes.length);
             } else {
                 showColor = colors_merge[instance.colors[i]];
             }
-            const note = NOTES[i];
-            const degree = allDegrees ? allDegrees[i] : null;
+            const note = notes[i];
+            const degree = instance.intervals ? instance.intervals[i] : null;
             for (let octave = 2; octave < 7; octave++) {
                 instance.addNote(note + octave, showColor, tipovisualizzazione, degree);
             }
@@ -1028,24 +1055,31 @@ export const Fretboard = function (config) {
     Per disegnare SCALE è chiamata all'interno dell'HTML !!!! 
     scaleNAme = "c lydian"
     */
-    instance.mergedScale = function (note, gradi, tipo, tipovisualizzazione, name) {
+    instance.mergedScale = function (root, scaleName, note, gradi, tipo, tipovisualizzazione, name) {
+        console.log(root, scaleName, note, gradi, tipo, tipovisualizzazione, name);
         instance.merged = true;
-        instance.name = name;
-        instance.notes = note.map(e => e.value).join(' ');
-        instance.readAbleNotes = getReadableScaleNames(note.map(e => e.value));
+        instance.name = scaleName;
+        instance.notes = note.map(e => e.value);
+        instance.intervals = gradi.map(e => e.value);
         instance.colors = note.map(e => e.style);
-        instance.gradi = typeof gradi === 'string' ? gradi : gradi.join(' ');
+        instance.gradi = gradi.map(e => e.value);
         instance.clear(); // cancella tutto e ridisegna la tastiera
         instance.addNotes(instance.notes, tipo, tipovisualizzazione, instance.colors); // ridisegna le note "c d e f# g a b", "scala", "grado"
     };
-    instance.scale = function (scaleName, tipo, tipovisualizzazione) {
-        let [root, type] = scaleName.split(' ');
-        let intervalli = SCALES[type];
-        let data = createScale(root, intervalli);
-        instance.name = formatText(scaleName) + ' over ' + root.toUpperCase() + data.accordo;
-        instance.notes = data.notes.join(' ');
-        instance.readAbleNotes = data.readAbleNotes;
-        instance.gradi = data.gradi.join(' ');
+    instance.scale = function (root, scaleName, tipo, tipovisualizzazione) {
+        let complete = root + ' ' + scaleName;
+        instance.name = complete;
+        instance.notes = Scale.notes(complete);
+        instance.gradi = Key.degrees(complete);
+        instance.degrees = Key.degrees(complete);
+        instance.accordi = Key.chords(complete);
+        instance.intervals = Scale.intervals(scaleName);
+        instance.domSecondarie = Key.secDomChords(complete);
+        instance.tonic = Key.props(complete).tonic;
+        instance.relatives = Key.modeNames().map(name => Key.relative(name, complete));
+        instance.paralells = Key.modeNames().map(name => instance.tonic + ' ' + name);
+        instance.chordsForThisScale = Scale.chords(scaleName);
+        instance.chordsForThisScaleIntervals = instance.chordsForThisScale.map(e => Chord.intervals(e));
         instance.clear(); // cancella tutto e ridisegna la tastiera
         instance.addNotes(instance.notes, tipo, tipovisualizzazione); // ridisegna le note "c d e f# g a b", "scala", "grado"
     };
@@ -1090,7 +1124,6 @@ export const Fretboard = function (config) {
     };
 
     instance.draw = function () {
-        // instance.drawScaleName();
         instance.drawFrets(); //  TASTI
         instance.drawStrings(); // STRINGHE
         instance.drawDots(); // cerchi per 3 5 7 9 12 15 17 19 21 24 e note !
