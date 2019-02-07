@@ -136,7 +136,20 @@
           </b-form-group>
           <div class="d-flex flex-row justify-content-between">
             <div class="p-2">
-              <p class="text-muted">Build your progression:</p>
+              <!-- v-if="selectedItem && selectedItem.data && selectedItem.data.length>1" -->
+              <b-form-select
+                style="width:80px"
+                name="selectIntervalsTranspose"
+                v-model="intervalTranspose"
+                :options="optionsIntervals"
+                class="mb-3 mr-2"
+              />
+            </div>
+            <div class="p-2">
+              <!-- v-if="selectedItem && selectedItem.data && selectedItem.data.length>1" -->
+              <b-button size="m" variant="outline-warning" @click="transpose" class="px-5">
+                <font-awesome-icon icon="arrows-alt-h"/>
+              </b-button>
             </div>
             <div class="p-2">
               <b-button size="m" variant="outline-warning" @click="add" class="px-5">
@@ -257,6 +270,13 @@ export default {
       submitted: false,
       selectedItem: null,
       list: [],
+      intervalTranspose: null,
+      optionsIntervals: Scale.intervals('chromatic').map(e => {
+        let a = {};
+        a.text = e;
+        a.value = e;
+        return a;
+      }),
       form: {
         title: '',
         description: '',
@@ -316,6 +336,17 @@ export default {
   },
   mounted() {},
   methods: {
+    transpose() {
+      console.log(this.list);
+      if (this.intervalTranspose) {
+        this.list.forEach(element => {
+          element = Object.assign(element, {
+            root: Distance.transpose(element.root, this.intervalTranspose),
+            key: Math.random() * 1000000
+          });
+        });
+      }
+    },
     handleCancel() {
       this.editMode = false;
       this.resetForm();
