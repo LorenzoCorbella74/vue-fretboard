@@ -77,7 +77,7 @@ export default {
     return {
       roots: [],
       selectedNote: 'c',
-      degrees: ['1', '2', '3', '4', '5', '6', '7'],
+      degrees: ['1°', '2°', '3°', '4°', '5°', '6°', '7°'],
       optionsNotes: [
         { text: 'C', value: 'c' },
         { text: 'C#/Db', value: 'c#' },
