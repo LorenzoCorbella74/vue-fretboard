@@ -1060,9 +1060,9 @@ export const Fretboard = function (config) {
         instance.merged = true;
         instance.name = scaleName;
         instance.notes = note.map(e => e.value);
-        instance.intervals = gradi.map(e => e.value);
+        instance.intervals = gradi;
         instance.colors = note.map(e => e.style);
-        instance.gradi = gradi.map(e => e.value);
+        instance.gradi = gradi;
         instance.clear(); // cancella tutto e ridisegna la tastiera
         instance.addNotes(instance.notes, tipo, tipovisualizzazione, instance.colors); // ridisegna le note "c d e f# g a b", "scala", "grado"
     };
