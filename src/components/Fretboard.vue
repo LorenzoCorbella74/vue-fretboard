@@ -14,7 +14,7 @@
             <font-awesome-icon icon="play"/>
           </button>
         </span>
-        <span class="d-inline" v-if="!input.merge||input.tipo != 'arpeggio'">
+        <span class="d-inline" v-if="input.type!='arpeggio'||!input.merge">
           <button type="button" class="btn btn-link" @click="toggleDetail">
             <font-awesome-icon icon="info-circle"/>
           </button>
@@ -96,6 +96,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.input);
     window.addEventListener('resize', this.onResize);
     this.onResize();
     this.inizialize(this.width);
@@ -106,10 +107,12 @@ export default {
   },
   methods: {
     toggleDetail() {
-      if (this.detailStep == 3) {
-        this.detailStep = 1;
-      } else {
-        this.detailStep++;
+      if (this.input.type != 'arpeggio') {
+        if (this.detailStep == 3) {
+          this.detailStep = 1;
+        } else {
+          this.detailStep++;
+        }
       }
     },
     inizialize(width) {

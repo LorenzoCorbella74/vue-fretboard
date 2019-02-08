@@ -35,8 +35,8 @@
         </div>
         <div class="p-2">
           <!-- v-if="selectedItem && selectedItem.data && selectedItem.data.length>1" -->
-          <b-button size="m" variant="outline-warning" @click="transpose" class="px-5">
-            <font-awesome-icon icon="arrows-alt-h"/>
+          <b-button size="m" variant="outline-warning" @click="transpose" class="px-5">Transpose
+            <font-awesome-icon icon="arrows-alt-h" class="ml-1"/>
           </b-button>
         </div>
         <div class="p-2">
@@ -465,7 +465,15 @@ export default {
             // si mergia
           } else if (this.mergeMode) {
             let secondroot = this.form.selectedNote;
-            let secondNotes = Scale.notes(secondroot, name);
+            let input = name.split(' ');
+            if (this.form.scaleUsArp == 'arpeggio') {
+              var secondNotes;
+              input.splice(0, 1);
+              secondNotes = input.map(e => Distance.transpose(this.form.selectedNote, e));
+              console.log('secondNotes: ', secondNotes);
+            } else {
+              secondNotes = Scale.notes(secondroot, name);
+            }
             const noteMergiate = mergeScale(this.mergeFirstItem.notes, secondNotes);
             const intervalliMergiati = noteMergiate.map(e => e.value).map((e, i, a) => Distance.interval(a[0], e));
             // TODO: si deve mettere la root e la scala della prima per poi poter fare il transpose...
@@ -477,7 +485,9 @@ export default {
               tuning: this.form.selectedTuning,
               root: this.form.selectedNote,
               secondName: name,
-              name: `${secondroot} ${name} mergiato con ${this.mergeFirstItem.root} ${this.mergeFirstItem.name}`,
+              name: `${secondroot} ${name.split(' ')[0]} merged with ${this.mergeFirstItem.root} ${
+                this.mergeFirstItem.name
+              }`,
               merge: true,
               noteMergiate: noteMergiate,
               intervals: intervalliMergiati

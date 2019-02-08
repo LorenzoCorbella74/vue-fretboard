@@ -6,24 +6,24 @@ import {
 } from "tonal";
 import * as Key from "tonal-key";
 
-const COLOURS_MERGE = ['#F4D03F', 'lightgray', 'gray'];
+const COLOURS_MERGE = ['#F4D03F', '#bdbdbd', '#9e9e9e'];
 const COLOURS = {
-    "1P": 'yellow',
-    "2m": '#87CEFA',
+    "1P": '#ffee58',
+    "2m": '#b3e5fc',
     "2M": '#87CEFA',
     "2A": '#87CEFA',
-    "3m": '#F4D03F',
-    "3M": '#F4D03F',
-    "4P": '#8FBC8F',
-    "4A": 'blue',
-    "5d": 'Tomato',
+    "3m": '#ffcc80',
+    "3M": '#ffa726',
+    "4P": '#a5d6a7',
+    "4A": '#66bb6a',
+    "5d": '#e57373',
     "5P": 'Tomato',
-    "5A": 'Tomato',
-    "6m": '#a78999',
-    "6M": '#a78999',
-    "7d": 'lightgray',
-    "7m": 'lightgray',
-    "7M": 'gray'
+    "5A": '#f44336',
+    "6m": '#f8bbd0',
+    "6M": '#f48fb1',
+    "7d": '#e0e0e0',
+    "7m": '#bdbdbd',
+    "7M": '#9e9e9e'
 };
 
 // ACCORDATURE
@@ -724,7 +724,11 @@ export class Fretboard {
     mergedScale(root, scaleName, note, gradi, tipo, tipovisualizzazione, name) {
         console.log(root, scaleName, note, gradi, tipo, tipovisualizzazione, name);
         this.merged = true;
-        this.name = scaleName;
+        // if(tipo=='arpeggio'){
+        //     this.name = scaleName;
+        // }else{
+        this.name = name;
+        // }
         this.notes = note.map(e => e.value);
         this.intervals = gradi;
         this.colors = note.map(e => e.style);
@@ -733,7 +737,7 @@ export class Fretboard {
         this.addNotes(this.notes, tipo, tipovisualizzazione, this.colors); // ridisegna le note "c d e f# g a b", "scala", "grado"
     };
     scale(root, scaleName, tipo, tipovisualizzazione) {
-        console.log('Calculate notes: ', root, scaleName, tipo, tipovisualizzazione)
+        // console.log('Calculate notes: ', root, scaleName, tipo, tipovisualizzazione)
         if (tipo != 'arpeggio') {
             let complete = root + ' ' + scaleName;
             this.name = complete; // a major
@@ -751,7 +755,7 @@ export class Fretboard {
             // console.log(JSON.stringify(this))
         } else {
             let input = scaleName.split(' ');
-            let complete = root + ' ' + input[0];
+            let complete = root.toUpperCase() + ' ' + input[0];
             input.splice(0, 1);
             let notes = input.map(e => Distance.transpose(root, e));
             this.name = complete; // a major
@@ -766,7 +770,7 @@ export class Fretboard {
             this.paralells = [];
             this.chordsForThisScale = [];
             this.chordsForThisScaleIntervals = [];
-            console.log(JSON.stringify(this))
+            // console.log(JSON.stringify(this))
         }
         this.clear(); // cancella tutto e ridisegna la tastiera
         this.addNotes(this.notes, tipo, tipovisualizzazione); // ridisegna le note "c d e f# g a b", "scala", "grado"
