@@ -324,6 +324,8 @@ export const SCALES = [{
 const NOTES = 'a a# b c c# d d# e f f# g g#'.split(' '); // è l'array di note
 const NOTESENH = 'a bb b c db d eb e f gb g ab'.split(' '); // è l'array di note
 
+
+
 // helper per ritornare il valore
 const verbatim = (d => d);
 
@@ -739,7 +741,7 @@ export class Fretboard {
     scale(root, scaleName, tipo, tipovisualizzazione) {
         // console.log('Calculate notes: ', root, scaleName, tipo, tipovisualizzazione)
         if (tipo != 'arpeggio') {
-            let complete = root + ' ' + scaleName;
+            let complete = root.toUpperCase() + ' ' + scaleName;
             this.name = complete; // a major
             this.notes = Scale.notes(complete); //     "A","B","C#","D","E","F#","G#"
             this.gradi = Key.degrees(complete); //     "I","ii","iii","IV","V","vi","vii"

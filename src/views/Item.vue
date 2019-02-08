@@ -215,7 +215,7 @@
 <script>
 import { lista } from './List.vue';
 import Fretboard from '../components/Fretboard.vue';
-import { mergeScale, /* mergeDegree, createScale, */ SCALES } from '../assets/js/music-engine.js';
+import { mergeScale, /* mergeDegree, createScale, */ SCALES, UINOTES } from '../assets/js/music-engine.js';
 import firebase from '../assets/js/Firebase';
 import draggable from 'vuedraggable';
 import { Note, Interval, Distance, Scale, Chord } from 'tonal';
@@ -271,20 +271,7 @@ export default {
         { text: 'dim7', value: 'dim7 1P 3m 5d 7d' },
         { text: 'aug', value: 'aug 1P 3M 5A' }
       ],
-      optionsNotes: [
-        { text: 'C', value: 'c' },
-        { text: 'C#/Db', value: 'c#' },
-        { text: 'D', value: 'd' },
-        { text: 'D#/Eb', value: 'd#' },
-        { text: 'E', value: 'e' },
-        { text: 'F', value: 'f' },
-        { text: 'F#/Gb', value: 'f#' },
-        { text: 'G', value: 'g' },
-        { text: 'G#/Ab', value: 'g#' },
-        { text: 'A', value: 'a' },
-        { text: 'A#/Bb', value: 'a#' },
-        { text: 'B', value: 'b' }
-      ],
+      optionsNotes: Note.names(),
       optionsTuning: [
         { text: 'E 4Ths', value: 'E_4Ths' },
         { text: 'E standard', value: 'E_std' },
