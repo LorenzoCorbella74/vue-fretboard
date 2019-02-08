@@ -6,7 +6,7 @@ import {
 } from "tonal";
 import * as Key from "tonal-key";
 
-const COLOURS_MERGE = ['#F4D03F', '#bdbdbd', '#9e9e9e'];
+const COLOURS_MERGE = ['#F4D03F', '#b3e5fc', '#bdbdbd'];
 const COLOURS = {
     "1P": '#ffee58',
     "2m": '#b3e5fc',

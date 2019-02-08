@@ -35,7 +35,7 @@
         </div>
         <div class="p-2">
           <!-- v-if="selectedItem && selectedItem.data && selectedItem.data.length>1" -->
-          <b-button size="m" variant="outline-warning" @click="transpose" class="px-5">Transpose
+          <b-button size="m" variant="outline-warning" @click="transpose" class="px-5">
             <font-awesome-icon icon="arrows-alt-h" class="ml-1"/>
           </b-button>
         </div>
