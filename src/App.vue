@@ -156,26 +156,30 @@ export default {
 <style lang="scss">
 .wrapper {
   /* background: url('https://unsplash.it/1500/1500/?image=721') center no-repeat; */
-  background: url('./assets/img/wood2-min.jpg') center no-repeat;
-  /* 
-  
-  Lista img sfondo: https://picsum.photos/images 
+  background: #2f4858; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #795548, #2f4858); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #795548,
+    #754e52,
+    #694b5b,
+    #574a61,
+    #414960,
+    #2f4858
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  /* Lista img sfondo: https://picsum.photos/images 
   1053
   1041
   994 <-
   769
-  765,721
-
-  */
+  765,721 */
   background-size: cover;
   min-height: 100vh;
   color: rgb(55, 55, 55);
 }
-
 .custom-padding {
   padding: 6px 12px 6px 12px !important;
 }
-
 .margine-da-navbar {
   margin-top: 16px;
 }
@@ -192,27 +196,22 @@ export default {
   z-index: 100; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
 }
-
 .fade-enter-active,
 .fade-leave-active {
   transition-duration: 0.3s;
   transition-property: opacity;
   transition-timing-function: ease;
 }
-
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
 }
-
 .progress {
   height: 12px !important;
 }
-
 .form-control {
   background-color: #f7f7f9 !important;
 }
-
 .ti-new-tag-input-wrapper {
   background-color: #f7f7f9;
 }
