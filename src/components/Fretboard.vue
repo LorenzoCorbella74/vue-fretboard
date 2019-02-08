@@ -14,7 +14,7 @@
             <font-awesome-icon icon="play"/>
           </button>
         </span>
-        <span class="d-inline" v-if="!tastiera.merge">
+        <span class="d-inline" v-if="!input.merge||input.tipo != 'arpeggio'">
           <button type="button" class="btn btn-link" @click="toggleDetail">
             <font-awesome-icon icon="info-circle"/>
           </button>

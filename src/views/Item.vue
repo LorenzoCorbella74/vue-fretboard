@@ -261,58 +261,15 @@ export default {
         { text: this.$t('Item.radio_label_degree'), value: 'grado' }
       ],
       optionsScales: SCALES,
-      /* { text: '- Maggiore e Pentatoniche', value: '', disabled: true },
-        { text: 'Lydian', value: 'lydian' },
-        { text: 'Lydian Penta', value: 'lydian-pentatonic' },
-        { text: 'Major (Ionian)', value: 'ionian' },
-        { text: 'Major Penta', value: 'major-pentatonic' },
-        { text: 'Major Blues', value: 'major-blues' },
-        { text: 'Mixolydian', value: 'mixolydian' },
-        { text: 'Mixolydian Penta', value: 'mixolydian-pentatonic' },
-        { text: 'Dorian', value: 'dorian' },
-        { text: 'Dorian Penta (Min 6Th)', value: 'dorian-pentatonic' },
-        { text: 'Minor 6Th Blues Penta', value: 'minor6Th-blues-pentatonic' },
-        { text: 'Minor (Aeolian)', value: 'aeolian' },
-        { text: 'Minor Penta', value: 'minor-pentatonic' },
-        { text: 'Minor Blues', value: 'minor-blues' },
-        { text: 'Phrygian', value: 'phrygian' },
-        { text: 'Phrygian Penta', value: 'phrygian-pentatonic' },
-        { text: 'Locrian', value: 'locrian' },
-        { text: 'Locrian Penta', value: 'locrian-pentatonic' },
-        // Minore melodica
-        { text: '- Minore melodica', value: '', disabled: true },
-        { text: 'Melodic Minor', value: 'melodic-minor' },
-        { text: 'Dorian b2', value: 'dorian-b2' },
-        { text: 'Lydian 5#', value: 'lydian-aug' },
-        { text: 'Lydian Dominante (4#)', value: 'lydian-dominant' },
-        { text: 'Mixolydian b6', value: 'mixolydian-b6' },
-        { text: 'Aeolian b5', value: 'aeolian-b5' },
-        { text: 'Super Locrian (ALTERED)', value: 'super-locrian' },
-        // Minore Armonica
-        { text: '- Minore Armonica', value: '', disabled: true },
-        { text: 'Harmonic Minor', value: 'harmonic-minor' },
-        { text: 'Locrian #6', value: 'locrian-#6' },
-        { text: 'Ionian #5', value: 'ionian-#5' },
-        { text: 'Dorian #4', value: 'dorian-#4' },
-        { text: 'Phrygian Dominant', value: 'phrygian-dominant' },
-        { text: 'Lydian #2', value: 'lydian-#2' },
-        { text: 'Super Locrian (Dim)', value: 'super-locrian-dim' },
-        // Toni interi
-        { text: '- Simmetriche', value: '', disabled: true },
-        { text: 'Whole Tone', value: 'whole-tone' },
-        // Diminuita
-        { text: 'Diminished st', value: 'diminished-st' },
-        { text: 'Diminished ts', value: 'diminished-ts' } */
-
       optionsArp: [
-        { text: 'Maj', value: 'maj' },
-        { text: '7', value: '7' },
-        { text: 'min', value: 'min' },
-        { text: 'min7', value: 'min7' },
-        { text: 'min7/b5', value: 'min7/b5' },
-        { text: 'dim', value: 'dim' },
-        { text: 'dim7', value: 'dim7' },
-        { text: 'aug', value: 'aug' }
+        { text: 'Maj', value: 'maj 1P 3M 5P' },
+        { text: '7', value: '7 1P 3M 5P 7m' },
+        { text: 'min', value: 'min 1P 3m 5P' },
+        { text: 'min7', value: 'min7 1P 3m 5P 7m' },
+        { text: 'min7/b5', value: 'min7/b5 1P 3m 5d 7m' },
+        { text: 'dim', value: 'dim 1P 3m 5d' },
+        { text: 'dim7', value: 'dim7 1P 3m 5d 7d' },
+        { text: 'aug', value: 'aug 1P 3M 5A' }
       ],
       optionsNotes: [
         { text: 'C', value: 'c' },
@@ -339,7 +296,7 @@ export default {
     };
   },
   mounted() {
-    //console.log(this.$router, this.$route);
+    // console.log(this.$router, this.$route);
     // console.log(this.items);
     let theIndex = this.items.findIndex(x => x.id == this.itemId);
     this.selectedItem = this.items[theIndex];

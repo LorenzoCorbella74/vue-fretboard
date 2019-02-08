@@ -1,7 +1,8 @@
 import * as d3 from 'd3';
 import {
     Scale,
-    Chord
+    Chord,
+    Distance
 } from "tonal";
 import * as Key from "tonal-key";
 
@@ -732,19 +733,41 @@ export class Fretboard {
         this.addNotes(this.notes, tipo, tipovisualizzazione, this.colors); // ridisegna le note "c d e f# g a b", "scala", "grado"
     };
     scale(root, scaleName, tipo, tipovisualizzazione) {
-        let complete = root + ' ' + scaleName;
-        this.name = complete;
-        this.notes = Scale.notes(complete);
-        this.gradi = Key.degrees(complete);
-        this.degrees = Key.degrees(complete);
-        this.accordi = Key.chords(complete);
-        this.intervals = Scale.intervals(scaleName);
-        this.domSecondarie = Key.secDomChords(complete);
-        this.tonic = Key.props(complete).tonic;
-        this.relatives = Key.modeNames().map(name => Key.relative(name, complete));
-        this.paralells = Key.modeNames().map(name => this.tonic + ' ' + name);
-        this.chordsForThisScale = Scale.chords(scaleName);
-        this.chordsForThisScaleIntervals = this.chordsForThisScale.map(e => Chord.intervals(e));
+        console.log('Calculate notes: ', root, scaleName, tipo, tipovisualizzazione)
+        if (tipo != 'arpeggio') {
+            let complete = root + ' ' + scaleName;
+            this.name = complete; // a major
+            this.notes = Scale.notes(complete); //     "A","B","C#","D","E","F#","G#"
+            this.gradi = Key.degrees(complete); //     "I","ii","iii","IV","V","vi","vii"
+            this.degrees = Key.degrees(complete);
+            this.accordi = Key.chords(complete); //      "AMaj7","Bm7","C#m7","DMaj7","E7","F#m7","G#m7b5"
+            this.intervals = Scale.intervals(scaleName); //     "1P", "2M", "3M", "4P", "5P", "6M", "7M"
+            this.domSecondarie = Key.secDomChords(complete); // "E7", "F#7", "G#7", "A7", "B7", "C#7", "D#7"
+            this.tonic = Key.props(complete).tonic; // A
+            this.relatives = Key.modeNames().map(name => Key.relative(name, complete));
+            this.paralells = Key.modeNames().map(name => this.tonic + ' ' + name);
+            this.chordsForThisScale = Scale.chords(scaleName);
+            this.chordsForThisScaleIntervals = this.chordsForThisScale.map(e => Chord.intervals(e));
+            // console.log(JSON.stringify(this))
+        } else {
+            let input = scaleName.split(' ');
+            let complete = root + ' ' + input[0];
+            input.splice(0, 1);
+            let notes = input.map(e => Distance.transpose(root, e));
+            this.name = complete; // a major
+            this.notes = notes; //     "A","B","C#","D","E","F#","G#"
+            this.gradi = input; //     "I","ii","iii","IV","V","vi","vii"
+            this.degrees = input;
+            this.accordi = []; //      "AMaj7","Bm7","C#m7","DMaj7","E7","F#m7","G#m7b5"
+            this.intervals = input; //     "1P", "2M", "3M", "4P", "5P", "6M", "7M"
+            this.domSecondarie = []; // "E7", "F#7", "G#7", "A7", "B7", "C#7", "D#7"
+            this.tonic = root.toUpperCase(); // A
+            this.relatives = [];
+            this.paralells = [];
+            this.chordsForThisScale = [];
+            this.chordsForThisScaleIntervals = [];
+            console.log(JSON.stringify(this))
+        }
         this.clear(); // cancella tutto e ridisegna la tastiera
         this.addNotes(this.notes, tipo, tipovisualizzazione); // ridisegna le note "c d e f# g a b", "scala", "grado"
     }
