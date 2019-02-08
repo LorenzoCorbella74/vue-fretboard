@@ -51,10 +51,6 @@ export const SCALES = [{
         value: 'augmented'
     },
     {
-        text: 'augmented heptatonic',
-        value: 'augmented heptatonic'
-    },
-    {
         text: 'bebop',
         value: 'bebop'
     },
@@ -75,10 +71,6 @@ export const SCALES = [{
         value: 'bebop minor'
     },
     {
-        text: 'chromatic',
-        value: 'chromatic'
-    },
-    {
         text: 'composite blues',
         value: 'composite blues'
     },
@@ -93,18 +85,6 @@ export const SCALES = [{
     {
         text: 'dorian #4',
         value: 'dorian #4'
-    },
-    {
-        text: 'double harmonic lydian',
-        value: 'double harmonic lydian'
-    },
-    {
-        text: 'double harmonic major',
-        value: 'double harmonic major'
-    },
-    {
-        text: 'egyptian',
-        value: 'egyptian'
     },
     {
         text: 'enigmatic',
@@ -219,12 +199,12 @@ export const SCALES = [{
         value: 'melodic minor'
     },
     {
-        text: 'melodic minor fifth mode',
-        value: 'melodic minor fifth mode'
-    },
-    {
         text: 'melodic minor second mode',
         value: 'melodic minor second mode'
+    },
+    {
+        text: 'melodic minor fifth mode',
+        value: 'melodic minor fifth mode'
     },
     {
         text: 'minor #7M pentatonic',
@@ -267,30 +247,6 @@ export const SCALES = [{
         value: 'mystery #1'
     },
     {
-        text: 'neopolitan',
-        value: 'neopolitan'
-    },
-    {
-        text: 'neopolitan major',
-        value: 'neopolitan major'
-    },
-    {
-        text: 'neopolitan major pentatonic',
-        value: 'neopolitan major pentatonic'
-    },
-    {
-        text: 'neopolitan minor',
-        value: 'neopolitan minor'
-    },
-    {
-        text: 'oriental',
-        value: 'oriental'
-    },
-    {
-        text: 'persian',
-        value: 'persian'
-    },
-    {
         text: 'phrygian',
         value: 'phrygian'
     },
@@ -301,10 +257,6 @@ export const SCALES = [{
     {
         text: 'six tone symmetric',
         value: 'six tone symmetric'
-    },
-    {
-        text: 'spanish heptatonic',
-        value: 'spanish heptatonic'
     },
     {
         text: 'super locrian pentatonic',
