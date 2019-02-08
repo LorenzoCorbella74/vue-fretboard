@@ -422,6 +422,8 @@ export function mergeScale(a, b) {
     return transposeScaleObjByStartingNote(a[0], output);
 }
 
+/* ------------------- PLAY SOUNDS ------------------- */
+
 // Crea la scala da suonare
 export function createScaleToBePlayed(s) {
     let a = 3,
@@ -486,88 +488,83 @@ function detectJumpOverC(scale) {
 }
 
 // si istanzia l'oggetto 'TASTIERA' passandogli un eventuale oggetto di configurazione
-export const Fretboard = function (config) {
-    config = config || {};
+export class Fretboard {
 
-    const instance = {
-        frets: config.frets || 12, // numero di tasti da visualizzare
-        strings: config.strings || 6, // numero di corde
-        tuning: config.tuning || Tunings.E_4ths, // accordatura
-        fretWidth: config.fretWidth || 46, // larghezza tasti
-        fretHeight: 30, // altezza tasti
-        id: 'fretboard-' + Math.floor(Math.random() * 1000000), // id della tastiera
-        name: '', // NOME della scala/arpeggio
-        notes: '', // NOTE della scala/arpeggio
-        callback: config.callback || null
-    };
+    constructor(config) {
+        this.frets = config.frets || 12, // numero di tasti da visualizzare
+            this.strings = config.strings || 6, // numero di corde
+            this.tuning = config.tuning || Tunings.E_4ths, // accordatura
+            this.fretWidth = config.fretWidth || 46, // larghezza tasti
+            this.fretHeight = 30, // altezza tasti
+            this.id = 'fretboard-' + Math.floor(Math.random() * 1000000), // id della tastiera
+            this.name = '', // NOME della scala/arpeggio
+            this.notes = '', // NOTE della scala/arpeggio
+            this.callback = config.callback || null
+    }
 
-    instance.fretsWithDots = function () {
+    fretsWithDots() {
         const allDots = [3, 5, 7, 9, 15, 17, 19, 21];
-        return allDots.filter(function (v) {
-            return v <= instance.frets;
-        });
-    };
+        return allDots.filter(v => v <= this.frets);
+    }
 
-    instance.fretsWithDoubleDots = function () {
+    fretsWithDoubleDots() {
         const allDots = [12, 24];
-        return allDots.filter(function (v) {
-            return v <= instance.frets;
-        });
-    };
+        return allDots.filter(v => v <= this.frets);
+    }
 
-    instance.fretboardHeight = function () {
-        return (instance.strings - 1) * instance.fretHeight + 2;
-    };
+    fretboardHeight() {
+        return (this.strings - 1) * this.fretHeight + 2;
+    }
 
-    instance.fretboardWidth = function () {
-        return instance.frets * instance.fretWidth + 2;
-    };
+    fretboardWidth() {
+        return this.frets * this.fretWidth + 2;
+    }
 
-    instance.XMARGIN = function () {
-        return instance.fretWidth;
-    };
-    instance.YMARGIN = function () {
-        return instance.fretHeight;
-    };
+    XMARGIN() {
+        return this.fretWidth;
+    }
+
+    YMARGIN() {
+        return this.fretHeight;
+    }
 
     // si crea l'istanza SVG
-    instance.makeContainer = function (elem) {
-        instance.svgContainer = d3
+    makeContainer(elem) {
+        this.svgContainer = d3
             .select(elem)
             .append('div')
             .attr('class', 'fretboard')
             .attr('class', 'col-md-8 offset-lg-2')
-            .attr('id', instance.id) // id è nell'istanza
+            .attr('id', this.id) // id è nell'istanza
             .append('svg')
-            .attr('width', instance.fretboardWidth() + instance.XMARGIN() * 2)
-            .attr('height', instance.fretboardHeight() + instance.YMARGIN() * 2);
-
-        return instance.svgContainer;
-    };
+            .attr('width', this.fretboardWidth() + this.XMARGIN() * 2)
+            .attr('height', this.fretboardHeight() + this.YMARGIN() * 2);
+        return this.svgContainer;
+    }
 
     // TASTI
-    instance.drawFrets = function () {
-        for (let i = 0; i <= instance.frets; i++) {
-            let x = i * instance.fretWidth + 1 + instance.XMARGIN(); // coordinata x del tasto
-            instance.svgContainer
+    drawFrets() {
+        for (let i = 0; i <= this.frets; i++) {
+            let x = i * this.fretWidth + 1 + this.XMARGIN(); // coordinata x del tasto
+            this.svgContainer
                 .append('line')
                 .attr('x1', x)
-                .attr('y1', instance.YMARGIN())
+                .attr('y1', this.YMARGIN())
                 .attr('x2', x)
-                .attr('y2', instance.YMARGIN() + instance.fretboardHeight())
+                .attr('y2', this.YMARGIN() + this.fretboardHeight())
                 .attr('stroke', 'lightgray')
                 .attr('stroke-width', i == 0 ? 8 : 2)
                 .append('text')
                 .attr('x', x - 6 + 'px')
-                .attr('y', (instance.fretboardHeight() + instance.YMARGIN() + 5) + 'px')
+                .attr('y', (this.fretboardHeight() + this.YMARGIN() + 5) + 'px')
                 .text(i); // è il numero del tasto
         }
-        for (let i = 0; i <= instance.frets; i++) {
-            let x = i * instance.fretWidth + 1 + instance.XMARGIN(); // coordinata x del tasto
-            instance.svgContainer
+        for (let i = 0; i <= this.frets; i++) {
+            let x = i * this.fretWidth + 1 + this.XMARGIN(); // coordinata x del tasto
+            this.svgContainer
                 .append('text')
                 .attr('x', x - 5 + 'px')
-                .attr('y', (instance.fretboardHeight() + instance.YMARGIN() + 20) + 'px')
+                .attr('y', (this.fretboardHeight() + this.YMARGIN() + 20) + 'px')
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "10px")
                 .attr("fill", "lightgray")
@@ -576,286 +573,222 @@ export const Fretboard = function (config) {
     }
 
     // CORDE
-    instance.drawStrings = function () {
-        for (let i = 0; i < instance.strings; i++) {
-            instance.svgContainer
+    drawStrings() {
+        for (let i = 0; i < this.strings; i++) {
+            this.svgContainer
                 .append('line')
-                .attr('x1', instance.XMARGIN())
-                .attr('y1', i * instance.fretHeight + 1 + instance.YMARGIN())
-                .attr('x2', instance.XMARGIN() + instance.fretboardWidth())
-                .attr('y2', i * instance.fretHeight + 1 + instance.YMARGIN())
+                .attr('x1', this.XMARGIN())
+                .attr('y1', i * this.fretHeight + 1 + this.YMARGIN())
+                .attr('x2', this.XMARGIN() + this.fretboardWidth())
+                .attr('y2', i * this.fretHeight + 1 + this.YMARGIN())
                 .attr('stroke', 'lightgray')
                 .attr('stroke-width', 1);
         }
-        let cordeAVuoto = instance.tuning.slice(0, instance.strings).map(e => e.charAt(0).toUpperCase());
+        let cordeAVuoto = this.tuning.slice(0, this.strings).map(e => e.charAt(0).toUpperCase());
         for (let i = 0; i < cordeAVuoto.length; i++) {
-            instance.svgContainer
+            this.svgContainer
                 .append('text')
-                .attr("x", (instance.XMARGIN() - 46) + 'px')
-                .attr('y', i * instance.fretHeight + 4 + instance.YMARGIN())
+                .attr("x", (this.XMARGIN() - 46) + 'px')
+                .attr('y', i * this.fretHeight + 4 + this.YMARGIN())
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "14px")
                 .attr("fill", "gray")
                 .text(cordeAVuoto[i])
         }
-
-        /* for (let i = 0; i < cordeAVuoto.length; i++) {
-            instance.svgContainer
-                .append('text')
-                .attr("x", (instance.XMARGIN() - 50) + 'px')
-                .attr('y', i * instance.fretHeight + 4 + instance.YMARGIN())
-                .attr("font-family", "sans-serif")
-                .attr("font-size", "14px")
-                .attr("fill", "lightgray")
-                .text(cordeAVuoto[i])
-        } */
-    };
+    }
 
     // PALLINI
-    instance.drawDots = function () {
-
+    drawDots() {
         // disegna i cerchi delle note...
-        let p = instance.svgContainer
+        let p = this.svgContainer
             .selectAll('circle')
-            .data(instance.fretsWithDots())
-
-
+            .data(this.fretsWithDots())
         // cerchi indicanti 3 5 7 9 tasto
         p.enter()
             .append('circle')
-            .attr('cx', function (d) {
-                return (d - 1) * instance.fretWidth + instance.fretWidth / 2 + instance.XMARGIN();
-            })
-            .attr('cy', instance.fretboardHeight() / 2 + instance.YMARGIN())
+            .attr('cx', d => (d - 1) * this.fretWidth + this.fretWidth / 2 + this.XMARGIN())
+            .attr('cy', this.fretboardHeight() / 2 + this.YMARGIN())
             .attr('r', 4).style('fill', '#ddd');
 
         // rimuove i cerchi sul 3 5 7 9  tasto... ?
-        let p2 = instance.svgContainer
+        let p2 = this.svgContainer
             .selectAll('.octave')
-            .data(instance.fretsWithDoubleDots);
-
+            .data(this.fretsWithDoubleDots);
         // cerchi indicanti il 12 e 24 tasto
         p2.enter()
             .append('circle')
             .attr('class', 'octave')
-            .attr('cx', function (d) {
-                return (d - 1) * instance.fretWidth + instance.fretWidth / 2 + instance.XMARGIN();
-            })
-            .attr('cy', instance.fretHeight * 3 / 2 + instance.YMARGIN())
+            .attr('cx', d => (d - 1) * this.fretWidth + this.fretWidth / 2 + this.XMARGIN())
+            .attr('cy', this.fretHeight * 3 / 2 + this.YMARGIN())
             .attr('r', 4).style('fill', '#ddd');
         p2.enter()
             .append('circle')
             .attr('class', 'octave')
-            .attr('cx', function (d) {
-                return (d - 1) * instance.fretWidth + instance.fretWidth / 2 + instance.XMARGIN();
-            })
-            .attr('cy', instance.fretHeight * 7 / 2 + instance.YMARGIN())
+            .attr('cx', d => (d - 1) * this.fretWidth + this.fretWidth / 2 + this.XMARGIN())
+            .attr('cy', this.fretHeight * 7 / 2 + this.YMARGIN())
             .attr('r', 4).style('fill', '#ddd');
-    };
-
+    }
 
     // Notes on fretboard
-    // 'a2' 1 red
-    instance.addNoteOnString = function (note, string, color, tipovisualizzazione, grado) {
+    addNoteOnString(note, string, color, tipovisualizzazione, grado) {
         // console.log(note, string, color, tipovisualizzazione, grado);
         const absPitch = absNote(note); // ES: 33
         color = color || 'black';
-        const absString = (instance.strings - string);
-        const basePitch = absNote(instance.tuning[absString]); // ES: 52 cioè si prende il valore della nota di partenza (sulla corda a vuoto)
+        const absString = (this.strings - string);
+        const basePitch = absNote(this.tuning[absString]); // ES: 52 cioè si prende il valore della nota di partenza (sulla corda a vuoto)
         let content = tipovisualizzazione == 'nota' ? note.substring(0, note.length - 1).toUpperCase() : grado;
-        if ((absPitch >= basePitch) && (absPitch <= basePitch + instance.frets)) {
-
+        if ((absPitch >= basePitch) && (absPitch <= basePitch + this.frets)) {
             if (grado == '1P') {
-                instance.svgContainer
+                this.svgContainer
                     .append('rect')
                     .attr('class', 'note')
                     .style('stroke', '#666')
                     .attr('stroke-width', 1)
-                    .attr("x", (absPitch - basePitch + 0.40) * instance.fretWidth)
-                    .attr("y", (string - 1) * instance.fretHeight + instance.YMARGIN() / 2 + 3.5)
+                    .attr("x", (absPitch - basePitch + 0.40) * this.fretWidth)
+                    .attr("y", (string - 1) * this.fretHeight + this.YMARGIN() / 2 + 3.5)
                     .attr("width", 24)
                     .attr("height", 24)
                     //.attr("transform", (d,i) => `rotate(${90})`)
                     .style("fill", color)
-                    .on('click', () => instance.playNote(note));
+                    .on('click', () => this.playNote(note));
             } else if (grado == '3M' || grado == '3m' || grado == '5P' || grado == '5A' || grado == '5d' || grado == '7m' || grado == '7M' || grado == '7d') {
-                instance.svgContainer
+                this.svgContainer
                     .append('rect')
                     .attr("rx", 8)
                     .attr('class', 'note')
                     .style('stroke', '#666')
                     .attr('stroke-width', 1)
-                    .attr("x", (absPitch - basePitch + 0.40) * instance.fretWidth)
-                    .attr("y", (string - 1) * instance.fretHeight + instance.YMARGIN() / 2 + 3.5)
+                    .attr("x", (absPitch - basePitch + 0.40) * this.fretWidth)
+                    .attr("y", (string - 1) * this.fretHeight + this.YMARGIN() / 2 + 3.5)
                     .attr("width", 24)
                     .attr("height", 24)
                     .style("fill", color)
-                    .on('click', () => instance.playNote(note));
+                    .on('click', () => this.playNote(note));
             } else {
-                instance.svgContainer
+                this.svgContainer
                     .append('circle')
                     .attr('class', 'note')
                     .attr('stroke-width', 1)
                     // 0.75 is the offset into the fret (higher is closest to fret)
-                    .attr('cx', (absPitch - basePitch + 0.65) * instance.fretWidth) // calcola la posizione sull'asse X
-                    .attr('cy', (string - 1) * instance.fretHeight + 1 + instance.YMARGIN()) // calcola la posizione sull'asse y
+                    .attr('cx', (absPitch - basePitch + 0.65) * this.fretWidth) // calcola la posizione sull'asse X
+                    .attr('cy', (string - 1) * this.fretHeight + 1 + this.YMARGIN()) // calcola la posizione sull'asse y
                     .attr('r', 12).style('stroke', '#666').style('fill', color)
-                    .on('click',
-                        /*  function (d) {
-                                                let fill = this.style.fill;
-                                                this.setAttribute('stroke-width', 5 - parseInt(this.getAttribute('stroke-width')));
-                                                this.style.fill = fill == color ? 'grey' : color;
-                                            } */
-                        () => instance.playNote(note));
+                    .on('click', () => this.playNote(note));
             }
 
-            instance.svgContainer
+            this.svgContainer
                 .append('text')
                 .attr('class', 'notes-info')
-                .attr('x', content.length > 1 ? ((absPitch - basePitch + 0.54) * instance.fretWidth + 'px') : ((absPitch - basePitch + 0.60) * instance.fretWidth + 'px'))
-                .attr('y', (string - 1) * instance.fretHeight + 1 + instance.YMARGIN() + 3.5 + 'px')
+                .attr('x', content.length > 1 ? ((absPitch - basePitch + 0.54) * this.fretWidth + 'px') : ((absPitch - basePitch + 0.60) * this.fretWidth + 'px'))
+                .attr('y', (string - 1) * this.fretHeight + 1 + this.YMARGIN() + 3.5 + 'px')
                 .attr('font-family', 'sans-serif')
                 .attr('font-size', '10px')
                 .attr('fill', '#4c5151') // '#2F4F4F' DarkSlateGrey
                 .text(content) // si rimuove l'ultimo carattere
-                .on('click', () => instance.playNote(note));
-
-
+                .on('click', () => this.playNote(note));
         }
-    };
+    }
 
-
-    instance.addNote = function (note, color, tipovisualizzazione, grado) {
-        for (let string = 1; string <= instance.strings; string++) {
-            instance.addNoteOnString(note, string, color, tipovisualizzazione, grado);
+    addNote(note, color, tipovisualizzazione, grado) {
+        for (let string = 1; string <= this.strings; string++) {
+            this.addNoteOnString(note, string, color, tipovisualizzazione, grado);
         }
-    };
+    }
 
-    // recuperare i colori giusti in base al tipo di scala (7,5 note) o accordo (3,4,5,6 note)
-    /*     instance.getRightColor = function (i, type, numNotes) {
-            if (type == 'scala') {
-                let out;
-                switch (numNotes) {
-                    case 5:
-                        out = colors_penta[i];
-                        break;
-                    case 6:
-                        out = colors_penta_six[i];
-                        break;
-                    case 7:
-                        out = colors[i];
-                        break;
-                    case 8:
-                        out = colors_dim[i];
-                        break;
-                    default:
-                        break;
-                }
-                return out;
-            } else if (type == 'arpeggio') {
-                return numNotes > 3 ? colors_triads_seven[i] : colors_triads[i];
-            }
-        } */
-
-    instance.addNotes = function (notes, tipo, tipovisualizzazione, colorForMerge) {
+    addNotes(notes, tipo, tipovisualizzazione, colorForMerge) {
         // console.log('Notes:', notes, tipo, tipovisualizzazione, colorForMerge);
         let showColor;
-        // TODO: si prende il colore in base all'intervallo...
         for (let i = 0; i < notes.length; i++) {
             if (!colorForMerge) {
-                showColor = COLOURS[instance.intervals[i]]; //instance.getRightColor(i, tipo, notes.length);
+                showColor = COLOURS[this.intervals[i]];
             } else {
-                showColor = COLOURS_MERGE[instance.colors[i]];
+                showColor = COLOURS_MERGE[this.colors[i]];
             }
             const note = notes[i];
-            const degree = instance.intervals ? instance.intervals[i] : null;
+            const degree = this.intervals ? this.intervals[i] : null;
             for (let octave = 2; octave < 7; octave++) {
-                instance.addNote(note + octave, showColor, tipovisualizzazione, degree);
+                this.addNote(note + octave, showColor, tipovisualizzazione, degree);
             }
         }
     }
 
-    instance.playNote = function (note) {
-        instance.callback(note);
+    playNote(note) {
+        this.callback(note);
     }
 
     /* 
     Per disegnare SCALE è chiamata all'interno dell'HTML !!!! 
     scaleNAme = "c lydian"
     */
-    instance.mergedScale = function (root, scaleName, note, gradi, tipo, tipovisualizzazione, name) {
+    mergedScale(root, scaleName, note, gradi, tipo, tipovisualizzazione, name) {
         console.log(root, scaleName, note, gradi, tipo, tipovisualizzazione, name);
-        instance.merged = true;
-        instance.name = scaleName;
-        instance.notes = note.map(e => e.value);
-        instance.intervals = gradi.map(e => e.value);
-        instance.colors = note.map(e => e.style);
-        instance.gradi = gradi.map(e => e.value);
-        instance.clear(); // cancella tutto e ridisegna la tastiera
-        instance.addNotes(instance.notes, tipo, tipovisualizzazione, instance.colors); // ridisegna le note "c d e f# g a b", "scala", "grado"
-    };
-    instance.scale = function (root, scaleName, tipo, tipovisualizzazione) {
+        this.merged = true;
+        this.name = scaleName;
+        this.notes = note.map(e => e.value);
+        this.intervals = gradi.map(e => e.value);
+        this.colors = note.map(e => e.style);
+        this.gradi = gradi.map(e => e.value);
+        this.clear(); // cancella tutto e ridisegna la tastiera
+        this.addNotes(this.notes, tipo, tipovisualizzazione, this.colors); // ridisegna le note "c d e f# g a b", "scala", "grado"
+    }
+    scale(root, scaleName, tipo, tipovisualizzazione) {
         let complete = root + ' ' + scaleName;
-        instance.name = complete;
-        instance.notes = Scale.notes(complete);
-        instance.gradi = Key.degrees(complete);
-        instance.degrees = Key.degrees(complete);
-        instance.accordi = Key.chords(complete);
-        instance.intervals = Scale.intervals(scaleName);
-        instance.domSecondarie = Key.secDomChords(complete);
-        instance.tonic = Key.props(complete).tonic;
-        instance.relatives = Key.modeNames().map(name => Key.relative(name, complete));
-        instance.paralells = Key.modeNames().map(name => instance.tonic + ' ' + name);
-        instance.chordsForThisScale = Scale.chords(scaleName);
-        instance.chordsForThisScaleIntervals = instance.chordsForThisScale.map(e => Chord.intervals(e));
-        instance.clear(); // cancella tutto e ridisegna la tastiera
-        instance.addNotes(instance.notes, tipo, tipovisualizzazione); // ridisegna le note "c d e f# g a b", "scala", "grado"
-    };
+        this.name = complete;
+        this.notes = Scale.notes(complete);
+        this.gradi = Key.degrees(complete);
+        this.degrees = Key.degrees(complete);
+        this.accordi = Key.chords(complete);
+        this.intervals = Scale.intervals(scaleName);
+        this.domSecondarie = Key.secDomChords(complete);
+        this.tonic = Key.props(complete).tonic;
+        this.relatives = Key.modeNames().map(name => Key.relative(name, complete));
+        this.paralells = Key.modeNames().map(name => this.tonic + ' ' + name);
+        this.chordsForThisScale = Scale.chords(scaleName);
+        this.chordsForThisScaleIntervals = this.chordsForThisScale.map(e => Chord.intervals(e));
+        this.clear(); // cancella tutto e ridisegna la tastiera
+        this.addNotes(this.notes, tipo, tipovisualizzazione); // ridisegna le note "c d e f# g a b", "scala", "grado"
+    }
 
-    /*  per disegnare accordi */
-    instance.placeNotes = function (sequence) {
+    /*  TODO: per disegnare accordi */
+    placeNotes(sequence) {
         // Sequence of string:note
         // e.g. '6:g2 5:b2 4:d3 3:g3 2:d4 1:g4'
-        instance.clear();
+        this.clear();
         const pairs = sequence.split(' ');
         pairs.forEach(function (pair, i) {
             let [string, note] = pair.split(':');
             string = parseInt(string);
-            instance.addNoteOnString(note, string, i == 0 ? 'red' : 'black');
+            this.addNoteOnString(note, string, i == 0 ? 'red' : 'black');
         });
-    };
+    }
 
-
-    instance.clearNotes = function () {
-        instance.svgContainer
+    clearNotes() {
+        this.svgContainer
             .selectAll('.note')
             .remove();
-    };
-
+    }
 
     // rimuove quanto disegnato e ridisegna
-    instance.clear = function () {
-        d3.select('#' + instance.id).selectAll('.fretnum,.tuning').remove();
-        instance.svgContainer
+    clear() {
+        d3.select('#' + this.id).selectAll('.fretnum,.tuning').remove();
+        this.svgContainer
             .selectAll('line')
             .remove();
-        instance.svgContainer
+        this.svgContainer
             .selectAll('circle')
             .remove();
-        instance.draw();
-    };
+        this.draw();
+    }
 
     // cancella la singola istanza
-    instance.delete = function (id) {
+    delete(id) {
         // instance.clear();
         d3.select('#' + id).remove();
-    };
+    }
 
-    instance.draw = function () {
-        instance.drawFrets(); //  TASTI
-        instance.drawStrings(); // STRINGHE
-        instance.drawDots(); // cerchi per 3 5 7 9 12 15 17 19 21 24 e note !
-    };
-
-    return instance;
+    draw() {
+        this.drawFrets(); //  TASTI
+        this.drawStrings(); // STRINGHE
+        this.drawDots(); // cerchi per 3 5 7 9 12 15 17 19 21 24 e note !
+    }
 };
