@@ -725,12 +725,12 @@ export class Fretboard {
         this.merged = true;
         this.name = scaleName;
         this.notes = note.map(e => e.value);
-        this.intervals = gradi.map(e => e.value);
+        this.intervals = gradi;
         this.colors = note.map(e => e.style);
-        this.gradi = gradi.map(e => e.value);
+        this.gradi = gradi;
         this.clear(); // cancella tutto e ridisegna la tastiera
         this.addNotes(this.notes, tipo, tipovisualizzazione, this.colors); // ridisegna le note "c d e f# g a b", "scala", "grado"
-    }
+    };
     scale(root, scaleName, tipo, tipovisualizzazione) {
         let complete = root + ' ' + scaleName;
         this.name = complete;
@@ -782,7 +782,7 @@ export class Fretboard {
 
     // cancella la singola istanza
     delete(id) {
-        // instance.clear();
+        // this.clear();
         d3.select('#' + id).remove();
     }
 

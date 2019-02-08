@@ -510,17 +510,8 @@ export default {
             let secondroot = this.form.selectedNote;
             let secondNotes = Scale.notes(secondroot, name);
             const noteMergiate = mergeScale(this.mergeFirstItem.notes, secondNotes);
-            /* console.log(
-              JSON.stringify(noteMergiate),
-              JSON.stringify(this.mergeFirstItem.gradi.split(' ')),
-              JSON.stringify(mergeSecondItem.gradi)
-            ); */
-            // const gradiMergiati = mergeDegree(
-            //   noteMergiate,
-            //   this.mergeFirstItem.gradi.split(' '),
-            //   mergeSecondItem.gradi
-            // );
-            console.log('Mergiato: ', this.mergeFirstItem.notes, secondNotes, noteMergiate);
+            const intervalliMergiati = noteMergiate.map(e => e.value).map((e, i, a) => Distance.interval(a[0], e));
+            // TODO: si deve mettere la root e la scala della prima per poi poter fare il transpose...
             this.selectedItem.data.push({
               id: this.selectedItem.data.length,
               key: Math.random() * 1000000,
@@ -532,7 +523,7 @@ export default {
               name: `${secondroot} ${name} mergiato con ${this.mergeFirstItem.root} ${this.mergeFirstItem.name}`,
               merge: true,
               noteMergiate: noteMergiate,
-              intervals: noteMergiate //  gradiMergiati
+              intervals: intervalliMergiati
             });
             let theIndex = this.selectedItem.data.length - 1;
             this.ref

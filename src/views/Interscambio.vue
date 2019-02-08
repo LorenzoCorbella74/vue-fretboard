@@ -30,7 +30,7 @@
                 :class="{'table-primary':selectedOne == i,'table-warning':selectedTwo == i}"
               >
                 <th class="text-left">{{scala.mode|capitalize}}</th>
-                <td v-for="n in scala.sonsAccordiNote" @click="selectScale(scala)">{{n}}</td>
+                <td v-for="n in scala.chords" @click="selectScale(scala)">{{n}}</td>
               </tr>
             </tbody>
           </table>
@@ -45,7 +45,10 @@
             <table class="table table-borderless table-hover table-sm">
               <thead class="thead-light">
                 <tr>
-                  <th v-for="(grado,index) in a.gradi" :key="index">{{grado}}</th>
+                  <th v-for="(degree,index) in a.degrees" :key="index">{{degree}}</th>
+                </tr>
+                <tr>
+                  <th v-for="(interval,index) in a.intervals" :key="index">{{interval}}</th>
                 </tr>
               </thead>
               <tbody>
@@ -65,13 +68,16 @@
 </template>
 
 <script>
-import { tableModalInterchange, createScaleOnDegree } from '../assets/js/music-engine.js';
+// import { tableModalInterchange, createScaleOnDegree } from '../assets/js/music-engine.js';
+import { Scale } from 'tonal';
+import * as Key from 'tonal-key';
+import { scale } from 'tonal-dictionary';
 export default {
   data() {
     return {
       roots: [],
       selectedNote: 'c',
-      degrees: ['1', '2', '3', '4', '5', '6', '7'],
+      degrees: ['1°', '2°', '3°', '4°', '5°', '6°', '7°'],
       optionsNotes: [
         { text: 'C', value: 'c' },
         { text: 'C#/Db', value: 'c#' },
@@ -95,22 +101,17 @@ export default {
   methods: {
     handleChange(nota) {
       this.selectedScales.length = 0;
-      let roots = tableModalInterchange(nota);
-      for (let r = 0; r < roots.length; r++) {
-        let superRoot = roots[r];
-        superRoot.sons = [];
-        for (let i = 1; i <= 7; i++) {
-          superRoot.sons.push(createScaleOnDegree(superRoot.notes[0], superRoot.intervalli, i));
-        }
-        superRoot.sonsAccordi = superRoot.sons.map(e => e.accordo);
-      }
-      for (let a = 0; a < roots.length; a++) {
-        const element = roots[a];
-        element.sonsAccordiNote = [];
-        for (let b = 0; b < element.notes.length; b++) {
-          element.sonsAccordiNote.push(element.notes[b] + element.sonsAccordi[b]);
-        }
-      }
+
+      let roots = ['major', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'locrian'].map(e => {
+        return {
+          mode: e,
+          notes: Scale.notes(`${nota} ${e}`),
+          chords: Key.chords(`${nota} ${e}`),
+          degrees: Key.degrees(`${nota} ${e}`),
+          intervals: scale(e)
+        };
+      });
+
       console.log('Modal interchange: ', roots);
       this.roots = roots;
     },
