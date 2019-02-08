@@ -116,8 +116,8 @@ export default {
     this.loadingMsg = this.$t('App.default_loading_msg');
     const a = this;
     Soundfont.instrument(ac, 'acoustic_guitar_steel').then(function(guitarDownloaded) {
-      console.log('Loaded from: ', guitarDownloaded.url);
-      console.log('Loaded notes: ', Object.keys(guitarDownloaded.buffers).map(e => Note.fromMidi(e)));
+      // console.log('Loaded from: ', guitarDownloaded.url);
+      // console.log('Loaded notes: ', Object.keys(guitarDownloaded.buffers).map(e => Note.fromMidi(e)));
       guitar = guitarDownloaded;
       console.log('Guitar: ', guitar);
       // a.isLoading = false;

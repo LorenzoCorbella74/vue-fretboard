@@ -112,7 +112,7 @@ export default {
         };
       });
 
-      console.log('Modal interchange: ', roots);
+      // console.log('Modal interchange: ', roots);
       this.roots = roots;
     },
     selectScale(scale) {

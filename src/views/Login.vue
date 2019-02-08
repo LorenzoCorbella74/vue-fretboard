@@ -112,7 +112,7 @@ export default {
   beforeRouteUpdate(to, from, next) {
     // react to route changes...
     // don't forget to call next()
-    console.log(to, from);
+    // console.log(to, from);
     next();
   },
   methods: {
@@ -127,7 +127,7 @@ export default {
             .then(user => {
               this.loading = false;
               this.submitted = false;
-              console.log('User in login page: ', user);
+              // console.log('User in login page: ', user);
               // EventBus.$emit('logged-user', user);
               this.$router.replace('/list');
             })
@@ -146,7 +146,7 @@ export default {
         .auth()
         .signInWithPopup(provider)
         .then(data => {
-          console.log('User in login page: ', data.user, data.credential.accessToken);
+          // console.log('User in login page: ', data.user, data.credential.accessToken);
           // EventBus.$emit('logged-user', user);
           this.$router.replace('/list');
         })
@@ -161,7 +161,7 @@ export default {
         .auth()
         .signInWithPopup(provider)
         .then(data => {
-          console.log('User in login page: ', data.user, data.credential.accessToken);
+          // console.log('User in login page: ', data.user, data.credential.accessToken);
           // EventBus.$emit('logged-user', user);
           this.$router.replace('/list');
         })

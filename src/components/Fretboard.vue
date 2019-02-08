@@ -96,11 +96,9 @@ export default {
     };
   },
   mounted() {
-    console.log(this.input);
     window.addEventListener('resize', this.onResize);
     this.onResize();
     this.inizialize(this.width);
-    console.log(this.input);
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.onResize);
@@ -129,7 +127,6 @@ export default {
       if (!this.input.merge) {
         nuovaTastiera.scale(this.input.root, this.input.name, this.input.type, this.input.typeOutput);
       } else {
-        console.log(this.input);
         nuovaTastiera.mergedScale(
           this.input.root,
           this.input.secondName,
@@ -146,7 +143,7 @@ export default {
       // si trasmette al padre i dati della scala
       let objCopy = JSON.parse(JSON.stringify(nuovaTastiera));
       this.$emit('tastiera', Object.assign({}, objCopy));
-      console.log('Tastiera: ', this.tastiera);
+      // console.log('Tastiera: ', this.tastiera);
     },
     onResize() {
       this.width = this.$el.offsetWidth;

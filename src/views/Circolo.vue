@@ -110,7 +110,7 @@ export default {
         };
       });
 
-      console.log('Circolo delle quinte: ', this.roots);
+      //  console.log('Circolo delle quinte: ', this.roots);
     },
     selectScale(scale) {
       if (this.selectedScales.length < 2 && this.selectedScales.findIndex(x => x.key == scale.key) == -1) {

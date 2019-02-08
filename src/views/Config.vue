@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     selectLanguage($e) {
-      console.log('Selezionato: ', $e);
+      console.log('Language seected: ', $e);
       if ($e == 'en') {
         this.config.language = 'en';
         this.$i18n.locale = this.config.language;
