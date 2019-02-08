@@ -1,22 +1,11 @@
 import * as d3 from 'd3';
 import {
-    Note,
-    Interval,
-    Distance,
     Scale,
     Chord
 } from "tonal";
 import * as Key from "tonal-key";
 
-/* const colors_dim = ['yellow', '#87CEFA', '#F4D03F', '#8FBC8F', 'Tomato', '#a78999', 'lightgray', '#C70039']; // 8 note
-const colors = ['yellow', '#87CEFA', '#F4D03F', '#8FBC8F', 'Tomato', '#a78999', 'lightgray']; // 7 note
-const colors_penta = ['yellow', '#87CEFA', '#F4D03F', 'Tomato', 'lightgray']; // 5 note
-const colors_penta_six = ['yellow', '#87CEFA', '#F4D03F', 'SlateBlue', 'Tomato', 'lightgray']; // 6 note
-const colors_triads_seven = ['yellow', '#F4D03F', 'Tomato', 'lightgray']; // 4 note
-const colors_triads = ['yellow', '#F4D03F', 'Tomato']; // 3 note
-const colors_merge = ['#F4D03F', 'lightgray', 'gray']; // 3 note */
-
-const colors_merge = ['#F4D03F', 'lightgray', 'gray'];
+const COLOURS_MERGE = ['#F4D03F', 'lightgray', 'gray'];
 const COLOURS = {
     "1P": 'yellow',
     "2m": '#87CEFA',
@@ -44,211 +33,295 @@ export const Tunings = {
     G_open: ['d2', 'g2', 'd3', 'g3', 'b4', 'd4']
 };
 
-/* const intervalMap8 = {
-    '2': {
-        '1': 'b9',
-        '2': '9',
-        '3': '#9',
+export const SCALES = [{
+        text: '- Major and Penta:',
+        value: '',
+        disabled: true
+    }, {
+        text: 'aeolian',
+        value: 'aeolian'
     },
-    '3': {
-        '3': 'b3',
-        '4': '3',
-        //'5':'#3',
+    {
+        text: 'altered',
+        value: 'altered'
     },
-    '4': {
-        '4': '3',
-        '5': '4',
-        '6': '#4',
+    {
+        text: 'augmented',
+        value: 'augmented'
     },
-    '5': {
-        '6': 'b5',
-        '7': '5',
-        '8': '#5',
+    {
+        text: 'augmented heptatonic',
+        value: 'augmented heptatonic'
     },
-    '6': {
-        '7': '5',
-        '8': 'b6',
-        '9': '6',
-        '10': '#6',
+    {
+        text: 'bebop',
+        value: 'bebop'
     },
-    '7': {
-        '9': '6',
-        '10': 'b7',
-        '11': '7',
-        //'12':'T',
+    {
+        text: 'bebop dominant',
+        value: 'bebop dominant'
     },
-    '8': {
-        '10': 'b7',
-        '11': '7',
-        //'12':'T',
+    {
+        text: 'bebop locrian',
+        value: 'bebop locrian'
     },
-};
-const intervalMap7 = {
-    '2': {
-        '1': 'b9',
-        '2': '9',
-        '3': '#9',
+    {
+        text: 'bebop major',
+        value: 'bebop major'
     },
-    '3': {
-        '3': 'b3',
-        '4': '3',
-        //'5':'#3',
+    {
+        text: 'bebop minor',
+        value: 'bebop minor'
     },
-    '4': {
-        '4': 'b4',
-        '5': '4',
-        '6': '#4',
+    {
+        text: 'chromatic',
+        value: 'chromatic'
     },
-    '5': {
-        '6': 'b5',
-        '7': '5',
-        '8': '#5',
+    {
+        text: 'composite blues',
+        value: 'composite blues'
     },
-    '6': {
-        '8': 'b6',
-        '9': '6',
-        '10': '#6',
+    {
+        text: 'diminished',
+        value: 'diminished'
     },
-    '7': {
-        '10': 'b7',
-        '11': '7',
-        //'12':'T',
+    {
+        text: 'dorian',
+        value: 'dorian'
     },
-};
-const intervalMap6 = {
-    '2': {
-        '1': 'b9',
-        '2': '9',
-        '3': '#9',
+    {
+        text: 'dorian #4',
+        value: 'dorian #4'
     },
-    '3': {
-        '2': '9',
-        '3': '#9',
-        '3': 'b3',
-        '4': '3',
-        '5': '4',
-        '6': 'b5',
-        '7': '5',
-        '8': '#5',
+    {
+        text: 'double harmonic lydian',
+        value: 'double harmonic lydian'
     },
-    '4': {
-        '3': 'b3',
-        '4': '3',
-        '5': '4',
-        '6': '#4',
-        '7': '5',
-        '8': '#5',
+    {
+        text: 'double harmonic major',
+        value: 'double harmonic major'
     },
-    '5': {
-        '6': 'b5',
-        '7': '5',
-        '8': '#5',
-        '9': '6',
-        '10': 'b7',
-        '11': '#7',
+    {
+        text: 'egyptian',
+        value: 'egyptian'
     },
-    '6': {
-        '8': 'b6',
-        '9': '6',
-        '10': 'b7',
-        '11': '7',
+    {
+        text: 'enigmatic',
+        value: 'enigmatic'
+    },
+    {
+        text: 'flamenco',
+        value: 'flamenco'
+    },
+    {
+        text: 'flat six pentatonic',
+        value: 'flat six pentatonic'
+    },
+    {
+        text: 'flat three pentatonic',
+        value: 'flat three pentatonic'
+    },
+    {
+        text: 'half-whole diminished',
+        value: 'half-whole diminished'
+    },
+    {
+        text: 'harmonic major',
+        value: 'harmonic major'
+    },
+    {
+        text: 'harmonic minor',
+        value: 'harmonic minor'
+    },
+    {
+        text: 'ionian augmented',
+        value: 'ionian augmented'
+    },
+    {
+        text: 'ionian pentatonic',
+        value: 'ionian pentatonic'
+    },
+    {
+        text: 'leading whole tone',
+        value: 'leading whole tone'
+    },
+    {
+        text: 'locrian',
+        value: 'locrian'
+    },
+    {
+        text: 'locrian #2',
+        value: 'locrian #2'
+    },
+    {
+        text: 'locrian major',
+        value: 'locrian major'
+    },
+    {
+        text: 'locrian pentatonic',
+        value: 'locrian pentatonic'
+    },
+    {
+        text: 'lydian',
+        value: 'lydian'
+    },
+    {
+        text: 'lydian #5P pentatonic',
+        value: 'lydian #5P pentatonic'
+    },
+    {
+        text: 'lydian #9',
+        value: 'lydian #9'
+    },
+    {
+        text: 'lydian augmented',
+        value: 'lydian augmented'
+    },
+    {
+        text: 'lydian diminished',
+        value: 'lydian diminished'
+    },
+    {
+        text: 'lydian dominant',
+        value: 'lydian dominant'
+    },
+    {
+        text: 'lydian dominant pentatonic',
+        value: 'lydian dominant pentatonic'
+    },
+    {
+        text: 'lydian minor',
+        value: 'lydian minor'
+    },
+    {
+        text: 'lydian pentatonic',
+        value: 'lydian pentatonic'
+    },
+    {
+        text: 'major',
+        value: 'major'
+    },
+    {
+        text: 'major blues',
+        value: 'major blues'
+    },
+    {
+        text: 'major flat two pentatonic',
+        value: 'major flat two pentatonic'
+    },
+    {
+        text: 'major pentatonic',
+        value: 'major pentatonic'
+    },
+    {
+        text: 'melodic minor',
+        value: 'melodic minor'
+    },
+    {
+        text: 'melodic minor fifth mode',
+        value: 'melodic minor fifth mode'
+    },
+    {
+        text: 'melodic minor second mode',
+        value: 'melodic minor second mode'
+    },
+    {
+        text: 'minor #7M pentatonic',
+        value: 'minor #7M pentatonic'
+    },
+    {
+        text: 'minor bebop',
+        value: 'minor bebop'
+    },
+    {
+        text: 'minor blues',
+        value: 'minor blues'
+    },
+    {
+        text: 'minor hexatonic',
+        value: 'minor hexatonic'
+    },
+    {
+        text: 'minor pentatonic',
+        value: 'minor pentatonic'
+    },
+    {
+        text: 'minor six diminished',
+        value: 'minor six diminished'
+    },
+    {
+        text: 'minor six pentatonic',
+        value: 'minor six pentatonic'
+    },
+    {
+        text: 'mixolydian',
+        value: 'mixolydian'
+    },
+    {
+        text: 'mixolydian pentatonic',
+        value: 'mixolydian pentatonic'
+    },
+    {
+        text: 'mystery #1',
+        value: 'mystery #1'
+    },
+    {
+        text: 'neopolitan',
+        value: 'neopolitan'
+    },
+    {
+        text: 'neopolitan major',
+        value: 'neopolitan major'
+    },
+    {
+        text: 'neopolitan major pentatonic',
+        value: 'neopolitan major pentatonic'
+    },
+    {
+        text: 'neopolitan minor',
+        value: 'neopolitan minor'
+    },
+    {
+        text: 'oriental',
+        value: 'oriental'
+    },
+    {
+        text: 'persian',
+        value: 'persian'
+    },
+    {
+        text: 'phrygian',
+        value: 'phrygian'
+    },
+    {
+        text: 'phrygian dominant',
+        value: 'phrygian dominant'
+    },
+    {
+        text: 'six tone symmetric',
+        value: 'six tone symmetric'
+    },
+    {
+        text: 'spanish heptatonic',
+        value: 'spanish heptatonic'
+    },
+    {
+        text: 'super locrian pentatonic',
+        value: 'super locrian pentatonic'
+    },
+    {
+        text: 'whole tone',
+        value: 'whole tone'
+    },
+    {
+        text: 'whole tone pentatonic',
+        value: 'whole tone pentatonic'
     }
-};
-const intervalMap5 = {
-    '2': {
-        '1': 'b9',
-        '2': '9',
-        '3': 'b3',
-        '4': '3',
-    },
-    '3': {
-        '3': 'b3',
-        '4': '3',
-        '5': '4',
-    },
-    '4': {
-        '6': 'b5',
-        '7': '5',
-        '8': '#5',
-    },
-    '5': {
-        '8': 'b6',
-        '9': '6',
-        '10': 'b7',
-    }
-};
-const intervalMap4 = {
-    '2': {
-        '3': 'b3',
-        '4': '3',
-        //'5': '4',
-    },
-    '3': {
-        '6': 'b5',
-        '7': '5',
-        '8': '#5',
-    },
-    '4': {
-        '9': '7°',
-        '10': 'b7',
-        '11': '7',
-    }
-}; */
+]
+
+
 const NOTES = 'a a# b c c# d d# e f f# g g#'.split(' '); // è l'array di note
 const NOTESENH = 'a bb b c db d eb e f gb g ab'.split(' '); // è l'array di note
-/* export const SCALES = {
-    'maj': ["2t", "ts", "2ts"],
-    'maj7': ["2t", "ts", "2t", 's'],
-    '7': ["2t", "ts", "ts", 't'],
-    'aug': ["2t", "2t", "2t"],
-    'min': ["ts", "2t", "3t"],
-    'min7': ["ts", "2t", "ts", 'ts'],
-    'min7/b5': ["ts", "ts", "2t", 'ts'],
-    'dim': ["ts", "ts", "ts", '2ts'], // TODO: 
-    'dim7': ["ts", "ts", "ts", '2ts'],
-
-    'ionian': ["t", "t", "s", "t", "t", "t", "s"],
-    'dorian': ["t", "s", "t", "t", "t", "s", "t"],
-    'phrygian': ["s", "t", "t", "t", "s", "t", "t"],
-    'lydian': ["t", "t", "t", "s", "t", "t", "s"],
-    'mixolydian': ["t", "t", "s", "t", "t", "s", "t"],
-    'aeolian': ["t", "s", "t", "t", "s", "t", "t"],
-    'locrian': ["s", "t", "t", "s", "t", "t", "t"],
-
-    'harmonic-minor': ["t", "s", "t", "t", "s", "ts", "s"],
-    'locrian-#6': ["s", "t", "t", "s", "ts", "s", "t"],
-    'ionian-#5': ["t", "t", "s", "ts", "s", "t", "s"],
-    'dorian-#4': ["t", "s", "ts", "s", "t", "s", "t"],
-    'phrygian-dominant': ["s", "ts", "s", "t", "s", "t", "t"],
-    'lydian-#2': ["ts", "s", "t", "s", "t", "t", "s"],
-    'super-locrian-dim': ["s", "t", "s", "t", "t", "s", "ts"],
-
-    'melodic-minor': ["t", "s", "t", "t", "t", "t", "s"],
-    'dorian-b2': ["s", "t", "t", "t", "t", "s", "t"],
-    'lydian-aug': ["t", "t", "t", "t", "s", "t", "s"],
-    'lydian-dominant': ["t", "t", "t", "s", "t", "s", "t"],
-    'mixolydian-b6': ["t", "t", "s", "t", "s", "t", "t"],
-    'aeolian-b5': ["t", "s", "t", "s", "t", "t", "t"],
-    'super-locrian': ["s", "t", "s", "t", "t", "t", "t"],
-
-    'major-pentatonic': ["t", "t", "ts", "t", "ts"],
-    'major-blues': ["t", "s", "s", "ts", "t", "ts"],
-    'dorian-pentatonic': ["ts", "t", "t", "t", "ts"], // R b3 4 5 6
-    'phrygian-pentatonic': ["s", "2t", "t", "ts", "t"], // R b2 4 5 b7
-    'lydian-pentatonic': ["t", "t", "t", "ts", "ts"], // R 2 3 #4 6
-    'mixolydian-pentatonic': ["t", "t", "ts", "ts", "t"], // R 2 3 5 b7
-    'dom-pentatonic': ["2t", "s", "t", "ts", "t"], // R 3 4 5 b7
-    'minor-pentatonic': ["ts", "t", "t", "ts", "t"],
-    'minor-blues': ["ts", "t", "s", "s", "ts", "t"],
-    'minor6Th-blues-pentatonic': ["ts", "t", "s", "s", "t", "ts"], // R b3 4# 5 6
-    'rootless9th-pentatonic': ["t", "t", "ts", "t", "ts"], // 2 b3 4 5 7b TODO:
-    'locrian-pentatonic': ["ts", "t", "s", "2t", "t"], // R b3 4 b5 b7
-
-    'whole-tone': ["t", "t", "t", "t", "t", "t"],
-
-    'diminished-st': ["s", "t", "s", "t", "s", "t", "s", "t"],
-    'diminished-ts': ["t", "s", "t", "s", "t", "s", "t", "s"],
-}; */
 
 // helper per ritornare il valore
 const verbatim = (d => d);
@@ -271,285 +344,6 @@ function absNote(note) {
     if (pitch > -1) {
         return pitch + octave * 12; // per a2 è 33
     }
-}
-
-/* function sumInterval(intervalArray) {
-    let trasformati = transformInt(intervalArray);
-    return trasformati.reduce((a, b) => a + b);
-}
-
-function calculateDegrees(intervalArray) {
-    let out = ['T']; //{'1': 'T'};
-    let loops = intervalArray.length;
-    let mapToBeUsed;
-    switch (loops) {
-        case 8:
-            mapToBeUsed = intervalMap8;
-            break;
-        case 7:
-            mapToBeUsed = intervalMap7;
-            break;
-        case 6:
-            mapToBeUsed = intervalMap6;
-            break;
-        case 5:
-            mapToBeUsed = intervalMap5;
-            break;
-        case 4:
-            mapToBeUsed = intervalMap4;
-            break;
-        case 3:
-            mapToBeUsed = intervalMap4;
-            break;
-        default:
-            break;
-    }
-    for (let i = 0; i < loops; i++) {
-        let subarray = intervalArray.slice(0, i + 1);
-        let oo = sumInterval(subarray);
-        if (oo < 12) {
-            //out[`${i + 2}`] = /*  `${oo}`;  
-mapToBeUsed[`${i + 2}`][`${oo}`];
-oggetto
-out.push(mapToBeUsed[`${i + 2}`][`${oo}`]); // array
-}
-}
-return out;
-}*/
-
-// ritorna un array di note che parte da startNote
-export function transposeSpecificScaleByStartingNote(startNote, scale) {
-    var indexToSplit = scale.indexOf(startNote);
-    var first = scale.slice(0, indexToSplit);
-    var second = scale.slice(indexToSplit);
-    return second.concat(first);
-}
-
-
-// ritorna un array di note che parte da startNote
-export function transposeScaleByStartingNote(startNote) {
-    var indexToSplit = NOTES.indexOf(startNote);
-    var first = NOTES.slice(0, indexToSplit);
-    var second = NOTES.slice(indexToSplit);
-    return second.concat(first);
-}
-
-// ritorna un array di intervalli che parte da startDegree
-// (startDegree è pari 0  se si considera il 1° grado)
-function transposeIntervalsByStartingDegree(startDegree, intervals) {
-    var indexToSplit = startDegree;
-    var first = intervals.slice(0, indexToSplit);
-    var second = intervals.slice(indexToSplit);
-    return second.concat(first);
-}
-
-// 7 semitoni è una quinta, 5 semitoni è una quarta
-// torna il nome della T
-function moveDownByNumOfSemitones(howManySemitone, fromNote) {
-    let numOfSemiton = howManySemitone > 12 ? howManySemitone % 12 : howManySemitone;
-    var indexToSplit = NOTES.indexOf(fromNote);
-    var first = NOTES.slice(0, indexToSplit);
-    var second = NOTES.slice(indexToSplit);
-    var join = second.concat(first);
-    return createScale(join[numOfSemiton], SCALES.ionian)
-}
-
-function moveUpByNumOfSemitones(howManySemitone, fromNote) {
-    let numOfSemiton = howManySemitone > 12 ? howManySemitone % 12 : howManySemitone;
-    var indexToSplit = NOTES.indexOf(fromNote);
-    var first = NOTES.slice(0, indexToSplit + 1);
-    var second = NOTES.slice(indexToSplit + 1);
-    var join = second.concat(first);
-    return createScale(join[11 - numOfSemiton], SCALES.ionian);
-}
-
-// tona un array di numeri indicanti il num di spostamenti
-function transformInt(intervalli) {
-    return intervalli.map((e) => {
-        let out;
-        switch (e) {
-            case '3t':
-                out = 6;
-                break;
-            case '2ts':
-                out = 5;
-                break;
-            case '2t':
-                out = 4;
-                break;
-            case 'ts':
-                out = 3;
-                break;
-            case 't':
-                out = 2;
-                break;
-            case 's':
-                out = 1;
-                break;
-            default:
-                break;
-        }
-        return out;
-    });
-}
-
-// ritorna il nome della scala passando gli intervalli
-function getName(intervalli) {
-    for (const key in SCALES) {
-        if (SCALES.hasOwnProperty(key) && SCALES[key].toString() == intervalli.toString()) {
-            return key;
-        }
-    }
-}
-
-// ritorna un array
-function compare(list1, list2, isUnion) {
-    var result = [];
-    for (var i = 0; i < list1.length; i++) {
-        var item1 = list1[i],
-            found = false;
-        for (var j = 0; j < list2.length && !found; j++) {
-            found = item1 === list2[j];
-        }
-        if (found === !!isUnion) { // isUnion is coerced to boolean
-            result.push(item1);
-        }
-    }
-    return result;
-}
-
-// 
-function analize(noteScala, gradi) {
-    let gradiArr = []
-    for (const key in gradi) {
-        if (gradi.hasOwnProperty(key)) {
-            gradiArr.push(gradi[key]);
-        }
-    }
-    let out = {
-        inside: {},
-        consonant: {},
-        dissonances: []
-    };
-    for (let i = 0; i < noteScala.length; i++) {
-        const element = noteScala[i];
-        if ((i + 1) % 2 != 0) {
-            out.inside[gradiArr[i]] = element;
-        } else {
-            out.consonant[gradiArr[i]] = element;
-        }
-        out.dissonances = compare(NOTES, noteScala, false);
-    }
-    return out;
-}
-
-function calcolaAccordo(gradiScala) {
-    let outStr = '';
-    if (gradiScala.indexOf("b3") != -1 && gradiScala.indexOf("b5") != -1) {
-        outStr = 'm7/b5';
-    } else if (gradiScala.indexOf("b3") != -1 && gradiScala.indexOf("b7") != -1) {
-        outStr = 'm7';
-    } else if (gradiScala.indexOf("b7") != -1) {
-        outStr = '7';
-    } else if (gradiScala.indexOf("7") != -1) {
-        outStr = 'maj7';
-    }
-    return outStr;
-}
-
-function flipAndCapitalizeNote(note) {
-    // console.log(note)
-    if (!note) return;
-    if (note.length == 2 && note[1] == "b") {
-        note = "b" + note[0].toUpperCase();
-        return note;
-    } else {
-        return note.charAt(0).toUpperCase() + note.substr(1);
-    }
-}
-// dato un array di note ["C", "D", "D#", "F", "G", "G#", "A#"]
-// torna un array senza note ripetute ["C", "D", "bE", "F", "G", "bA", "bB"]
-function getReadableScaleNames(arr) {
-    let output = [];
-    arr = arr.map(e => e.toLowerCase());
-    let a = arr.map(e => e.toLowerCase().charAt(0));
-    for (let index = 0; index < a.length; index++) {
-        const element = a[index];
-        let primo = a.indexOf(element);
-        let ultimo = a.lastIndexOf(element);
-        // console.log(index, element, primo, ultimo);
-        if (primo != ultimo && primo < ultimo && ultimo == a.lenght - 1) {
-            let ultimoIndexNote = NOTES.findIndex(x => x == arr[ultimo]);
-            // console.log(ultimo, ultimoIndexNote, index, arr[index]);
-            output.push(arr[index]);
-            output.push(NOTESENH[ultimoIndexNote]);
-            index = ultimo;
-        } else if (
-            output[output.length - 1] && output[output.length - 1].charAt(0) == element.charAt(0)
-        ) {
-            let ultimoIndexNote = NOTES.findIndex(x => x == arr[ultimo]);
-            // console.log(ultimo, ultimoIndexNote);
-            output.push(NOTESENH[ultimoIndexNote]);
-        } else {
-            output.push(arr[index]);
-        }
-    }
-    return output.map(flipAndCapitalizeNote);
-}
-
-
-// ritorna un array di note che rappresenta la scala in base agli intervalli passati
-export function createScale(startNote, intervalli) {
-    let output = {
-        key: startNote,
-        notes: [],
-        intervalli: intervalli,
-        mode: getName(intervalli),
-        gradi: calculateDegrees(intervalli)
-    };
-    var notes = transposeScaleByStartingNote(startNote, NOTES);
-    var intervalli = transformInt(intervalli);
-    let progressIndex = 0; // indica i salti da fare tra gli elementi della scala
-    output.notes.push(notes[progressIndex]);
-    intervalli.forEach((e, index) => {
-        if (index != intervalli.length - 1) {
-            progressIndex += e;
-            output.notes.push(notes[progressIndex]);
-        }
-    });
-    // alalize aggiunge .inside, .dissonances, .consonant
-    output = Object.assign(output, analize(output.notes, output.gradi));
-    output.accordo = calcolaAccordo(output.gradi);
-    output.sons = [];
-    output.readAbleNotes = getReadableScaleNames(output.notes);
-    // console.log(output);
-    return output;
-}
-
-// ritorna un array di note a partire da una nota iniziale ed un relativo grado
-export function createScaleOnDegree(startNote, scale, degree) {
-    let i = degree - 1;
-    var mag = createScale(startNote, scale).notes; // "scala di riferimento"
-    var ind = transposeIntervalsByStartingDegree(i, scale);
-    return createScale(mag[i], ind);
-}
-
-// si creano tutti i gradi a partire da una scala maggiore
-export function createAllDegree(tonica, scala) {
-    var allDegree = [];
-    var mag = createScale(tonica, scala).notes;
-    mag.forEach((firstNote, i) => {
-        var n = transposeScaleByStartingNote(firstNote, mag);
-        var ind = transposeIntervalsByStartingDegree(i, selectedScale);
-        allDegree.push(createScale(n[0], ind));
-    });
-    return allDegree;
-}
-
-function formatText(scalename) {
-    let out = scalename.replace(/-/, ' ');
-    out = out.charAt(0).toUpperCase() + out.slice(1).toLowerCase();
-    return out;
 }
 
 /* ------------------- MERGE SCALES ------------------- */
@@ -628,28 +422,7 @@ export function mergeScale(a, b) {
     return transposeScaleObjByStartingNote(a[0], output);
 }
 
-export function mergeDegree(data, uno, due) {
-    let a, b;
-    if (uno.length > due.length) {
-        a = uno;
-        b = due;
-    } else {
-        a = due;
-        b = uno;
-    }
-    let output = [];
-    for (let i = 0; i < data.length; i++) {
-        const e = data[i];
-        if (e.style === 1 || e.style === 0) {
-            output.push(a[e.index]);
-        }
-        if (e.style == 2) {
-            output.push(b[e.index]);
-        }
-    }
-    return output;
-}
-
+// Crea la scala da suonare
 export function createScaleToBePlayed(s) {
     let a = 3,
         b = 3;
@@ -677,6 +450,7 @@ export function createScaleToBePlayed(s) {
     return o.concat(osotto + olast, o_rev);
 }
 
+// Crea gli accordi da suonare 
 export function createChordNotes(s) {
     let a = 3;
     let indexJump = detectJumpOverC(s);
@@ -710,52 +484,6 @@ function detectJumpOverC(scale) {
     }
     return result;
 }
-
-function calculateRootsOfCircleOfFifth(scale) {
-    let out = [];
-    let semitonArray = [42, 35, 28, 21, 14, 7];
-    semitonArray.forEach((e) => out.push(moveUpByNumOfSemitones(e, scale)));
-    out.push(createScale('c', SCALES.ionian))
-    semitonArray.reverse().forEach((e) => out.push(moveDownByNumOfSemitones(e, scale)));
-    return out;
-}
-
-
-
-export function createTableOfCircleOfFifth(note) {
-    let roots = calculateRootsOfCircleOfFifth(note);
-    let scalaArray = [
-        SCALES.ionian,
-        SCALES.dorian,
-        SCALES.phrygian,
-        SCALES.lydian,
-        SCALES.mixolydian,
-        SCALES.aeolian,
-        SCALES.locrian
-    ];
-    roots.forEach(root => {
-        let majors = []
-        scalaArray.forEach((e, i) => majors.push(createScale(root.notes[i], e)));
-        root.majors = majors;
-    });
-    return roots;
-}
-export function tableModalInterchange(note) {
-    let scalaArray = [
-        SCALES.ionian,
-        SCALES.dorian,
-        SCALES.phrygian,
-        SCALES.lydian,
-        SCALES.mixolydian,
-        SCALES.aeolian,
-        SCALES.locrian
-    ];
-    let out = []
-    scalaArray.forEach((e, i) => out.push(createScale(note, e)));
-
-    return out;
-}
-/* ------------------- MERGE SCALES ------------------- */
 
 // si istanzia l'oggetto 'TASTIERA' passandogli un eventuale oggetto di configurazione
 export const Fretboard = function (config) {
@@ -1037,7 +765,7 @@ export const Fretboard = function (config) {
             if (!colorForMerge) {
                 showColor = COLOURS[instance.intervals[i]]; //instance.getRightColor(i, tipo, notes.length);
             } else {
-                showColor = colors_merge[instance.colors[i]];
+                showColor = COLOURS_MERGE[instance.colors[i]];
             }
             const note = notes[i];
             const degree = instance.intervals ? instance.intervals[i] : null;
