@@ -19,11 +19,17 @@
         </div>
       </div>
       <div class="d-flex flex-row justify-content-between">
-        <div class="p-2 flex-grow-1">
-          <h3>{{selectedItem.title}}</h3>
-          <p class="text-muted">{{selectedItem.description}}</p>
+        <div class="p-1 flex-grow-1">
+          <h5>
+            <span class="d-inline">
+            {{selectedItem.title}}
+              <button type="button" class="btn btn-link" @click="toggleDescription">
+                <font-awesome-icon :icon="descriptionVisible?'caret-down':'caret-up'"/>
+              </button>
+            </span>
+          </h5>
         </div>
-        <div class="p-2">
+        <div class="p-1">
           <!-- v-if="selectedItem && selectedItem.data && selectedItem.data.length>1" -->
           <b-form-select
             style="width:80px"
@@ -33,71 +39,74 @@
             class="mb-3 mr-2"
           />
         </div>
-        <div class="p-2">
+        <div class="p-1">
           <!-- v-if="selectedItem && selectedItem.data && selectedItem.data.length>1" -->
           <b-button size="m" variant="outline-warning" @click="transpose" class="px-5">
             <font-awesome-icon icon="arrows-alt-h" class="ml-1"/>
           </b-button>
         </div>
-        <div class="p-2">
+        <div class="p-1">
           <b-button size="m" variant="outline-warning" @click="addItem" class="px-5">
             <font-awesome-icon icon="plus"/>
           </b-button>
         </div>
       </div>
+      <div class="d-flex flex-row" v-if="descriptionVisible">
+        <p class="text-muted">{{selectedItem.description}}</p>
+      </div>
     </div>
     <div class="container bg-white">
       <div class="d-flex flex-column">
-        <draggable
+        <!-- <draggable
           v-model="selectedItem.data"
           :options="{group:'people'}"
           @start="drag=true"
           @end="drag=false"
           :move="checkMove"
-        >
-          <transition-group name="list-fretboard" tag="div">
-            <div v-for="i in selectedItem.data" :key="i.id">
-              <!-- FRETBOARD -->
-              <fretboard-chart
-                :input="i"
-                :all="selectedItem.data"
-                :key="i.key"
-                v-on:tastiera="registerFretboard($event,i)"
-              ></fretboard-chart>
-              <div class="posizione-icone">
-                <button
-                  type="button"
-                  class="btn btn-link"
-                  v-b-tooltip.hover
-                  :title="$t('Item.btn_edit')"
-                  @click="editItem(i.id)"
-                  v-if="!i.merge"
-                >
-                  <font-awesome-icon icon="edit"/>
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-link"
-                  v-b-tooltip.hover
-                  :title="$t('Item.btn_merge')"
-                  @click="mergeWithOther(i)"
-                  v-if="!i.merge"
-                >
-                  <font-awesome-icon icon="code-branch"/>
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-link float-right"
-                  v-b-tooltip.hover
-                  :title="$t('Item.btn_delete')"
-                  @click="deleteItem(i.id)"
-                >
-                  <font-awesome-icon icon="trash"/>
-                </button>
-              </div>
+        >-->
+        <transition-group name="list-fretboard" tag="div">
+          <div v-for="i in selectedItem.data" :key="i.id">
+            <!-- FRETBOARD -->
+            <fretboard-chart
+              :input="i"
+              :all="selectedItem.data"
+              :key="i.key"
+              v-on:tastiera="registerFretboard($event,i)"
+            ></fretboard-chart>
+            <div class="posizione-icone">
+              <button
+                type="button"
+                class="btn btn-link"
+                v-b-tooltip.hover
+                :title="$t('Item.btn_edit')"
+                @click="editItem(i.id)"
+                v-if="!i.merge"
+              >
+                <font-awesome-icon icon="edit"/>
+              </button>
+              <button
+                type="button"
+                class="btn btn-link"
+                v-b-tooltip.hover
+                :title="$t('Item.btn_merge')"
+                @click="mergeWithOther(i)"
+                v-if="!i.merge"
+              >
+                <font-awesome-icon icon="code-branch"/>
+              </button>
+              <button
+                type="button"
+                class="btn btn-link float-right"
+                v-b-tooltip.hover
+                :title="$t('Item.btn_delete')"
+                @click="deleteItem(i.id)"
+              >
+                <font-awesome-icon icon="trash"/>
+              </button>
             </div>
-          </transition-group>
-        </draggable>
+          </div>
+        </transition-group>
+        <!--  </draggable> -->
       </div>
     </div>
     <!-- MODALE -->
@@ -235,6 +244,7 @@ export default {
       },
       editMode: false,
       mergeMode: false,
+      descriptionVisible: true,
       form: {
         scaleUsArp: 'scala',
         noteUsDegree: 'grado',
@@ -305,6 +315,9 @@ export default {
     next();
   },
   methods: {
+    toggleDescription() {
+      this.descriptionVisible = !this.descriptionVisible;
+    },
     transpose() {
       console.log(this.selectedItem.data);
       if (this.intervalTranspose) {
@@ -567,7 +580,7 @@ export default {
 
 <style scoped>
 .navbar-sticky {
-  top: 87px;
+  top: 60px;
   z-index: 500;
   width: inherit;
   height: inherit;

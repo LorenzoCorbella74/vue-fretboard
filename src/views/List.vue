@@ -2,7 +2,7 @@
   <div>
     <div class="home">
       <div class="container bg-light mb-1" :class="{'sticky-top navbar-sticky':fixBtnBar}">
-        <div class="d-flex flex-row justify-content-between">
+        <div class="d-flex flex-row justify-content-between" style="height:48px">
           <div class="p-2 page-header">
             <h1>{{$t('List.title')}}</h1>
           </div>
@@ -455,7 +455,7 @@ export default {
 
 <style lang="css" scoped>
 .navbar-sticky {
-  top: 87px;
+  top: 60px;
   z-index: 500;
   width: inherit;
   height: inherit;
