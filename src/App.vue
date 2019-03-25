@@ -179,6 +179,7 @@ export default {
 }
 .custom-padding {
   padding: 6px 12px 6px 12px !important;
+  height: 60px!important;
 }
 .margine-da-navbar {
   margin-top: 16px;
