@@ -2,6 +2,10 @@
 
 ![tastiera](./src/assets/img/Screen.PNG)
 
+![](https://img.shields.io/badge/type-JS_Library-brightgreen.svg "Project type")
+![](https://img.shields.io/github/repo-size/LorenzoCorbella74/vue-fretboard "Repository size")
+![](https://img.shields.io/github/package-json/v/LorenzoCorbella74/vue-fretboard)
+
 Vue Fretboard, is a web app based and continuation of [notes-on-fretboard](https://github.com/LorenzoCorbella74/notes-on-fretboard):  is able to organize the studies on the superimpositions of scales and arpeggios fingerings by displaying vertically guitar fretboards. The production of guitar fretboards is derived from the precious library [fretboard](https://github.com/txels/fretboard) based on [D3.js](https://d3js.org/).Vue Fretboard is optimised to be responsive up to ***550px*** so it can be used on smartphones only with a "desktop" visualisation.
 Guitar images courtesy of [Pexels](https://www.pexels.com).  
 
